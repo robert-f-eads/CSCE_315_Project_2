@@ -17,15 +17,29 @@ public class DbTools {
 
     //Member functions
     public void openDbConnection(String username, String password) {
-        System.out.println("I will open database connection!");
+        try {
+            dbConnection = DriverManager.getConnection(dbConnectionString, username, password);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.out.println("Could not connect to database... exiting program");
+            System.exit(0);
+        }
     }
 
     public boolean hasDbConnection() {
-        System.out.println("I will check database connection!");
+        if(dbConnection != null) {
+            return true;
+        }
+        return false;
     }
 
     public void closeDbConnection() {
-        System.out.println("I will close database connection!");
+        try {
+            dbConnection.close();
+            System.out.println("Connection Closed.");
+        } catch(Exception e) {
+            System.out.println("Connection NOT Closed.");
+        }
     }
 
     public void dbCreate(String filePath) {

@@ -1,6 +1,11 @@
 public class DbSetup {
     /*
         Main function used in conjunction with DbTools to setup and populate database for project 2
+        Compile: javac *.java
+
+        Run:
+        Windows: java -cp ".;postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
+        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
     */
 
     public static void main(String args[]) {
@@ -14,7 +19,7 @@ public class DbSetup {
         //Open connection to database and database functions
         DbTools tool = new DbTools();
         tool.openDbConnection(args[0], args[1]);
-        if(tool.hasDbConnection()) {System.out.println("Connection to database successful");}
+        if(tool.hasDbConnection()) {System.out.println("\nConnection to database successful\n");}
 
 
         //Create database tables from names in file
