@@ -1,1 +1,1 @@
-CREATE TABLE rewardsMembers (id SERIAL PRIMARY KEY, firstName VARCHAR(25) NOT NULL, lastName VARCHAR(25) NOT NULL, phone VARCHAR(15) UNIQUE, email VARCHAR(60) NOT NULL UNIQUE, rewardPoints INT NOT NULL DEFAULT 0 CHECK (rewardPoints>=0))
+rewardsMembers : id, firstName, lastName, phone, email, rewardPoints : SERIAL, VARCHAR(25), VARCHAR(25), VARCHAR(15), VARCHAR(60), INT : PRIMARY KEY, NOT NULL, NOT NULL, UNIQUE, NOT NULL UNIQUE, NOT NULL DEFAULT 0 CHECK (rewardPoints>=0)
