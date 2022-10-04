@@ -3,6 +3,11 @@ public class DbSetup {
         Main function used in conjunction with DbTools to manage database for project 2
         Compile: javac *.java
 
+        NOTE: Before running program, please ensue your pgpass.conf file is setup in your enviornment 
+                using formatting "csce-315-db.engr.tamu.edu:*:csce315_901_2:your_username:your_password"
+        Windows: %APPDATA%\postgresql\pgpass.conf
+        Mac/Linux: ~/pgpass.conf
+
         Run Program:
         Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
         Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
@@ -50,7 +55,7 @@ public class DbSetup {
                     dbtool.dbCreate();
                     break;
                 case "fill":
-                    dbtool.dbFill(args[1]);
+                    dbtool.dbFill(args[1], username);
                     break;
                 case "drop":
                     dbtool.dbDrop();
