@@ -1,14 +1,15 @@
 public class DbSetup {
     /*
-        Main function used in conjunction with DbTools to setup and populate database for project 2
-<<<<<<< HEAD
+        Main function used in conjunction with DbTools to manage database for project 2
         Compile: javac *.java
 
-        Run:
+        Fill tables (Default):
         Windows: java -cp ".;postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
         Mac/Linux: java -cp ".:postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
-=======
->>>>>>> e9fed09e71174c5ee0a7564b5c43c31b978ed943
+
+        Additional arguments placed before "DbSetup":
+        "-DrunCreate=true" - Create new tables from info in file
+        "-DrunDrop=true" - Drop table from info in file
     */
 
     public static void main(String args[]) {
@@ -18,30 +19,40 @@ public class DbSetup {
             System.exit(0);
         }
 
+        //Checking additional flags
+        String runCreate = System.getProperty("runCreate");
+        if(runCreate == null) {runCreate= "false";}
+        String runDrop = System.getProperty("runDrop");
+        if(runDrop == null) {runDrop = "false";}
+
     
         //Open connection to database and database functions
-        DbTools tool = new DbTools();
-        tool.openDbConnection(args[0], args[1]);
-<<<<<<< HEAD
-        if(tool.hasDbConnection()) {System.out.println("\nConnection to database successful\n");}
-=======
-        if(tool.hasDbConnection()) {System.out.println("Connection to database successful");}
->>>>>>> e9fed09e71174c5ee0a7564b5c43c31b978ed943
+        DbTools dbtool = new DbTools();
+        dbtool.openDbConnection(args[0], args[1]);
+        if(dbtool.hasDbConnection()) {System.out.println("\nConnection to database successful");}
+
+        dbtool.importData("dbInfo\\dbTableInfo.txt");
 
 
-        //Create database tables from names in file
-        tool.dbCreate("filepath");
-
+        /*//Create database tables from names in file
+        if(runCreate.equals("true")) {
+            //System.out.println("Will create tables");
+            dbtool.dbCreate("dbInfo\\dbTableCreateInfo.txt");
+        }
         
+        //TODO - Write wrapping for write tables 
         //Fill tables with data
-        tool.dbFill("table1", "table1data.csv");
+        dbtool.dbFill("table1", "table1data.csv");
 
 
         //Drop database tables from names in file
-        tool.dbDrop("filepath");
+        if(runDrop.equals("true")) {
+            //System.out.println("Will drop tables");
+            dbtool.dbDrop("dbInfo\\dbTableDropInfo.txt");
+        }
 
 
         //Close database connection
-        tool.closeDbConnection();
+        dbtool.closeDbConnection();*/
     }
 }
