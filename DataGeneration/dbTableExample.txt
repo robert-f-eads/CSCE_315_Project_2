@@ -1,0 +1,17 @@
+//Example formatting for tables with structure "[name] : [columns] : [data types] : [constraints (optional)]"
+//NOTE: Everything is considered parallel arrays
+
+//No constraints
+testdata_robert : name, number, color : VARCHAR(25), INT, VARCHAR(25)
+
+//No constraints alt.
+testdata_1 : price, timestamp : DOUBLE, TIMESTAMP : 
+
+//Constraints on all
+testdata_2 : id, name : INT, VARCHAR(25) : UNIQUE, NOT NULL
+
+//Constraints sequentially
+testdata_3 : name, number, color : VARCHAR(25), INT, VARCHAR(25) : NOT NULL, NOT NULL
+
+//Constraints skipping
+testdata_3 : name, number, color : VARCHAR(25), INT, VARCHAR(25) : NOT NULL, NULL, NOT NULL

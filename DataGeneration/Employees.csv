@@ -1,0 +1,11 @@
+id,firstName,lastName,phone,email,isAdmin,hourlyRate,hoursPerWeek,hireDate,endDate,active
+0,David,Rainey,8357231302,DavRa@KgW.zqF,False,10.07,17.8,1992-10-09,2000-02-20,False
+1,Jolene,Gillispie,3038582775,JolenGilli@bXQ.xNZ,False,16.83,32.9,2007-02-17,,True
+2,Nelson,Irby,5303308532,NIrby@hzI.ehy,True,14.28,33.6,2017-07-19,,True
+3,Faustino,Fields,5349047454,FauField@TRR.GFd,True,28.8,3.3,1993-03-09,,True
+4,Richard,Garcia,9858096601,RiGa@Qdr.GjN,True,15.68,49.5,2013-12-25,,True
+5,Randy,Stecker,0250918686,RanStec@Ooh.XqM,False,22.88,41.7,2018-02-15,2018-02-18,False
+6,Nathanial,Lark,8706623202,NathanLark@SRd.LWh,False,13.04,45.0,2001-10-26,,True
+7,Ruth,Rounds,7560395210,RRou@jUH.GqQ,True,14.71,23.5,2018-03-14,,True
+8,Rusty,Ethington,7677475442,REthington@bil.evA,True,11.64,37.9,1998-12-28,,True
+9,Alfred,Love,2763359059,AlfLove@ALG.lAu,True,22.21,26.0,2004-07-25,2004-08-23,False
