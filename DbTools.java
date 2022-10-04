@@ -9,17 +9,23 @@ public class DbTools {
     private String dbConnectionString;
     private Connection dbConnection = null;
     private Vector<TableInfo> infoForTables = new Vector<TableInfo>();
+    private Vector<String> users = new Vector<String>();
 
     //Constructor
     public DbTools() {
         dbName = "csce315_901_2";
         dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
+        users.add("csce315_901_eads");
+        users.add("csce315_901_ong");
+        users.add("csce315_901_kaliyur");
+        users.add("csce315_901_hassan");
     } 
 
     //Member functions
     public void openDbConnection(String username, String password) {
         try {
             dbConnection = DriverManager.getConnection(dbConnectionString, username, password);
+            users.remove(users.indexOf(username));
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.out.println("Could not connect to database... exiting program");
@@ -73,7 +79,7 @@ public class DbTools {
         }
     }
 
-    public void dbCreate() {
+    public void dbCreate() {    //Add grant permissions function for all of team
         try {
             Statement stmt = dbConnection.createStatement();
 
@@ -103,6 +109,11 @@ public class DbTools {
 
                 int result = stmt.executeUpdate(sqlStatement);
                 System.out.println(String.format("Added %s to database", currentTable.tableName));
+
+                for(String user : users) {
+                    stmt.executeUpdate(String.format("GRANT ALL ON %s TO %s", currentTable.tableName, user));
+                }
+                
             }
 
             System.out.println("Finished adding tables...");
@@ -113,65 +124,37 @@ public class DbTools {
         }
     }
 
-    public void dbFill(String directoryPath) {
+    public void dbFill(String directoryPath, String username) {
         try{
-            Statement stmt = dbConnection.createStatement();
-            String sqlStatement = "";
+            String executable = "powershell.exe";
+            String login = String.format("psql -h csce-315-db.engr.tamu.edu -U %s -d %s", username, dbName);
 
             for(TableInfo currentTable : infoForTables) {
-                System.out.println(String.format("\nAdding entries to %1$s from file %1$s.csv", currentTable.tableName));
+                System.out.print(String.format("\nAdding entries to %1$s from file %1$s.csv: ", currentTable.tableName));
 
-                //Open each file in scanner
-                Scanner sc = new Scanner(new File(String.format("%1$s%2$s.csv", directoryPath, currentTable.tableName)));
-                int entrySum = 0;
-                int rowCount = 0;
+                //Format and execute psql command
+                String command = String.format("%s %s -c '\\COPY %3$s FROM \"%4$s%3$s.csv\" csv'", executable, login, currentTable.tableName, directoryPath);
+                Process powerShellProcess = Runtime.getRuntime().exec(command);                
+                powerShellProcess.getOutputStream().close();
+                String line;
 
-                //Reading and formatting each line in the opened file
-                while(sc.hasNext()) 
-                {
-                    rowCount++;
-                    String currentline = sc.nextLine();
-                    String[] lineData = currentline.split(",");
-                    String dataFormatting = "";
-
-                    //Reading and formatting each data point properly
-                    for(int i = 0; i < currentTable.dataTypes.length; i++) {
-                        switch(currentTable.dataTypes[i]) {
-                            case "INT":
-                                dataFormatting += String.format("%d", Integer.parseInt(lineData[i]));
-                                break;
-                            case "DOUBLE":
-                                dataFormatting += String.format("%.2f", Double.parseDouble(lineData[i]));
-                                break;
-                            default:
-                                dataFormatting += String.format("'%s'", lineData[i]);
-                        }
-                        if(i < currentTable.dataTypes.length-1) {
-                            dataFormatting += ", ";
-                        }
-                    }
-
-                    //Reading a formatting each column name properly
-                    String columnNameFormatting = "";
-                    for(int i = 0; i < currentTable.attributes.length; i++) {
-                        if(currentTable.dataTypes[i] == "SERIAL") {continue;}
-                        else {
-                            columnNameFormatting += String.format("%s", currentTable.attributes[i]);
-                        }
-                        
-                        if(i < currentTable.attributes.length-1) {
-                            columnNameFormatting += ", ";
-                        }
-                    }
-
-                    //Creating sql statement
-                    sqlStatement = String.format("INSERT INTO %s (%s) VALUES (%s)", currentTable.tableName, columnNameFormatting, dataFormatting);
-                    int result = stmt.executeUpdate(sqlStatement);
-                    entrySum += result;
+                //Check for output
+                BufferedReader stdout = new BufferedReader(new InputStreamReader(powerShellProcess.getInputStream()));
+                if((line = stdout.readLine()) != null) {
+                    System.out.println(line);  
+                    while((line = stdout.readLine()) != null) {System.out.println(line);}
+                    stdout.close();
                 }
-                sc.close();
-                System.out.println(String.format("Successfully added %d entries to %s from file with %d rows", entrySum, currentTable.tableName, rowCount));
-            } 
+
+                //Check for errors
+                BufferedReader stderr = new BufferedReader(new InputStreamReader(powerShellProcess.getErrorStream()));
+                if((line = stderr.readLine()) != null) {
+                    System.out.println(line);  
+                    while((line = stderr.readLine()) != null) {System.out.println(line);}
+                    stderr.close();
+                }
+
+            }
         } catch (Exception e) {
             System.out.println("Error Detected:");
             e.printStackTrace();
