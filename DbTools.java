@@ -38,9 +38,9 @@ public class DbTools {
     public void closeDbConnection() {
         try {
             dbConnection.close();
-            System.out.println("Connection Closed.");
+            System.out.println("\nConnection Closed.");
         } catch(Exception e) {
-            System.out.println("Connection NOT Closed.");
+            System.out.println("\nConnection NOT Closed.");
         }
     }
 
@@ -48,6 +48,7 @@ public class DbTools {
         try {
             Scanner sc = new Scanner(new File(filePath));
             String tableMetadata = "";
+            System.out.println("\nStarting file reading...");
             
             while(sc.hasNext()) {
                 TableInfo tempInfo = new TableInfo();
@@ -56,13 +57,15 @@ public class DbTools {
                 //Spits table metadata into proper formatting
                 String[] sections = tableMetadata.split(" : ");
                 tempInfo.tableName = sections[0];
-                tempInfo.attributes = sections[1].split(",");
-                tempInfo.dataTypes = sections[2].split(",");
-                tempInfo.modifiers = sections[3].split(",");
+                tempInfo.attributes = sections[1].split(", ");
+                tempInfo.dataTypes = sections[2].split(", ");
+                tempInfo.modifiers = sections[3].split(", ");
 
                 infoForTables.add(tempInfo);
+                System.out.println(String.format("Imported %s metadata", tempInfo.tableName));
             }
             sc.close();
+            System.out.println("Finished file reading...");
 
         } catch (Exception e) {
             System.out.println("Error Detected:");
@@ -71,28 +74,29 @@ public class DbTools {
         }
     }
 
-
-
-    public void dbCreate(String filePath) {
+    public void dbCreate() {
         try {
-            //Setup statement and scanner
             Statement stmt = dbConnection.createStatement();
-            Scanner sc = new Scanner(new File(filePath));
-            sc.useDelimiter("\n");
 
-            //Read and execute each create command from the file
+            //Create each table from metadata
             System.out.println("\nStarted adding tables...");
-            String sqlStatement = "";
-            while(sc.hasNext()) {
-                sqlStatement = sc.next();
-                String tableName = sqlStatement.substring(13, sqlStatement.indexOf(" ("));
+
+             for(TableInfo currentTable : infoForTables) {
+                String sqlStatement = String.format("CREATE TABLE %s (", currentTable.tableName); 
+
+                for(int i = 0; i < currentTable.attributes.length; i++) {
+                    sqlStatement += String.format("%s %s %s", currentTable.attributes[i], currentTable.dataTypes[i], currentTable.modifiers[i]);
+                    if(i < currentTable.attributes.length - 1) {sqlStatement += ", ";}
+                }
+                sqlStatement += ")";
+
                 int result = stmt.executeUpdate(sqlStatement);
                 if(result == 0) {
-                    System.out.println(String.format("Added %s to database", tableName));
+                    System.out.println(String.format("Added %s to database", currentTable.tableName));
                 }
+
             }
-            sc.close();
-            System.out.println("Finished adding tables...\n");
+            System.out.println("Finished adding tables...");
         } catch (Exception e) {
             System.out.println("Error Detected:");
             e.printStackTrace();
@@ -106,31 +110,26 @@ public class DbTools {
 
     }
 
-    public void dbDrop(String filePath) {
+    public void dbDrop() {
         /*
             --------------------------------- WARNING ---------------------------------
-            This is will drop all tables in function parameter file
+            This is will drop all tables in table metadata vector
             Double check there is not another solution before performing this action
         */
         try {
-            //Setup statement and scanner
             Statement stmt = dbConnection.createStatement();
-            Scanner sc = new Scanner(new File(filePath));
-            sc.useDelimiter("\n");
 
-            //Read and execute each drop command from the file
+            //Drop each table based on metadata
             System.out.println("\nStarted dropping tables...");
-            String sqlStatement = "";
-            while(sc.hasNext()) {
-                sqlStatement = sc.next();
-                String tableName = sqlStatement.substring(11);
+
+            for(TableInfo currentTable : infoForTables) {
+                String sqlStatement = String.format("DROP TABLE IF EXISTS %s", currentTable.tableName);
                 int result = stmt.executeUpdate(sqlStatement);
                 if(result == 0) {
-                    System.out.println(String.format("Dropped %s from the database", tableName));
+                    System.out.println(String.format("Dropped %s from the database", currentTable.tableName));
                 }
             }
-            sc.close();
-            System.out.println("Finished dropping tables...\n");
+            System.out.println("Finished dropping tables...");
         } catch (Exception e) {
             System.out.println("Error Detected:");
             e.printStackTrace();

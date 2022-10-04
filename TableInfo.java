@@ -1,5 +1,3 @@
-//import java.util.*;
-
 public class TableInfo {
     String tableName;
     String[] attributes;
