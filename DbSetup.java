@@ -4,8 +4,8 @@ public class DbSetup {
         Compile: javac *.java
 
         Run Program:
-        Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup
-        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup
+        Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
+        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
     */
 
     public static void main(String args[]) {
@@ -14,17 +14,22 @@ public class DbSetup {
         String username = System.getProperty("username");
         if(username == null) {
             System.out.println("Please use argument \"-Dusername=your_username_here\" before executable name to enable database connection");
-            System.exit(0);
+            System.exit(1);
         }
         String password = System.getProperty("password");
         if(password == null) {
             System.out.println("Please use argument \"-Dpassword=your_password_here\" before executable name to enable database connection");
-            System.exit(0);
+            System.exit(1);
         }
-        if(args.length == 0) {
-            System.out.println("To use the program please enter one or more of the following as a command line argument after the executable name [create|fill|drop]");
-            System.exit(0);
+        if(args.length < 2) {
+            System.out.println("To use the program please enter the file path of table metadata file and table data directory path as a command line argument after the excutable");
+            System.exit(1);
         }
+        else if(args.length == 2) {
+            System.out.println("To use the program please enter one or more of the following as a command line argument after the file and directory path [create|fill|drop]");
+            System.exit(1);
+        }
+
 
         DbTools dbtool = new DbTools();
 
@@ -32,19 +37,20 @@ public class DbSetup {
         dbtool.openDbConnection(username, password);
         if(dbtool.hasDbConnection()) {System.out.println("\nConnection to database successful");}
 
+
         //Import table metadata into runtime storage
-        dbtool.importData("dbInfo\\dbTableInfo.txt");
+        dbtool.importMetaData(args[0]);
+        //dbInfo\\dbTableInfo.txt
+        
 
         //Perform orperations based on runtime input
-        for(String arg : args){
-            switch(arg) {
+        for(int i = 2; i < args.length; i++){
+            switch(args[i]) {
                 case "create":
                     dbtool.dbCreate();
                     break;
                 case "fill":
-                    //TODO - Write wrapping for write tables 
-                    //Fill tables with data
-                    //dbtool.dbFill("table1", "table1data.csv");
+                    dbtool.dbFill(args[1]);
                     break;
                 case "drop":
                     dbtool.dbDrop();
