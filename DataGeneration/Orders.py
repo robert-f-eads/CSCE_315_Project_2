@@ -133,10 +133,10 @@ if __name__ == '__main__':
             dayOrderTicket.orderPriceTotal = dayOrderTicketPrice
         orderTickets.extend(dayOrderTickets)
 
-    Utils.writeObjectsToCsv(orderTickets, 'OrderTickets.csv')
-    Utils.writeObjectsToCsv(orderItems, 'OrderItems.csv')
-    Utils.writeObjectsToCsv(orderItemAdditions, 'OrderItemAdditions.csv')
-    Utils.writeObjectsToCsv(orderItemSubtractions, 'OrderItemSubtractions.csv')
+    Utils.writeObjectsToCsv(orderTickets, 'data/OrderTickets.csv')
+    Utils.writeObjectsToCsv(orderItems, 'data/OrderItems.csv')
+    Utils.writeObjectsToCsv(orderItemAdditions, 'data/OrderItemAdditions.csv')
+    Utils.writeObjectsToCsv(orderItemSubtractions, 'data/OrderItemSubtractions.csv')
 
 
 

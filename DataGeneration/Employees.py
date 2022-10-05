@@ -31,4 +31,4 @@ def generateEmployees(numToGenerate):
 
 if __name__ == '__main__':
     employees = generateEmployees(10)
-    Utils.writeObjectsToCsv(employees, 'Employees.csv')
+    Utils.writeObjectsToCsv(employees, 'data/Employees.csv')

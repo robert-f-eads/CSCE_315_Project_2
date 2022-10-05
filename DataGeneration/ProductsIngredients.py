@@ -41,12 +41,12 @@ def loadProductsByScraping():
     return humanReadableProducts
 
 def saveProductsToJson(products: List[HumanReadableProduct]):
-    with open('products.json', 'w') as outputFile:
+    with open('data/products.json', 'w') as outputFile:
         json.dump(products, outputFile, cls=ProductEncoder, indent=4)
 
 def loadProductsFromJson():
     humanReadableProducts: List[HumanReadableProduct] = []
-    with open('products.json', 'r') as inputFile:
+    with open('data/products.json', 'r') as inputFile:
         loadedJson = json.load(inputFile)
         for elem in loadedJson:
             humanReadableProduct = HumanReadableProduct()
@@ -107,8 +107,8 @@ if __name__ == '__main__':
     ingredientsNames = [ingredient.name for ingredient in ingredients]
     humanReadableProducts = loadProductsByScraping()
     products = [humanReadableProduct.product for humanReadableProduct in humanReadableProducts]
-    Utils.writeObjectsToCsv(ingredients, 'Ingredients.csv')
-    Utils.writeObjectsToCsv(products, 'Products.csv')
+    Utils.writeObjectsToCsv(ingredients, 'data/Ingredients.csv')
+    Utils.writeObjectsToCsv(products, 'data/Products.csv')
 
     # connect ingredients to products
     productsToIngredients = []
@@ -117,6 +117,6 @@ if __name__ == '__main__':
         for ingredient in humanReadableProduct.ingredients:
             ingredientId = ingredients[ingredientsNames.index(ingredient)].id
             productsToIngredients.append(ProductToIngredient(productId, ingredientId))
-    Utils.writeObjectsToCsv(productsToIngredients, 'ProductsToIngredients.csv')
+    Utils.writeObjectsToCsv(productsToIngredients, 'data/ProductsToIngredients.csv')
 
     saveProductsToJson(humanReadableProducts)

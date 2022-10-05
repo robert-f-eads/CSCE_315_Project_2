@@ -47,4 +47,4 @@ def generateRewardsMembers(numToGenerate):
 
 if __name__ == '__main__':
     rewardsMembers = generateRewardsMembers(100)
-    Utils.writeObjectsToCsv(rewardsMembers, 'RewardsMembers.csv')
+    Utils.writeObjectsToCsv(rewardsMembers, 'data/RewardsMembers.csv')
