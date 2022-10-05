@@ -1,0 +1,19 @@
+SELECT SUM(orderPriceTotal) FROM orderTickets;
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-18 00:00:00' AND '2022-09-18 23:59:59'
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-20 00:00:00' AND '2022-09-20 23:59:59'
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-24 00:00:00' AND '2022-09-24 23:59:59'
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-26 00:00:00' AND '2022-09-26 23:59:59'
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-19 00:00:00' AND '2022-09-19 23:59:59'
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-25 00:00:00' AND '2022-09-25 23:59:59'
+SELECT * FROM employees WHERE CURRENT_DATE - hiredate > 3650 AND active = true
+SELECT COUNT (id) FROM products
+SELECT COUNT(productId) FROM productstoingredients WHERE ingredientid = 13
+SELECT SUM(orderpricetotal) FROM ordertickets WHERE timestamp BETWEEN '2022-09-15 00:00:00' AND '2022-09-22 23:59:59'
+SELECT COUNT(*) FROM orderItemsubtractions WHERE ingredientid = 1
+SELECT * FROM materials WHERE quantityremaining < 20
+SELECT * FROM ingredients WHERE quantityremaining < 5
+SELECT * FROM rewardsmembers WHERE rewardPoints > 250 LIMIT 10
+SELECT * FROM ordertickets WHERE timestamp < CURRENT_DATE AND timestamp > date '2022-09-28' LIMIT 10
+SELECT * FROM rewardsmembers WHERE DATE_PART('month', birthday) = 7
+SELECT * FROM employees WHERE isAdmin = True
+SELECT * FROM products WHERE price < 7.5 LIMIT 10

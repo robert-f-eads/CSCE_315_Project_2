@@ -79,7 +79,7 @@ public class DbTools {
         }
     }
 
-    public void dbCreate() {    //Add grant permissions function for all of team
+    public void dbCreate() {
         try {
             Statement stmt = dbConnection.createStatement();
 
@@ -188,4 +188,52 @@ public class DbTools {
         }
     }
 
+    public void dbRunQueries(String filePath) {
+        try {
+            Statement stmt = dbConnection.createStatement();
+            Scanner sc = new Scanner(new File(filePath));
+            String sqlStatement = "";
+            System.out.println("\nStarting file reading...");
+            
+            while(sc.hasNext()) {
+                sqlStatement = sc.nextLine();
+                
+                //Run queries from file
+                System.out.println(String.format("Running query: %s", sqlStatement));
+                ResultSet result = stmt.executeQuery(sqlStatement);
+
+                //Get metadata and print results
+                ResultSetMetaData metaData = result.getMetaData();
+                int numColumns = metaData.getColumnCount();
+
+                //Print table result labels
+                for (int i = 1; i <= numColumns; i++) {
+                    System.out.print(metaData.getColumnName(i));
+                    if (i > 1) {
+                        System.out.print(",  ");
+                    }
+                }
+                System.out.println("");
+
+                //Print results
+                while (result.next()) {
+                    for (int i = 1; i <= numColumns; i++) {
+                        if (i > 1) {
+                            System.out.print(",  ");
+                        }
+                        System.out.print(result.getString(i));
+                    }
+                    System.out.println("");
+                }
+                System.out.println("");
+            }
+            sc.close();
+            System.out.println("Finished file reading...");
+
+        } catch (Exception e) {
+            System.out.println("Error Detected:");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 }
