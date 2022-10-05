@@ -1,9 +1,9 @@
 import random
 import datetime
+import numpy as np
 
 import Utils
 
-import numpy as np
 class Material:
     numberOfMaterials = 0
     
@@ -22,6 +22,7 @@ class Material:
 
 def generateMaterials():
     materials = []
+    # hard coded materials, can be manually modified later
     materialNames = ['toilet paper', 'napkins', 'straws', 'cups', 'receipt paper']
     for materialName in materialNames:
         material = Material()
@@ -36,6 +37,7 @@ def generateMaterials():
         materials.append(material)
     return materials
 
+# run main to just generate new materials
 if __name__ == '__main__':
     materials = generateMaterials()
     Utils.writeObjectsToCsv(materials, 'data/Materials.csv')

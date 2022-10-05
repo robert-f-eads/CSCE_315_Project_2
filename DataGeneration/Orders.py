@@ -1,5 +1,4 @@
 import random
-import pprint
 from typing import List
 import datetime
 
@@ -77,6 +76,7 @@ if __name__ == '__main__':
     gameDaySales = [random.randint(int(avgSalesPerDay * 5), int(avgSalesPerDay * 7)) for i in range(numberOfGameDays)]
     typicalDaySales = [random.randint(int(avgSalesPerDay * .5), int(avgSalesPerDay * 1.5)) for i in range(daysOfSales)]
 
+    # splice in two days to be game days
     gameDays = []
     for i in range(numberOfGameDays):
         randomDay = random.randint(0, daysOfSales)
@@ -103,10 +103,12 @@ if __name__ == '__main__':
     for daySale in allDaySales:
         numOrders = daySale // avgOrderAmount
         currentSaleDay += datetime.timedelta(days=1)
+        print(daySale, ':', currentSaleDay)
         dayOrderTickets = generateOrderTickets(numOrders, currentSaleDay, customers, employees)
         for dayOrderTicket in dayOrderTickets:
             ticketOrderAmount = random.randint(int(avgOrderAmount * .5), int(avgOrderAmount * 1.5))
             numProductsOnTicket = int(ticketOrderAmount // avgProductPrice)
+            # accumulate the price of the ticket with this
             dayOrderTicketPrice = 0
             for i in range(numProductsOnTicket):
                 orderItemProduct = random.choice(products)
