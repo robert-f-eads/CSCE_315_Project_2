@@ -68,7 +68,8 @@ class OrderItemSubtraction(OrderItemModification):
 
 if __name__ == '__main__':
     daysOfSales = 28
-    totalSales = 20000 # dollars, this is just approx, not guarenteed to be over this number
+    # we aim for 20k of sales per week
+    totalSales = int(20000 * daysOfSales / 7) # dollars, this is just approx, not guarenteed to be over this number
     numberOfGameDays = 2
     avgOrderAmount = 20 # dollars, helpful for determining how many orders are in a day given that day has x dollars in sales
 
@@ -95,11 +96,12 @@ if __name__ == '__main__':
     ingredients = ProductsIngredients.loadIngredientsByScraping()
     ingredientsNames = [ingredient.name for ingredient in ingredients]
 
-    currentSaleDay = datetime.datetime(2022, 9, 1)
+    currentSaleDay = datetime.datetime(2022, 9, 1) # arbitrary day to start selling
     orderTickets: List[OrderTicket] = []
     orderItems: List[OrderItem] = []
     orderItemAdditions: List[OrderItemAddition] = []
     orderItemSubtractions: List[OrderItemAddition] = []
+
     for daySale in allDaySales:
         numOrders = daySale // avgOrderAmount
         currentSaleDay += datetime.timedelta(days=1)
@@ -114,6 +116,7 @@ if __name__ == '__main__':
                 orderItemProduct = random.choice(products)
                 numberOfProductPurchased = random.choice(range(1, 3))
                 dayOrderTicketPrice += numberOfProductPurchased * orderItemProduct.product.price
+                # sizes are in oz for orderItem
                 orderItem = OrderItem(dayOrderTicket.id, i, orderItemProduct.product.name, numberOfProductPurchased, random.choice([16, 32, 48]))
                 orderItems.append(orderItem)
 
@@ -127,8 +130,11 @@ if __name__ == '__main__':
                 numOrderSubtractions = random.randint(0, 2)
                 for j in range(numOrderSubtractions):
                     orderItemSubtraction = OrderItemSubtraction()
+
+                    # an ingredient to subtract must be in the product that was ordered
                     ingredientNameToSubtract = random.choice(orderItemProduct.ingredients)
                     orderItemSubtraction.ingredientId = ingredients[ingredientsNames.index(ingredientNameToSubtract)].id
+
                     orderItemSubtraction.orderId = dayOrderTicket.id
                     orderItemSubtraction.itemNumberInOrder = i
                     orderItemSubtractions.append(orderItemSubtraction)

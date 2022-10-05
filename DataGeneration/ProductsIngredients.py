@@ -37,7 +37,7 @@ class HumanReadableProduct(Utils.StringRepresentation):
 def loadProductsByScraping():
     humanReadableProducts: List[HumanReadableProduct] = WebsiteScraper.getHumanReadableProducts()
     for humanReadableProduct in humanReadableProducts:
-        humanReadableProduct.product.price = random.choice(np.arange(5.99, 10.99, 1))
+        humanReadableProduct.product.price = random.choice(np.arange(5.99, 10.99, 1)) # arbitrary range
     return humanReadableProducts
 
 def saveProductsToJson(products: List[HumanReadableProduct]):
@@ -47,16 +47,18 @@ def saveProductsToJson(products: List[HumanReadableProduct]):
 def loadProductsFromJson():
     humanReadableProducts: List[HumanReadableProduct] = []
     with open('data/products.json', 'r') as inputFile:
-        loadedJson = json.load(inputFile)
+        loadedJson = json.load(inputFile) # loadedJson is a list
         for elem in loadedJson:
             humanReadableProduct = HumanReadableProduct()
             for key, value in elem.items():
-                if key == 'product':
+                if key == 'product': # this means we have encountered nested class Product
+                    # so we have to do the same process essentially for that class
                     product = Product()
                     for nested_key, nested_value in value.items():
                         product.__dict__[nested_key] = nested_value
                     humanReadableProduct.__dict__[key] = product
                 else:
+                    # else we can just set the attribute to the parsed value
                     humanReadableProduct.__dict__[key] = value
             humanReadableProducts.append(humanReadableProduct)
     return humanReadableProducts
@@ -102,6 +104,8 @@ class ProductToIngredient:
         self.productId = productId
         self.ingredientId = ingredientId
 
+# run main to scrape ingredients and products from smoothie king website
+# save the products to a json so that future runs don't take so long
 if __name__ == '__main__':
     ingredients = loadIngredientsByScraping()
     ingredientsNames = [ingredient.name for ingredient in ingredients]
