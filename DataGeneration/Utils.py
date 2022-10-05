@@ -34,7 +34,7 @@ def getRandomDate(startDate, endDate):
         startDate += datetime.timedelta(days=1)
     return random.choice(dateOptions)
 
-def writeObjectsToCsv(objects, outputFileName, writeHeader=True):
+def writeObjectsToCsv(objects, outputFileName, writeHeader=False):
     with open(outputFileName, 'w') as outputFile:
         csvWriter = csv.writer(outputFile)
         if writeHeader:
