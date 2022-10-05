@@ -9,8 +9,8 @@ public class DbSetup {
         Mac/Linux: ~/pgpass.conf
 
         Run Program:
-        Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
-        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
+        Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData filepath_to_query_file
+        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData filepath_to_query_file
     */
 
     public static void main(String args[]) {
@@ -26,12 +26,12 @@ public class DbSetup {
             System.out.println("Please use argument \"-Dpassword=your_password_here\" before executable name to enable database connection");
             System.exit(1);
         }
-        if(args.length < 2) {
+        if(args.length < 3) {
             System.out.println("To use the program please enter the file path of table metadata file and table data directory path as a command line argument after the excutable");
             System.exit(1);
         }
-        else if(args.length == 2) {
-            System.out.println("To use the program please enter one or more of the following as a command line argument after the file and directory path [create|fill|drop]");
+        else if(args.length == 3) {
+            System.out.println("To use the program please enter one or more of the following as a command line argument after the file and directory path [create|fill|drop|query]");
             System.exit(1);
         }
 
@@ -45,11 +45,10 @@ public class DbSetup {
 
         //Import table metadata into runtime storage
         dbtool.importMetaData(args[0]);
-        //dbInfo\\dbTableInfo.txt
         
 
         //Perform orperations based on runtime input
-        for(int i = 2; i < args.length; i++){
+        for(int i = 3; i < args.length; i++){
             switch(args[i]) {
                 case "create":
                     dbtool.dbCreate();
@@ -60,8 +59,11 @@ public class DbSetup {
                 case "drop":
                     dbtool.dbDrop();
                     break;
+                case "query":
+                    dbtool.dbRunQueries(args[2]);
+                    break;
                 default:
-                    System.out.println("\nUnrecognized option, please select one or more of the following options [create|fill|drop]");
+                    System.out.println("\nUnrecognized option, please select one or more of the following options [create|fill|drop|query]");
             }
 
         }
