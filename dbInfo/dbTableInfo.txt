@@ -1,1 +1,0 @@
-rewardsMembers : id, firstName, lastName, phone, email, rewardPoints : SERIAL, VARCHAR(25), VARCHAR(25), VARCHAR(15), VARCHAR(60), INT : PRIMARY KEY, NOT NULL, NOT NULL, UNIQUE, NOT NULL UNIQUE, NOT NULL DEFAULT 0 CHECK (rewardPoints>=0)

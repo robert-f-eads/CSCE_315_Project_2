@@ -3,56 +3,70 @@ public class DbSetup {
         Main function used in conjunction with DbTools to manage database for project 2
         Compile: javac *.java
 
-        Fill tables (Default):
-        Windows: java -cp ".;postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
-        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" DbSetup "csce315_901_yourlastname" "password"
+        NOTE: Before running program, please ensue your pgpass.conf file is setup in your enviornment 
+                using formatting "csce-315-db.engr.tamu.edu:*:csce315_901_2:your_username:your_password"
+        Windows: %APPDATA%\postgresql\pgpass.conf
+        Mac/Linux: ~/pgpass.conf
 
-        Additional arguments placed before "DbSetup":
-        "-DrunCreate=true" - Create new tables from info in file
-        "-DrunDrop=true" - Drop table from info in file
+        Run Program:
+        Windows: java -cp ".;postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
+        Mac/Linux: java -cp ".:postgresql-42.2.8.jar" -Dusername=your_username_here -Dpassword=your_password_here DbSetup filepath_to_tableMetaData directorypath_to_tableData
     */
 
     public static void main(String args[]) {
         
-        if (args.length != 2) {
-            System.out.println("Not enough arguments provided. Please provide username and password at runtime.");
-            System.exit(0);
+        //Validate input
+        String username = System.getProperty("username");
+        if(username == null) {
+            System.out.println("Please use argument \"-Dusername=your_username_here\" before executable name to enable database connection");
+            System.exit(1);
+        }
+        String password = System.getProperty("password");
+        if(password == null) {
+            System.out.println("Please use argument \"-Dpassword=your_password_here\" before executable name to enable database connection");
+            System.exit(1);
+        }
+        if(args.length < 2) {
+            System.out.println("To use the program please enter the file path of table metadata file and table data directory path as a command line argument after the excutable");
+            System.exit(1);
+        }
+        else if(args.length == 2) {
+            System.out.println("To use the program please enter one or more of the following as a command line argument after the file and directory path [create|fill|drop]");
+            System.exit(1);
         }
 
-        //Checking additional flags
-        String runCreate = System.getProperty("runCreate");
-        if(runCreate == null) {runCreate= "false";}
-        String runDrop = System.getProperty("runDrop");
-        if(runDrop == null) {runDrop = "false";}
 
-    
-        //Open connection to database and database functions
         DbTools dbtool = new DbTools();
-        dbtool.openDbConnection(args[0], args[1]);
+
+        //Open and store connection to database
+        dbtool.openDbConnection(username, password);
         if(dbtool.hasDbConnection()) {System.out.println("\nConnection to database successful");}
 
-        dbtool.importData("dbInfo\\dbTableInfo.txt");
 
+        //Import table metadata into runtime storage
+        dbtool.importMetaData(args[0]);
+        //dbInfo\\dbTableInfo.txt
+        
 
-        /*//Create database tables from names in file
-        if(runCreate.equals("true")) {
-            //System.out.println("Will create tables");
-            dbtool.dbCreate("dbInfo\\dbTableCreateInfo.txt");
+        //Perform orperations based on runtime input
+        for(int i = 2; i < args.length; i++){
+            switch(args[i]) {
+                case "create":
+                    dbtool.dbCreate();
+                    break;
+                case "fill":
+                    dbtool.dbFill(args[1], username);
+                    break;
+                case "drop":
+                    dbtool.dbDrop();
+                    break;
+                default:
+                    System.out.println("\nUnrecognized option, please select one or more of the following options [create|fill|drop]");
+            }
+
         }
         
-        //TODO - Write wrapping for write tables 
-        //Fill tables with data
-        dbtool.dbFill("table1", "table1data.csv");
-
-
-        //Drop database tables from names in file
-        if(runDrop.equals("true")) {
-            //System.out.println("Will drop tables");
-            dbtool.dbDrop("dbInfo\\dbTableDropInfo.txt");
-        }
-
-
         //Close database connection
-        dbtool.closeDbConnection();*/
+        dbtool.closeDbConnection();
     }
 }
