@@ -29,7 +29,7 @@ class RewardMember:
         self.phone = Utils.getRandomPhoneNumber()
         self.email = Utils.getEmailFromNames(self.firstName, self.lastName)
         self.birthday = Utils.getRandomDate(datetime.date(1900, 1, 1), datetime.date(2020, 1, 1)) # arbitrary start and end date limits
-        self.rewardPoints = random.randint(0, 10000) # 10,000 is arbitrary upper limit
+        self.rewardPoints = random.randint(0, 500) # 500 is arbitrary upper limit
 
     def makeDefaultRewardMember(self):
         self.firstName = 'Default'

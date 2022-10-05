@@ -18,6 +18,7 @@ class OrderTicket(Utils.StringRepresentation):
         self.customerFirstName = ''
         self.rewardsMemberId = 0
         self.employeeId = 0
+        self.orderPriceTotal = 0.0
 
 # day is a datetime date
 def generateOrderTickets(numToGenerate, day, customers: List[RewardsMembers.RewardMember], employees: List[Employees.Employee]):
@@ -106,9 +107,12 @@ if __name__ == '__main__':
         for dayOrderTicket in dayOrderTickets:
             ticketOrderAmount = random.randint(int(avgOrderAmount * .5), int(avgOrderAmount * 1.5))
             numProductsOnTicket = int(ticketOrderAmount // avgProductPrice)
+            dayOrderTicketPrice = 0
             for i in range(numProductsOnTicket):
                 orderItemProduct = random.choice(products)
-                orderItem = OrderItem(dayOrderTicket.id, i, orderItemProduct.product.name, random.choice(range(1, 3)), random.choice([16, 32, 48]))
+                numberOfProductPurchased = random.choice(range(1, 3))
+                dayOrderTicketPrice += numberOfProductPurchased * orderItemProduct.product.price
+                orderItem = OrderItem(dayOrderTicket.id, i, orderItemProduct.product.name, numberOfProductPurchased, random.choice([16, 32, 48]))
                 orderItems.append(orderItem)
 
                 numOrderAdditions = random.randint(0, 2)
@@ -126,6 +130,7 @@ if __name__ == '__main__':
                     orderItemSubtraction.orderId = dayOrderTicket.id
                     orderItemSubtraction.itemNumberInOrder = i
                     orderItemSubtractions.append(orderItemSubtraction)
+            dayOrderTicket.orderPriceTotal = dayOrderTicketPrice
         orderTickets.extend(dayOrderTickets)
 
     Utils.writeObjectsToCsv(orderTickets, 'OrderTickets.csv')
