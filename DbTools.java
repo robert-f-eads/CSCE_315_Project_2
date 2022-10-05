@@ -174,10 +174,10 @@ public class DbTools {
             //Drop each table based on metadata
             System.out.println("\nStarted dropping tables...");
 
-            for(TableInfo currentTable : infoForTables) {
-                String sqlStatement = String.format("DROP TABLE IF EXISTS %s", currentTable.tableName);
+            for(int i = infoForTables.size()-1; i >= 0; i--){
+                String sqlStatement = String.format("DROP TABLE IF EXISTS %s", infoForTables.get(i).tableName);
                 int result = stmt.executeUpdate(sqlStatement);
-                System.out.println(String.format("Dropped %s from the database", currentTable.tableName));
+                System.out.println(String.format("Dropped %s from the database", infoForTables.get(i).tableName));
             }
 
             System.out.println("Finished dropping tables...");
@@ -208,10 +208,10 @@ public class DbTools {
 
                 //Print table result labels
                 for (int i = 1; i <= numColumns; i++) {
-                    System.out.print(metaData.getColumnName(i));
                     if (i > 1) {
                         System.out.print(",  ");
                     }
+                    System.out.print(metaData.getColumnName(i));
                 }
                 System.out.println("");
 
