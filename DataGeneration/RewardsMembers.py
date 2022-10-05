@@ -37,10 +37,11 @@ class RewardMember:
 def generateRewardsMembers(numToGenerate):
     generatedRewardsMembers: List[RewardMember] = []
 
-    defaultRewardMember = RewardMember(defaultRewardMember=True)
-    generatedRewardsMembers.append(defaultRewardMember)
+    # if we want to create a default reward member
+    # defaultRewardMember = RewardMember(defaultRewardMember=True)
+    # generatedRewardsMembers.append(defaultRewardMember)
 
-    for i in range(numToGenerate - 1): # we iterate to -1 bc we added default member
+    for i in range(numToGenerate):
         newRewardMember = RewardMember()
         generatedRewardsMembers.append(newRewardMember)
     return generatedRewardsMembers
