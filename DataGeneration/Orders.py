@@ -20,12 +20,12 @@ class OrderTicket(Utils.StringRepresentation):
         self.orderPriceTotal = 0.0
 
 # day is a datetime date
-def generateOrderTickets(numToGenerate, day, customers: List[RewardsMembers.RewardMember], employees: List[Employees.Employee]):
+def generateOrderTickets(numToGenerate, day: datetime.datetime, customers: List[RewardsMembers.RewardMember], employees: List[Employees.Employee]):
     orderTickets: List[OrderTicket] = []
     timestamps = [day + random.random() * datetime.timedelta(days=1) for i in range(numToGenerate)]
     for timestamp in timestamps:
         orderTicket = OrderTicket()
-        orderTicket.timestamp = timestamp
+        orderTicket.timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
         customer = random.choice(customers)
         employee = random.choice(employees)
         orderTicket.customerFirstName = customer.firstName
