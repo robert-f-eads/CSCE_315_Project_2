@@ -1,3 +1,4 @@
+from typing import List
 import Utils
 import datetime
 import random
@@ -34,7 +35,7 @@ class RewardMember:
         self.firstName = 'Default'
 
 def generateRewardsMembers(numToGenerate):
-    generatedRewardsMembers = []
+    generatedRewardsMembers: List[RewardMember] = []
 
     defaultRewardMember = RewardMember(defaultRewardMember=True)
     generatedRewardsMembers.append(defaultRewardMember)

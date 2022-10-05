@@ -43,6 +43,15 @@ def writeObjectsToCsv(objects, outputFileName, writeHeader=True):
             csvWriter.writerow([value for key, value in object.__dict__.items()])
     return True # if successfully wrote to the csv
 
+
+class StringRepresentation:
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
+    def __repr__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
+
 if __name__ == '__main__':
     for i in range(100):
         print(getRandomDate(datetime.date(1900, 2, 5), datetime.date(2020, 9, 18)))
