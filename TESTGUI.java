@@ -15,9 +15,11 @@ class TESTGUI{
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(screenSize.width - 100, screenSize.height);
+		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize(1300, 800);
 		frame.setResizable(false);
+		frame.setLayout(null);
+
 
 
 		//Logo panel will house Smoothie King logo in top left 
