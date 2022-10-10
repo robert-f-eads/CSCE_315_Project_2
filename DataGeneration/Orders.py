@@ -59,12 +59,14 @@ class OrderItemAddition(OrderItemModification):
     def __init__(self):
         self.id = OrderItemAddition.numberOfOrderItemAdditions
         OrderItemAddition.numberOfOrderItemAdditions += 1
+        super()
 
 class OrderItemSubtraction(OrderItemModification):
     numberOfOrderItemSubtractions = 0
     def __init__(self):
         self.id = OrderItemSubtraction.numberOfOrderItemSubtractions
         OrderItemSubtraction.numberOfOrderItemSubtractions += 1
+        super()
 
 if __name__ == '__main__':
     daysOfSales = 28
@@ -143,8 +145,8 @@ if __name__ == '__main__':
 
     Utils.writeObjectsToCsv(orderTickets, 'data/OrderTickets.csv')
     Utils.writeObjectsToCsv(orderItems, 'data/OrderItems.csv')
-    Utils.writeObjectsToCsv(orderItemAdditions, 'data/OrderItemAdditions.csv')
-    Utils.writeObjectsToCsv(orderItemSubtractions, 'data/OrderItemSubtractions.csv')
+    Utils.writeOrderItemModificationToCsv(orderItemAdditions, 'data/OrderItemAdditions.csv')
+    Utils.writeOrderItemModificationToCsv(orderItemSubtractions, 'data/OrderItemSubtractions.csv')
 
 
 

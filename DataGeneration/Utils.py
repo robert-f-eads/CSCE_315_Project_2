@@ -1,4 +1,5 @@
 import random
+from typing import List
 import names
 import string
 import datetime
@@ -42,6 +43,18 @@ def writeObjectsToCsv(objects, outputFileName, writeHeader=False):
         for object in objects:
             csvWriter.writerow([value for key, value in object.__dict__.items()])
     return True # if successfully wrote to the csv
+
+# we need a special method for order item modifications since they are not 
+# writing in the order asked for by our table
+def writeOrderItemModificationToCsv(orderItemModifications, outputFileName, writeHeader=False):
+    attributeList = ['id', 'orderId', 'itemNumberInOrder', 'ingredientId'] # the order of attributes to write modifications to csv in
+    with open(outputFileName, 'w') as outputFile:
+        csvWriter = csv.writer(outputFile)
+        if writeHeader:
+            csvWriter.writerow(attributeList)
+        for modification in orderItemModifications:
+            csvWriter.writerow([modification.__dict__[attribute] for attribute in attributeList])
+    return True
 
 
 class StringRepresentation:
