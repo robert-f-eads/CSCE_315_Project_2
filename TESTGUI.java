@@ -15,9 +15,8 @@ class TESTGUI{
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(1300, 900);
-		//frame.setResizable(false);
+		frame.setSize(1920, 1080);
+		frame.setResizable(false);
 		frame.setLayout(null);
 
 
@@ -25,7 +24,7 @@ class TESTGUI{
 		//Logo panel will house Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
 		logoPanel.setBackground(Color.white);
-		logoPanel.setBounds(0, 0, 1125, 75);
+		logoPanel.setBounds(0, 0, 1000, 75);
 		logoPanel.setLayout(new BorderLayout());
 
 		//Create Label as icon and add it to the logo panel
@@ -50,7 +49,6 @@ class TESTGUI{
 
 		//Create button component of search bar
 		JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
-		//JButton searchButton = new JButton(searchIcon.getScaledInstance( 50, 50,  java.awt.Image.SCALE_SMOOTH));
 		searchButton.setPreferredSize(new Dimension(50,50));
 		searchButton.addActionListener(new ActionListener() 
 			{
@@ -63,12 +61,12 @@ class TESTGUI{
 		);
 
 		//Set searchButton colors
-		searchButton.setForeground(Color.BLACK);
-		searchButton.setBackground(Color.WHITE);
+		searchButton.setForeground(Color.black);
+		searchButton.setBackground(Color.white);
 
 
 		//Set border colors for search bar and search button
-		Border line = new LineBorder(Color.BLACK);
+		Border line = new LineBorder(Color.black);
 		searchTextField.setBorder(line);
 		searchButton.setBorder(line);
 
@@ -79,20 +77,21 @@ class TESTGUI{
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBackground(Color.red);
-		rightPanel.setBounds(1125, 0, 275, 1000);
+		rightPanel.setBounds(1201, 0, 350, 1000);
 		rightPanel.setLayout(new BorderLayout());
 		
 		
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
-		leftPanel.setBackground(Color.green);
-		leftPanel.setBounds(0, 0, 1124, 1000);
+		leftPanel.setBackground(Color.white);
+		leftPanel.setBounds(0, 0, 1200, 1000);
 		leftPanel.setLayout(null);
 
+		//Adding logo and search to left panel
 		leftPanel.add(logoPanel);
 		leftPanel.add(searchPanel);
 
-                
+        //Adding right and left panel to main frame
 		frame.add(rightPanel);
 		frame.add(leftPanel);
 
