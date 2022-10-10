@@ -17,6 +17,7 @@ class TESTGUI{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setSize(screenSize.width - 100, screenSize.height);
+		frame.setResizable(false);
 
 
 		//Logo panel will house Smoothie King logo in top left 
