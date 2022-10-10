@@ -1,0 +1,10 @@
+SELECT * FROM employees LIMIT 10;
+SELECT * FROM ingredients LIMIT 10;
+SELECT * FROM materials LIMIT 10;
+SELECT * FROM orderitemadditions LIMIT 10;
+SELECT * FROM orderitems LIMIT 10;
+SELECT * FROM orderitemsubtractions LIMIT 10;
+SELECT * FROM ordertickets LIMIT 10;
+SELECT * FROM products LIMIT 10;
+SELECT * FROM productstoingredients LIMIT 10;
+SELECT * FROM rewardsmembers LIMIT 10;
