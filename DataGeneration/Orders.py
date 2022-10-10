@@ -119,7 +119,7 @@ if __name__ == '__main__':
                 numberOfProductPurchased = random.choice(range(1, 3))
                 dayOrderTicketPrice += numberOfProductPurchased * orderItemProduct.product.price
                 # sizes are in oz for orderItem
-                orderItem = OrderItem(dayOrderTicket.id, i, orderItemProduct.product.name, numberOfProductPurchased, random.choice([16, 32, 48]))
+                orderItem = OrderItem(dayOrderTicket.id, i, orderItemProduct.product.name, numberOfProductPurchased, random.choice([20, 32, 40]))
                 orderItems.append(orderItem)
 
                 numOrderAdditions = random.randint(0, 2)
