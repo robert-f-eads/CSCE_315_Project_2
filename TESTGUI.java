@@ -16,8 +16,8 @@ class TESTGUI{
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(1300, 800);
-		frame.setResizable(false);
+		frame.setSize(1300, 900);
+		//frame.setResizable(false);
 		frame.setLayout(null);
 
 
@@ -76,25 +76,25 @@ class TESTGUI{
 		searchPanel.add(searchButton, BorderLayout.LINE_START);
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
 
-		JPanel redPanel = new JPanel();
-		redPanel.setBackground(Color.red);
-		redPanel.setBounds(1125, 0, 275, 1000);
-		redPanel.setLayout(new BorderLayout());
+		//Create right panel to house side buttons
+		JPanel rightPanel = new JPanel();
+		rightPanel.setBackground(Color.red);
+		rightPanel.setBounds(1125, 0, 275, 1000);
+		rightPanel.setLayout(new BorderLayout());
 		
-
-
 		
-		JPanel greenPanel = new JPanel();
-		greenPanel.setBackground(Color.green);
-		greenPanel.setBounds(0, 0, 20, 10);
-		greenPanel.setLayout(new BorderLayout());
+		//Create left panel to house logo, search, and all other functionalities
+		JPanel leftPanel = new JPanel();
+		leftPanel.setBackground(Color.green);
+		leftPanel.setBounds(0, 0, 1124, 1000);
+		leftPanel.setLayout(null);
 
+		leftPanel.add(logoPanel);
+		leftPanel.add(searchPanel);
 
                 
-		frame.add(redPanel);
-		frame.add(logoPanel);
-        frame.add(searchPanel);
-		frame.add(greenPanel);
+		frame.add(rightPanel);
+		frame.add(leftPanel);
 
         frame.setVisible(true);
 
