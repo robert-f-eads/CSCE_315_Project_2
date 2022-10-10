@@ -15,10 +15,13 @@ class TESTGUI{
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1920, 1080);
+		frame.setPreferredSize(new Dimension(1920, 1080));
+		frame.setMinimumSize(new Dimension(1920, 1080));
+		frame.setMaximumSize(new Dimension(1920, 1080));
+
+
 		frame.setResizable(false);
 		frame.setLayout(null);
-
 
 
 		//Logo panel will house Smoothie King logo in top left 
@@ -73,6 +76,7 @@ class TESTGUI{
 		//Add both search bar and search button to panel in appropriate place 
 		searchPanel.add(searchButton, BorderLayout.LINE_START);
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
+
 
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
