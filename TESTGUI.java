@@ -14,6 +14,8 @@ class TESTGUI{
 	static int maxWidth = 1500;
 	static Color darkRed = new Color(165,58,59);
 	static Border line = new LineBorder(Color.black);
+	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
+
 
     public static void main(String args[]){
 
@@ -49,7 +51,7 @@ class TESTGUI{
 		JTextField searchTextField = new JTextField();
 		searchTextField.setPreferredSize(new Dimension(1050,50));
 		searchTextField.setHorizontalAlignment(JTextField.LEFT);
-		searchTextField.setLocation(0, 75);
+		//searchTextField.setLocation(5, 75);
 		Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
 		searchTextField.setFont(searchFont);
 
@@ -72,7 +74,7 @@ class TESTGUI{
 
 
 		//Set border colors for search bar and search button
-		searchTextField.setBorder(line);
+		searchTextField.setBorder(BorderFactory.createCompoundBorder(line, BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		searchButton.setBorder(line);
 
 		//Add both search bar and search button to panel in appropriate place 
@@ -89,13 +91,6 @@ class TESTGUI{
 		Font serverNameFont = new Font("SansSerif", Font.BOLD, 35); //font used in text box
 		serverName.setFont(serverNameFont);
 
-		//for testing purposes, REMOVE
-		//serverName.setBackground(Color.blue);
-		//serverName.setOpaque(true);
-
-
-		//Creating default font for rest of buttons
-		Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
 
 		//Creating Logout Button
 		JButton logout = new JButton("      Logout      ");
