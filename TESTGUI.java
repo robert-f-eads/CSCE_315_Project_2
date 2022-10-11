@@ -12,6 +12,9 @@ import javax.imageio.ImageIO;
 class TESTGUI{
 	static int maxHeight = 1080;
 	static int maxWidth = 1920;
+	static Color darkRed = new Color(165,58,59);
+	static Border line = new LineBorder(Color.black);
+
     public static void main(String args[]){
 
 		//Create JFrame and initial settings
@@ -30,7 +33,7 @@ class TESTGUI{
 
 		//Logo panel will house Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
-		logoPanel.setBackground(Color.blue);
+		logoPanel.setBackground(Color.white);
 		logoPanel.setBounds(0, 0, 1100, 75);
 		logoPanel.setLayout(new BorderLayout());
 
@@ -73,7 +76,6 @@ class TESTGUI{
 
 
 		//Set border colors for search bar and search button
-		Border line = new LineBorder(Color.black);
 		searchTextField.setBorder(line);
 		searchButton.setBorder(line);
 
@@ -83,7 +85,7 @@ class TESTGUI{
 
 
 		//Creating server name label
-		JLabel serverName = new JLabel("Hey");
+		JLabel serverName = new JLabel("Server Name");
 		//serverName.setBounds(32, 0, 300, 300);
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
 		serverName.setVerticalAlignment(SwingConstants.CENTER);;
@@ -92,26 +94,29 @@ class TESTGUI{
 		Font serverNameFont = new Font("SansSerif", Font.BOLD, 35); //font used in text box
 		serverName.setFont(serverNameFont);
 
-		//for testing purposes, REMOVES
+		//for testing purposes, REMOVE
 		//serverName.setBackground(Color.blue);
 		//serverName.setOpaque(true);
 
 
 		//Creating default font for rest of buttons
-		Font defaultButtons = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
+		Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
 
 		//Creating Logout Button
-		JButton logout = new JButton("Logout");
+		JButton logout = new JButton("      Logout      ");
 		//logout.setBounds(32, 50, 150, 75);
 		logout.setFont(defaultButtons);
 		logout.setBackground(Color.white);
-		logout.setMargin(new Insets(0,1,0,1));
-
+		logout.setForeground(darkRed);
+		logout.setRolloverEnabled(false);
+		logout.setFocusPainted(false);
+		logout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
 
 
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
-		rightPanel.setBackground(Color.red);
+		rightPanel.setBackground(Color.white);
+		rightPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));		
 		rightPanel.setBounds(1150, 0, 350, maxHeight);
 		rightPanel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -132,7 +137,7 @@ class TESTGUI{
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.weightx = 1.0;
 		gbc.weighty = 0.1; 
-		//gbc.ipady = 50;
+		gbc.fill = GridBagConstraints.NONE;
 		rightPanel.add(logout, gbc);
 		
 		
