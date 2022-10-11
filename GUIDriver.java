@@ -11,7 +11,21 @@ public class GUIDriver{
 	static Color darkRed = new Color(165,58,59);
 	static Border line = new LineBorder(Color.black);
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
+	JPanel mainPanel;
 
+	public GUIDriver() {
+		mainPanel = new JPanel();
+	}
+	public void updateTilesFromSearch() {
+
+	}
+
+	public JPanel resetMainPanel(JPanel mainPanel) {
+		mainPanel.removeAll();
+		mainPanel.revalidate();
+		mainPanel.repaint();
+		return mainPanel;
+	}
 
     public static void main(String args[]){
 
@@ -58,8 +72,11 @@ public class GUIDriver{
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String typedValue = searchTextField.getText();
-					System.out.println(typedValue);
+					/*String typedValue = searchTextField.getText();
+					System.out.println(typedValue);*/
+
+
+
 				}
 			}
 		);
@@ -76,15 +93,15 @@ public class GUIDriver{
 		//Add both search bar and search button to panel in appropriate place 
 		searchPanel.add(searchButton, BorderLayout.LINE_START);
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
-		
-		TilePanel testTile = new TilePanel("pumpkin Whatever");
+
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBackground(Color.white);
 		mainPanel.setBounds(13, 150, 1100, 800);
 		mainPanel.setBorder(line);
 		mainPanel.setLayout(new FlowLayout());
 
-		mainPanel.add(testTile.mainPanel);
+		TilePanel tileTest = new TilePanel("pumpkin Whatever");
+		mainPanel.add(tileTest.mainPanel);
 
 		//Creating server name label
 		JLabel serverName = new JLabel("Server Name"); //pull from database
@@ -191,17 +208,29 @@ public class GUIDriver{
 
 class TilePanel {
     public JPanel mainPanel;
-    public Image imageIcon;
-    public JLabel itemName;
+    private JLabel itemName;
+	private static Border line = new LineBorder(Color.black);
+	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 23); //font used in text box
+
     public TilePanel(String itemNameString) {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
+		mainPanel.setBackground(Color.white);
+        mainPanel.setBorder(line);
 
-		this.itemName = new JLabel(itemNameString);
+		itemName = new JLabel(itemNameString);
+		itemName.setBackground(Color.white);
+		itemName.setFont(itemNameFont);
+		itemName.setLayout(new FlowLayout());
 
 		JLabel picLabel = new JLabel();
-		picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/" + itemNameString + ".png").getImage().getScaledInstance(400, 300, Image.SCALE_SMOOTH)));
-
+		picLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		try {
+			picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/" + itemNameString.replaceAll("\\s", "") + ".png").getImage().getScaledInstance(175, 225, Image.SCALE_SMOOTH)));
+		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
 		mainPanel.add(picLabel, BorderLayout.PAGE_START);
 		mainPanel.add(itemName, BorderLayout.PAGE_END);
     }
