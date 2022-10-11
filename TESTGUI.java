@@ -10,14 +10,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 class TESTGUI{
+	static int maxHeight = 1080;
+	static int maxWidth = 1920;
     public static void main(String args[]){
 
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(1920, 1080));
-		frame.setMinimumSize(new Dimension(1920, 1080));
-		frame.setMaximumSize(new Dimension(1920, 1080));
+		frame.setPreferredSize(new Dimension(maxWidth, maxHeight));
+		frame.setMinimumSize(new Dimension(maxWidth, maxHeight));
+		frame.setMaximumSize(new Dimension(maxWidth, maxHeight));
+
+		
 
 
 		frame.setResizable(false);
@@ -26,8 +30,8 @@ class TESTGUI{
 
 		//Logo panel will house Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
-		logoPanel.setBackground(Color.white);
-		logoPanel.setBounds(0, 0, 1000, 75);
+		logoPanel.setBackground(Color.blue);
+		logoPanel.setBounds(0, 0, 1100, 75);
 		logoPanel.setLayout(new BorderLayout());
 
 		//Create Label as icon and add it to the logo panel
@@ -43,11 +47,11 @@ class TESTGUI{
 		searchPanel.setLayout(new BorderLayout());
 
 		//Create text component of search bar
-		Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
 		JTextField searchTextField = new JTextField();
 		searchTextField.setPreferredSize(new Dimension(1050,50));
 		searchTextField.setHorizontalAlignment(JTextField.LEFT);
 		searchTextField.setLocation(0, 75);
+		Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
 		searchTextField.setFont(searchFont);
 
 		//Create button component of search bar
@@ -78,17 +82,64 @@ class TESTGUI{
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
 
 
+		//Creating server name label
+		JLabel serverName = new JLabel("Hey");
+		//serverName.setBounds(32, 0, 300, 300);
+		serverName.setHorizontalAlignment(SwingConstants.CENTER);
+		serverName.setVerticalAlignment(SwingConstants.CENTER);;
+
+		//Creating server font
+		Font serverNameFont = new Font("SansSerif", Font.BOLD, 35); //font used in text box
+		serverName.setFont(serverNameFont);
+
+		//for testing purposes, REMOVES
+		//serverName.setBackground(Color.blue);
+		//serverName.setOpaque(true);
+
+
+		//Creating default font for rest of buttons
+		Font defaultButtons = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
+
+		//Creating Logout Button
+		JButton logout = new JButton("Logout");
+		//logout.setBounds(32, 50, 150, 75);
+		logout.setFont(defaultButtons);
+		logout.setBackground(Color.white);
+		logout.setMargin(new Insets(0,1,0,1));
+
+
+
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBackground(Color.red);
-		rightPanel.setBounds(1201, 0, 350, 1000);
-		rightPanel.setLayout(new BorderLayout());
+		rightPanel.setBounds(1150, 0, 350, maxHeight);
+		rightPanel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		//Add objects to panel
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0;
+		gbc.weighty = 0; 
+		gbc.ipady = 30;
+		rightPanel.add(serverName, gbc);
+
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.1; 
+		//gbc.ipady = 50;
+		rightPanel.add(logout, gbc);
 		
 		
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.white);
-		leftPanel.setBounds(0, 0, 1200, 1000);
+		leftPanel.setBounds(0, 0, 1200, maxHeight);
 		leftPanel.setLayout(null);
 
 		//Adding logo and search to left panel
