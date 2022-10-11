@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 public class GUIDriver {
@@ -18,18 +19,49 @@ public class GUIDriver {
 	static Border line = new LineBorder(Color.black);
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
 	JPanel mainPanel;
+	String currentTextFieldEntry;
+
+	boolean currentPageIsMain;
+	boolean currentPageIsTile;
+	boolean currentPageIsModifications;
 
 	public void updateTilesFromSearch(String searchBarText) {
 		mainPanel.removeAll();
-		mainPanel.revalidate();
 
-		//Use search string to display results
+		TilePanel test = new TilePanel("pumpkin Whatever");
+		mainPanel.add(test.mainPanel);
+		//Use search string to display results etc
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
+
+	public void updateMainView() {
+		mainPanel.removeAll();
+		mainPanel.setLayout(new GridBagLayout());
+
+		ItemInOrder testItem = new ItemInOrder("pumpkin Whatever");
+		mainPanel.add(testItem.mainPanel);
+
+		mainPanel.revalidate();
+		mainPanel.repaint();
 	}
 
 	public void resetMainPanel() {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
+	}
+
+	public void stateMachine() {
+		//defaults to main page
+		//if (text is entered and the search button is pressed) and currentPage is Main
+			//update tile part
+
+		//if (on tile click and currentPage is tile)
+			//go to modifications
+		
+		//if (on modification exit and currentPage is modification)
+			// go back to main view
 	}
 
 	public GUIWindow() {
@@ -46,10 +78,6 @@ public class GUIDriver {
 		mainPanel.setBackground(Color.white);
 		mainPanel.setBounds(13, 150, 1100, 800);
 		mainPanel.setBorder(line);
-		mainPanel.setLayout(new FlowLayout());
-
-		TilePanel tileTest = new TilePanel("pumpkin Whatever");
-		mainPanel.add(tileTest.mainPanel);
 
 		//Logo panel will house Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
@@ -84,8 +112,9 @@ public class GUIDriver {
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String typedValue = searchTextField.getText();
-					updateTilesFromSearch(typedValue);
+					currentTextFieldEntry = searchTextField.getText();
+
+					updateTilesFromSearch(currentTextFieldEntry);
 				}
 			}
 		);
@@ -93,6 +122,9 @@ public class GUIDriver {
 		//Set searchButton colors
 		searchButton.setForeground(Color.black);
 		searchButton.setBackground(Color.white);
+		searchButton.setRolloverEnabled(false);
+		searchButton.setFocusPainted(false);
+
 
 
 		//Set border colors for search bar and search button
@@ -194,6 +226,8 @@ public class GUIDriver {
 		leftPanel.setBounds(0, 0, 1150, maxHeight);
 		leftPanel.setLayout(null);
 
+
+		//ALL TESTING DONE HERE
 		//Adding logo and search to left panel
 		leftPanel.add(logoPanel);
 		leftPanel.add(searchPanel);
@@ -209,13 +243,13 @@ public class GUIDriver {
 }
 
 class TilePanel {
-    public JPanel mainPanel;
+    public JButton mainPanel;
     private JLabel itemName;
 	private static Border line = new LineBorder(Color.black);
 	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 23); //font used in text box
 
     public TilePanel(String itemNameString) {
-		mainPanel = new JPanel();
+		mainPanel = new JButton();
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBackground(Color.white);
         mainPanel.setBorder(line);
@@ -236,4 +270,42 @@ class TilePanel {
 		mainPanel.add(picLabel, BorderLayout.PAGE_START);
 		mainPanel.add(itemName, BorderLayout.PAGE_END);
     }
+}
+
+class ItemInOrder {
+	public JPanel mainPanel;
+	private JLabel itemName;
+	private ArrayList<String> itemAdditons;
+	private ArrayList<String> itemSubtractions;
+	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 23); //font used in text box
+
+	//get itemAdditons and itemSubtractions from database and display them
+	public ItemInOrder(String itemNameString) {
+		mainPanel = new JPanel();
+		mainPanel.setBackground(Color.blue);
+		mainPanel.setLayout(new BorderLayout());
+
+		JPanel subScrollPanel = new JPanel();
+		subScrollPanel.setLayout(new GridBagLayout());
+		subScrollPanel.setBackground(Color.red);
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		
+		itemName = new JLabel(itemName + "\n today's additions are as follows: \n pain, pain, pain pain pain");
+		itemName.setFont(itemNameFont);
+
+		//for loop, for all additions
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0; 
+		gbc.gridy = 0; //set in for loop
+
+		subScrollPanel.add(itemName, gbc);
+
+		JScrollPane scrollPane = new JScrollPane(subScrollPanel);
+		mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+	
+	}
+
+
 }
