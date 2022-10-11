@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 class TESTGUI{
 	static int maxHeight = 1080;
-	static int maxWidth = 1920;
+	static int maxWidth = 1550;
 	static Color darkRed = new Color(165,58,59);
 	static Border line = new LineBorder(Color.black);
 
@@ -82,7 +82,6 @@ class TESTGUI{
 
 		//Creating server name label
 		JLabel serverName = new JLabel("Server Name"); //pull from database
-		//serverName.setBounds(32, 0, 300, 300);
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
 		serverName.setVerticalAlignment(SwingConstants.CENTER);;
 
@@ -132,7 +131,7 @@ class TESTGUI{
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBackground(Color.white);
-		rightPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));		
+		rightPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.black));		
 		rightPanel.setBounds(1150, 0, 350, maxHeight);
 		rightPanel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -163,12 +162,10 @@ class TESTGUI{
 		gbc.fill = GridBagConstraints.NONE;
 		rightPanel.add(cancel, gbc);
 
-		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.weightx = 0.0;
-		//gbc.weighty = 0.055; 
 		gbc.weighty = 1;
 		gbc.fill = GridBagConstraints.NONE;
 		rightPanel.add(finishAndPay, gbc);
