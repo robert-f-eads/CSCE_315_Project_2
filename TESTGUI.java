@@ -23,10 +23,6 @@ class TESTGUI{
 		frame.setPreferredSize(new Dimension(maxWidth, maxHeight));
 		frame.setMinimumSize(new Dimension(maxWidth, maxHeight));
 		frame.setMaximumSize(new Dimension(maxWidth, maxHeight));
-
-		
-
-
 		frame.setResizable(false);
 		frame.setLayout(null);
 
@@ -85,7 +81,7 @@ class TESTGUI{
 
 
 		//Creating server name label
-		JLabel serverName = new JLabel("Server Name");
+		JLabel serverName = new JLabel("Server Name"); //pull from database
 		//serverName.setBounds(32, 0, 300, 300);
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
 		serverName.setVerticalAlignment(SwingConstants.CENTER);;
@@ -113,6 +109,26 @@ class TESTGUI{
 		logout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
 
 
+		JButton cancel = new JButton("      Cancel      ");
+		//cancel.setBounds(32, 50, 150, 75);
+		cancel.setFont(defaultButtons);
+		cancel.setBackground(Color.white);
+		cancel.setForeground(darkRed);
+		cancel.setRolloverEnabled(false);
+		cancel.setFocusPainted(false);
+		cancel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, darkRed));	
+
+
+		JButton finishAndPay = new JButton("Finish and Pay");
+		//finishAndPay.setBounds(32, 50, 150, 75);
+		finishAndPay.setFont(defaultButtons);
+		finishAndPay.setBackground(Color.white);
+		finishAndPay.setForeground(darkRed);
+		finishAndPay.setRolloverEnabled(false);
+		finishAndPay.setFocusPainted(false);
+		finishAndPay.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
+
+
 		//Create right panel to house side buttons
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBackground(Color.white);
@@ -131,14 +147,31 @@ class TESTGUI{
 		gbc.ipady = 30;
 		rightPanel.add(serverName, gbc);
 
-
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 1.0;
-		gbc.weighty = 0.1; 
+		gbc.weightx = 0.0;
+		gbc.weighty = 4.5; 
 		gbc.fill = GridBagConstraints.NONE;
 		rightPanel.add(logout, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0; 
+		gbc.fill = GridBagConstraints.NONE;
+		rightPanel.add(cancel, gbc);
+
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.weightx = 0.0;
+		//gbc.weighty = 0.055; 
+		gbc.weighty = 1;
+		gbc.fill = GridBagConstraints.NONE;
+		rightPanel.add(finishAndPay, gbc);
 		
 		
 		//Create left panel to house logo, search, and all other functionalities
