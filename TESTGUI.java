@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 class TESTGUI{
 	static int maxHeight = 1080;
-	static int maxWidth = 1550;
+	static int maxWidth = 1500;
 	static Color darkRed = new Color(165,58,59);
 	static Border line = new LineBorder(Color.black);
 
@@ -174,7 +174,7 @@ class TESTGUI{
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.white);
-		leftPanel.setBounds(0, 0, 1200, maxHeight);
+		leftPanel.setBounds(0, 0, 1150, maxHeight);
 		leftPanel.setLayout(null);
 
 		//Adding logo and search to left panel
