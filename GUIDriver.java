@@ -5,7 +5,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-public class GUIDriver{
+public class GUIDriver {
+	public static void main(String args[]) {
+		GUIWindow newGUIWindow = new GUIWindow();
+	}
+}
+
+ class GUIWindow {
 	static int maxHeight = 1080;
 	static int maxWidth = 1500;
 	static Color darkRed = new Color(165,58,59);
@@ -13,22 +19,20 @@ public class GUIDriver{
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
 	JPanel mainPanel;
 
-	public GUIDriver() {
-		mainPanel = new JPanel();
-	}
-	public void updateTilesFromSearch() {
+	public void updateTilesFromSearch(String searchBarText) {
+		mainPanel.removeAll();
+		mainPanel.revalidate();
 
+		//Use search string to display results
 	}
 
-	public JPanel resetMainPanel(JPanel mainPanel) {
+	public void resetMainPanel() {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
-		return mainPanel;
 	}
 
-    public static void main(String args[]){
-
+	public GUIWindow() {
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,6 +42,14 @@ public class GUIDriver{
 		frame.setResizable(false);
 		frame.setLayout(null);
 
+		mainPanel = new JPanel();
+		mainPanel.setBackground(Color.white);
+		mainPanel.setBounds(13, 150, 1100, 800);
+		mainPanel.setBorder(line);
+		mainPanel.setLayout(new FlowLayout());
+
+		TilePanel tileTest = new TilePanel("pumpkin Whatever");
+		mainPanel.add(tileTest.mainPanel);
 
 		//Logo panel will house Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
@@ -72,11 +84,8 @@ public class GUIDriver{
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					/*String typedValue = searchTextField.getText();
-					System.out.println(typedValue);*/
-
-
-
+					String typedValue = searchTextField.getText();
+					updateTilesFromSearch(typedValue);
 				}
 			}
 		);
@@ -94,14 +103,6 @@ public class GUIDriver{
 		searchPanel.add(searchButton, BorderLayout.LINE_START);
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
 
-		JPanel mainPanel = new JPanel();
-		mainPanel.setBackground(Color.white);
-		mainPanel.setBounds(13, 150, 1100, 800);
-		mainPanel.setBorder(line);
-		mainPanel.setLayout(new FlowLayout());
-
-		TilePanel tileTest = new TilePanel("pumpkin Whatever");
-		mainPanel.add(tileTest.mainPanel);
 
 		//Creating server name label
 		JLabel serverName = new JLabel("Server Name"); //pull from database
@@ -203,7 +204,8 @@ public class GUIDriver{
 		frame.add(leftPanel);
 
         frame.setVisible(true);
-    }
+	}
+
 }
 
 class TilePanel {
