@@ -1,15 +1,11 @@
+
 import javax.swing.*;
 import javax.swing.border.*;
-
-
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
-class TESTGUI{
+
+public class GUIDriver{
 	static int maxHeight = 1080;
 	static int maxWidth = 1500;
 	static Color darkRed = new Color(165,58,59);
@@ -80,12 +76,20 @@ class TESTGUI{
 		//Add both search bar and search button to panel in appropriate place 
 		searchPanel.add(searchButton, BorderLayout.LINE_START);
 		searchPanel.add(searchTextField, BorderLayout.LINE_END);
+		
+		TilePanel testTile = new TilePanel("pumpkin Whatever");
+		JPanel mainPanel = new JPanel();
+		mainPanel.setBackground(Color.white);
+		mainPanel.setBounds(13, 150, 1100, 800);
+		mainPanel.setBorder(line);
+		mainPanel.setLayout(new FlowLayout());
 
+		mainPanel.add(testTile.mainPanel);
 
 		//Creating server name label
 		JLabel serverName = new JLabel("Server Name"); //pull from database
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
-		serverName.setVerticalAlignment(SwingConstants.CENTER);;
+		serverName.setVerticalAlignment(SwingConstants.CENTER);
 
 		//Creating server font
 		Font serverNameFont = new Font("SansSerif", Font.BOLD, 35); //font used in text box
@@ -175,12 +179,30 @@ class TESTGUI{
 		//Adding logo and search to left panel
 		leftPanel.add(logoPanel);
 		leftPanel.add(searchPanel);
+		leftPanel.add(mainPanel);
 
         //Adding right and left panel to main frame
 		frame.add(rightPanel);
 		frame.add(leftPanel);
 
         frame.setVisible(true);
+    }
+}
 
+class TilePanel {
+    public JPanel mainPanel;
+    public Image imageIcon;
+    public JLabel itemName;
+    public TilePanel(String itemNameString) {
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+
+		this.itemName = new JLabel(itemNameString);
+
+		JLabel picLabel = new JLabel();
+		picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/" + itemNameString + ".png").getImage().getScaledInstance(400, 300, Image.SCALE_SMOOTH)));
+
+		mainPanel.add(picLabel, BorderLayout.PAGE_START);
+		mainPanel.add(itemName, BorderLayout.PAGE_END);
     }
 }
