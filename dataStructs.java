@@ -181,7 +181,7 @@ class orderItemModification {
         void setOrderId(int orderId) {this.orderId = orderId;}
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
         void setingredientId(int ingredientId) {this.ingredientId = ingredientId;}
-        void setingredientName(String ingredientName) {this.ingredientName = ingredientName;}
+        void setIngredientName(String ingredientName) {this.ingredientName = ingredientName;}
      
 
     @Override
