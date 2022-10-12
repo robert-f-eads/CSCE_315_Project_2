@@ -6,13 +6,110 @@ public class serverViewFunctions {
         Dictionary<Integer, ingredient> ingredients = new Hashtable<Integer, ingredient>();
         Dictionary<Integer, material> materials = new Hashtable<Integer, material>();
         Dictionary<Integer, product> products = new Hashtable<Integer, product>();
+        Dictionary<Integer, orderTicketInfo> orderTickets = new Hashtable<Integer, orderTicketInfo>();
         //For product search bar use "SELECT id FROM products WHERE name ILIKE '%Search_string%'"
 
     public serverViewFunctions() {
         importIngredients();
         importMaterials();
         importProducts();
+        importOrderTickets();
     }
+
+    private void importOrderTickets() {
+       try{
+            dbFunctions dbConnection = new dbFunctions();
+            dbConnection.createDbConnection();
+            // TODO see if sql has get first ten, then next ten, and page it
+            String sqlStatement = "SELECT * FROM orderTickets LIMIT 10";
+            ResultSet result = dbConnection.dbQuery(sqlStatement);
+            
+            //Import all ingredients
+            while(result.next()) {
+                /*
+                    int id;
+                    String timestamp;
+                    String customerFirstName;
+                    int rewardsMemberId;
+                    int employeeId;
+                    double orderPriceTotal; 
+                    Vector<orderItem> items;
+                */
+                orderTicketInfo oti = new orderTicketInfo(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4), 
+                    result.getInt(5), result.getDouble(6));
+
+                sqlStatement = "SELECT * FROM orderItems WHERE orderId=" + oti.getId();
+                ResultSet itemResult = dbConnection.dbQuery(sqlStatement);
+                while(itemResult.next()) {
+                    /*
+                    int id;
+                    int orderId;
+                    int itemNumberInOrder;
+                    String itemName;
+                    int itemAmount;
+                    int itemSize;
+                    Vector<orderItemModification> additions;
+                    Vector<orderItemModification> subtractions;
+                    */
+                    orderItem oi = new orderItem(itemResult.getInt(1), itemResult.getInt(2), itemResult.getInt(3), itemResult.getString(4), itemResult.getInt(5), itemResult.getInt(6));
+                    sqlStatement = "SELECT * FROM orderItemAdditions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
+                    ResultSet additionResult = dbConnection.dbQuery(sqlStatement);
+                    while(additionResult.next()) {
+                        /*
+                        int id;
+                        int orderId;
+                        int itemNumberInOrder;
+                        int ingredientId;
+                        String ingredientName = "";
+                        */ 
+                        orderItemModification a = new orderItemModification(additionResult.getInt(1), additionResult.getInt(2), additionResult.getInt(3), additionResult.getInt(4), additionResult.getString(4));
+                        oi.addAddition(a);
+                    }
+
+                    sqlStatement = "SELECT * FROM orderItemSubtractions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
+                    ResultSet subtractionResult = dbConnection.dbQuery(sqlStatement);
+                    while(subtractionResult.next()) {
+                        /*
+                        int id;
+                        int orderId;
+                        int itemNumberInOrder;
+                        int ingredientId;
+                        String ingredientName = "";
+                        */ 
+                        orderItemModification s = new orderItemModification(subtractionResult.getInt(1), subtractionResult.getInt(2), subtractionResult.getInt(3), subtractionResult.getInt(4), subtractionResult.getString(4));
+                        oi.addSubtraction(s);
+                    }
+                    oti.addItemToOrder(oi);
+                }
+                orderTickets.put(oti.getId(), oti);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        } 
+    }
+
+    // private void importIngredients() {
+    //     try{
+    //         dbFunctions dbConnection = new dbFunctions();
+    //         dbConnection.createDbConnection();
+    //         String sqlStatement = "SELECT * FROM ingredients";
+    //         ResultSet result = dbConnection.dbQuery(sqlStatement);
+            
+    //         //Import all ingredients
+    //         while(result.next()) {
+    //             ingredient temp_ingredient = new ingredient(result.getInt(1), result.getString(2), result.getString(3), result.getDouble(4), 
+    //             result.getString(5), result.getDouble(6), result.getString(7), result.getDouble(8));
+    //             ingredients.put(temp_ingredient.getId(), temp_ingredient);
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         System.err.println(e.getClass().getName()+": "+e.getMessage());
+    //         System.exit(0);
+    //     }
+    // }//Close importIngredients
+
 
     private void importMaterials() {
        try{
@@ -140,25 +237,37 @@ public class serverViewFunctions {
                     resultInt = dbConnection.dbUpsert(sqlStatement);
                 }
 
-                /*
+
+                //Update ingredient counts
                 int id = item.getId();
                 product temp_product = products.get(id);
+                Vector<ingredient> temp_ingreds = new Vector<ingredient>();
+
+                //Adds default
+                for(ingredient ingred : temp_product.ingredients()) {temp_ingreds.add(ingred);}
+
+                //Adds additions
                 for(orderItemModification modification : item.getAdditions()) {
                     ingredient temp_ingredient = ingredients.get(modification.getId());
-                    
-                }
-                for(orderItemModification modification : item.getSubtractions()) {
-
+                    temp_ingreds.add(temp_ingredient);
                 }
                 
-                for(ingredient ingred : temp_product.ingredients()) {
-
+                //Removes subtractions
+                for(orderItemModification modification : item.getSubtractions()) {
+                    ingredient temp_ingredient = ingredients.get(modification.getId());
+                    temp_ingreds.remove(temp_ingredient);
                 }
 
-                ingerigent number - 1
-
-
-                */
+                //Decrement the ingredient quanitity
+                for(ingredient temp_ingredient : temp_ingreds) {
+                    sqlStatement = String.format("SELECT quantityremaining FROM ingredients WHERE id = %d", temp_ingredient.getId());
+                    result = dbConnection.dbQuery(sqlStatement);
+                    int quantRemaining = 0;
+                    while(result.next()){quantRemaining = result.getInt(1);}
+                    quantRemaining -= 1;
+                    sqlStatement = String.format("UPDATE ingredients SET quantityremaining = %.2f WHERE id = %d", quantRemaining, temp_ingredient.getId());
+                    resultInt = dbConnection.dbUpsert(sqlStatement);
+                }
             }
 
         } catch (Exception e) {
@@ -191,8 +300,7 @@ public class serverViewFunctions {
         }
         return check;
     } 
-
-    
+  
     public String getEmployeeName(int employeeId) {
         ResultSet result;
         String name = "";
@@ -220,7 +328,7 @@ public class serverViewFunctions {
         product getProduct(int id) {return products.get(id);}
         material getMaterial(int id) {return materials.get(id);}
         ingredient getIngredient(int id) {return ingredients.get(id);}
-        
+        orderTicketInfo getOrderTicket(int id) {return orderTickets.get(id);}
 
 
 

@@ -114,10 +114,12 @@ public class GUIDriver {
 		mainPanel.add(buttonPanel);
 
 		
-		for(orderItem item : newTicket.getOrderItems()){
-			ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
-			mainPanel.add(tempItem.mainPanel); //adjust gbc
-		}
+		/*if(newTicket != null) {
+			for(orderItem item : newTicket.getOrderItems()){
+				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
+				mainPanel.add(tempItem.mainPanel); //adjust gbc
+			}
+		}*/
 
 
 		mainPanel.revalidate();

@@ -123,7 +123,7 @@ class orderItem {
         void setItemSize(int itemSize) {this.itemSize = itemSize;}
         void addAddition(orderItemModification modification) {additions.add(modification);}
         void removeAddition(orderItemModification modification) {additions.remove(modification);}
-        void addSubraction(orderItemModification modification) {subtractions.add(modification);}
+        void addSubtraction(orderItemModification modification) {subtractions.add(modification);}
         void removeSubraction(orderItemModification modification) {subtractions.remove(modification);}
      
 
@@ -157,6 +157,14 @@ class orderItemModification {
         this.orderId = orderId;
         this.itemNumberInOrder = itemNumberInOrder;
         this.ingredientId = ingredientId;
+    }
+
+    public orderItemModification(int id, int orderId, int itemNumberInOrder, int ingredientId, String ingredientName) {
+        this.id = id;
+        this.orderId = orderId;
+        this.itemNumberInOrder = itemNumberInOrder;
+        this.ingredientId = ingredientId;
+        this.ingredientName = ingredientName;
     }
 
 

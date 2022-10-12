@@ -19,7 +19,7 @@ public class inventoryViewFunctions {
         Vector<ingredient> ingredients = new Vector<>();
         try {
 			dbConnection.createDbConnection();
-			String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", filter, "%");
+			String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s'", "%", filter, "%");
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
 			while(results.next()) {
 				ingredient i = serverFunctions.getIngredient(results.getInt("id")); 
@@ -38,7 +38,7 @@ public class inventoryViewFunctions {
         Vector<material> materials = new Vector<>();
         try {
 			dbConnection.createDbConnection();
-			String sqlStatement = String.format("SELECT id FROM materials WHERE name ILIKE '%s%s%s' ", "%", filter, "%");
+			String sqlStatement = String.format("SELECT id FROM materials WHERE name ILIKE '%s%s%s'", "%", filter, "%");
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
 			while(results.next()) {
 				material m = serverFunctions.getMaterial(results.getInt("id")); 
