@@ -4,11 +4,14 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.sql.*;
 
 
 public class GUIDriver {
 	public static void main(String args[]) {
 		GUIWindow newGUIWindow = new GUIWindow();
+		newGUIWindow.updateMainView();
+		//newGUIWindow.updateTileView("Good morning");
 	}
 }
 
@@ -25,11 +28,29 @@ public class GUIDriver {
 	boolean currentPageIsTile;
 	boolean currentPageIsModifications;
 
-	public void updateTilesFromSearch(String searchBarText) {
+	public void updateTileView(String searchBarText) {
 		mainPanel.removeAll();
+		mainPanel.setLayout(new FlowLayout());
+		
 
-		TilePanel test = new TilePanel("pumpkin Whatever");
-		mainPanel.add(test.mainPanel);
+		try {
+			serverViewFunctions serverFunctions = new serverViewFunctions();
+			dbFunctions dbConnection = new dbFunctions();
+			dbConnection.createDbConnection();
+
+			String sqlStatement = String.format("SELECT id FROM products WHERE name ILIKE '%%s%' ", searchBarText)
+			ResultSet results = dbConnection.dbQuery(sqlStatement);
+			while(results.next()) {
+				product tempProduct = serverFunctions.getProduct(results.getInt("id")); 
+				TilePanel tempPanel = new TilePanel(tempProduct.getName());
+				mainPanel.add(tempPanel.mainPanel);
+			}
+		} catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        } 
+
 		//Use search string to display results etc
 		mainPanel.revalidate();
 		mainPanel.repaint();
@@ -37,10 +58,60 @@ public class GUIDriver {
 
 	public void updateMainView() {
 		mainPanel.removeAll();
-		mainPanel.setLayout(new GridBagLayout());
 
-		ItemInOrder testItem = new ItemInOrder("pumpkin Whatever");
-		mainPanel.add(testItem.mainPanel);
+
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+		
+		JPanel buttonPanel = new JPanel(); //will house buttons dedicated to the main view 
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		buttonPanel.setBackground(Color.white);
+
+		JButton duplicate = new JButton("Duplicate");
+		duplicate.setBackground(darkRed);
+		duplicate.setFont(defaultButtons);
+		duplicate.setForeground(Color.white);
+		duplicate.setRolloverEnabled(false);
+		duplicate.setFocusPainted(false);
+
+		JButton edit = new JButton("Edit");
+		edit.setBackground(darkRed);
+		edit.setFont(defaultButtons);
+		edit.setForeground(Color.white);
+		edit.setRolloverEnabled(false);
+		edit.setFocusPainted(false);
+
+	
+		JButton removeItem = new JButton("Remove Item");
+		removeItem.setBackground(darkRed);
+		removeItem.setFont(defaultButtons);
+		removeItem.setForeground(Color.white);
+		removeItem.setRolloverEnabled(false);
+		removeItem.setFocusPainted(false);
+
+
+		buttonPanel.add(removeItem);
+
+		buttonPanel.add(Box.createRigidArea(new Dimension(590,5)));
+		buttonPanel.add(edit);
+		buttonPanel.add(Box.createRigidArea(new Dimension(30,5)));
+		buttonPanel.add(duplicate);
+
+
+		mainPanel.add(buttonPanel);
+
+		//ABOVE IS JUST BUTTONS//
+		
+		orderTicketInfo current_ticket = new orderTicketInfo();
+		for(orderItem item : current_ticket.getOrderItems()){
+			ItemInOrder tempItem = new ItemInOrder(item);
+			mainPanel.add(tempItem.mainPanel); //adjust gbc
+		}
+
+
+		//ItemInOrder testItem = new ItemInOrder("pumpkin Whatever");
+		//mainPanel.add(testItem.mainPanel);
 
 		mainPanel.revalidate();
 		mainPanel.repaint();
@@ -113,8 +184,7 @@ public class GUIDriver {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					currentTextFieldEntry = searchTextField.getText();
-
-					updateTilesFromSearch(currentTextFieldEntry);
+					updateTileView(currentTextFieldEntry);
 				}
 			}
 		);
@@ -139,7 +209,8 @@ public class GUIDriver {
 		//Creating server name label
 		JLabel serverName = new JLabel("Server Name"); //pull from database
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
-		serverName.setVerticalAlignment(SwingConstants.CENTER);
+		serverName.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
 		//Creating server font
 		Font serverNameFont = new Font("SansSerif", Font.BOLD, 35); //font used in text box
@@ -155,6 +226,8 @@ public class GUIDriver {
 		logout.setRolloverEnabled(false);
 		logout.setFocusPainted(false);
 		logout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
+		logout.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
 
 		JButton cancel = new JButton("      Cancel      ");
@@ -165,6 +238,7 @@ public class GUIDriver {
 		cancel.setRolloverEnabled(false);
 		cancel.setFocusPainted(false);
 		cancel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, darkRed));	
+		cancel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
 		JButton finishAndPay = new JButton("Finish and Pay");
@@ -175,6 +249,7 @@ public class GUIDriver {
 		finishAndPay.setRolloverEnabled(false);
 		finishAndPay.setFocusPainted(false);
 		finishAndPay.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
+		finishAndPay.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
 		//Create right panel to house side buttons
@@ -182,43 +257,16 @@ public class GUIDriver {
 		rightPanel.setBackground(Color.white);
 		rightPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.black));		
 		rightPanel.setBounds(1150, 0, 350, maxHeight);
-		rightPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 
-		//Add objects to panel
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0;
-		gbc.weighty = 0; 
-		gbc.ipady = 30;
-		rightPanel.add(serverName, gbc);
+		rightPanel.add(serverName);
+		rightPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		rightPanel.add(logout);
+		rightPanel.add(Box.createRigidArea(new Dimension(0,750)));
+		rightPanel.add(cancel);
+		rightPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		rightPanel.add(finishAndPay);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 0.0;
-		gbc.weighty = 4.5; 
-		gbc.fill = GridBagConstraints.NONE;
-		rightPanel.add(logout, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 0.0;
-		gbc.weighty = 0.0; 
-		gbc.fill = GridBagConstraints.NONE;
-		rightPanel.add(cancel, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 0.0;
-		gbc.weighty = 1;
-		gbc.fill = GridBagConstraints.NONE;
-		rightPanel.add(finishAndPay, gbc);
-		
 		
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
@@ -275,12 +323,10 @@ class TilePanel {
 class ItemInOrder {
 	public JPanel mainPanel;
 	private JLabel itemName;
-	private ArrayList<String> itemAdditons;
-	private ArrayList<String> itemSubtractions;
 	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 23); //font used in text box
 
 	//get itemAdditons and itemSubtractions from database and display them
-	public ItemInOrder(String itemNameString) {
+	public ItemInOrder(orderItem item) {
 		mainPanel = new JPanel();
 		mainPanel.setBackground(Color.blue);
 		mainPanel.setLayout(new BorderLayout());
@@ -291,20 +337,34 @@ class ItemInOrder {
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		
-		itemName = new JLabel(itemName + "\n today's additions are as follows: \n pain, pain, pain pain pain");
+		itemName = new JLabel(item.getItemName());
 		itemName.setFont(itemNameFont);
 
 		//for loop, for all additions
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0; 
-		gbc.gridy = 0; //set in for loop
+		int counter = 0;
+		for(orderItemModification modification : item.getAdditions()) { //int k = 0; k < 
+			JLabel currentAddition = new JLabel("Addition: " + modification.getIngredientName());
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridx = 0; 
+			gbc.gridy = counter; //set in for loop
+			mainPanel.add(currentAddition, gbc);
+			counter+=1;
+		}
+		counter = 0;
+		for(orderItemModification modification : item.getSubtractions()) {
+			JLabel currentSubtraction = new JLabel("Subtractions: " + modification.getIngredientName());
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridx = 0; 
+			gbc.gridy = counter; //set in for loop
+			mainPanel.add(currentSubtraction, gbc);
+			counter+=1;
+		}
+			
 
 		subScrollPanel.add(itemName, gbc);
 
 		JScrollPane scrollPane = new JScrollPane(subScrollPanel);
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-	
 	}
 
 
