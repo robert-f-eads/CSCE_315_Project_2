@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.sql.*;
+import  java.text.DecimalFormat;
 
 
 public class GUIDriver {
@@ -70,15 +71,72 @@ public class GUIDriver {
 
 	public void updateMainView() {
 		mainPanel.removeAll();
-
-
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		mainPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+		//Item 1
+        orderItemModification add1_1 = new orderItemModification();
+        add1_1.setingredientId(0);
+        orderItemModification add1_2 = new orderItemModification();
+        add1_2.setingredientId(1);
+        orderItemModification subtract1_1 = new orderItemModification();
+        subtract1_1.setingredientId(2);
+        
+        orderItem item1 = new orderItem();
+        item1.setItemNumberInOrder(0);
+        item1.setItemName("Test Drink 1");
+        item1.setItemAmount(1);
+        item1.setItemSize(20);
+        item1.addAddition(add1_1);
+        item1.addAddition(add1_2);
+		item1.setId(20);
+        item1.addSubtraction(subtract1_1);
+        
+        //Item 2
+        orderItemModification add2_1 = new orderItemModification();
+        add2_1.setingredientId(0);
+        orderItemModification subtract2_1 = new orderItemModification();
+        subtract2_1.setingredientId(1);
+        orderItemModification subtract2_2 = new orderItemModification();
+        subtract2_2.setingredientId(2);
+
+        orderItem item2 = new orderItem();
+        item2.setItemNumberInOrder(1);
+        item2.setItemName("very very veyr long name");
+        item2.setItemAmount(2);
+        item2.setItemSize(32);
+		item2.setId(21);
+        item2.addAddition(add2_1);
+        item2.addSubtraction(subtract2_1);
+        item2.addSubtraction(subtract2_2);
+        
+        //Order ticket
+        orderTicketInfo temp_ticket = new orderTicketInfo();
+        temp_ticket.setCustomerFirstName("Test-Person");
+        temp_ticket.setRewardsMemberId(2);
+        temp_ticket.setEmployeeId(2);
+        temp_ticket.setOrderPriceTotal(4.99);
+        temp_ticket.addItemToOrder(item1);
+        temp_ticket.addItemToOrder(item2);
+        //
+
+		JPanel subScrollPanel = new JPanel();
+		subScrollPanel.setLayout(new BoxLayout(subScrollPanel, BoxLayout.PAGE_AXIS));
+		subScrollPanel.add(Box.createRigidArea(new Dimension(10,10)));
+		subScrollPanel.setBackground(Color.white);
+		subScrollPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		//subScrollPanel.setMinimumSize(new Dimension(1100, 800));
+		//subScrollPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		
 		JPanel buttonPanel = new JPanel(); //will house buttons dedicated to the main view 
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.setBackground(Color.white);
+		//buttonPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+		//buttonPanel.setMinimumSize(new Dimension(1200, 50));
+		//buttonPanel.setPreferredSize(new Dimension(1200, 50));
+		buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
 
 		JButton duplicate = new JButton("Duplicate");
 		duplicate.setBackground(darkRed);
@@ -104,24 +162,64 @@ public class GUIDriver {
 
 
 		buttonPanel.add(removeItem);
-
-		buttonPanel.add(Box.createRigidArea(new Dimension(590,5)));
+		buttonPanel.add(Box.createRigidArea(new Dimension(550,5)));
 		buttonPanel.add(edit);
 		buttonPanel.add(Box.createRigidArea(new Dimension(30,5)));
 		buttonPanel.add(duplicate);
+		buttonPanel.add(Box.createRigidArea(new Dimension(30,5)));
+
 
 
 		mainPanel.add(buttonPanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		//subScrollPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
 
 		
 		/*if(newTicket != null) {
 			for(orderItem item : newTicket.getOrderItems()){
 				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
-				mainPanel.add(tempItem.mainPanel); //adjust gbc
+				subScrollPanel.add(tempItem.subScrollPanel); 
 			}
 		}*/
 
+		if(temp_ticket != null) {
+			for(orderItem item : temp_ticket.items){
+				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
+				tempItem.mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+				subScrollPanel.add(tempItem.mainPanel); 
+			}
+		}
 
+		if(temp_ticket != null) {
+			for(orderItem item : temp_ticket.items){
+				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
+				tempItem.mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+				subScrollPanel.add(tempItem.mainPanel); 
+			}
+		}
+
+	 	if(temp_ticket != null) {
+			for(orderItem item : temp_ticket.items){
+				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
+				tempItem.mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+				subScrollPanel.add(tempItem.mainPanel); 
+			}
+		}
+
+		
+		if(temp_ticket != null) {
+			for(orderItem item : temp_ticket.items){
+				ItemInOrder tempItem = new ItemInOrder(item, serverFunctions);
+				tempItem.mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+				subScrollPanel.add(tempItem.mainPanel); 
+			}
+		}
+
+
+		JScrollPane scrollPanel = new JScrollPane(subScrollPanel);
+
+		mainPanel.add(scrollPanel);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
@@ -461,45 +559,89 @@ class TilePanel {
 
 class ItemInOrder {
 	public JPanel mainPanel;
-	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 23); //font used in text box
+	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 28); //font used in text box
+	private static Font defaultButtons =  new Font("SansSerif", Font.PLAIN, 25); //font used in text box
+
+	static Color darkRed = new Color(165,58,59);
 	serverViewFunctions serverFunctions;
 
 	//get itemAdditons and itemSubtractions from database and display them
 	public ItemInOrder(orderItem item, serverViewFunctions serverFunctions) {
+
+		if (serverFunctions == null) {
+			System.out.println("serverFunctions is null");
+			return;
+		}
+		System.out.println("Creating panel for item: " + item.itemName);
 		mainPanel = new JPanel();
-		mainPanel.setBackground(Color.blue);
-		mainPanel.setLayout(new BorderLayout());
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.setBackground(Color.white);
+		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel subScrollPanel = new JPanel();
 		subScrollPanel.setLayout(new BoxLayout(subScrollPanel, BoxLayout.PAGE_AXIS));
-		subScrollPanel.setBackground(Color.red);
+		subScrollPanel.setBackground(Color.white);
+		subScrollPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel itemNamePanel = new JPanel();
 		itemNamePanel.setLayout(new BoxLayout(itemNamePanel, BoxLayout.LINE_AXIS));
-		////////////////////
-		item.getItemSize();
-		item.getItemAmount();
-		(serverFunctions.getProduct(item.getId())).getPrice();
-		
-		JLabel itemName = new JLabel(item.getItemName());
-		itemName.setFont(itemNameFont);
+		itemNamePanel.setBackground(Color.white);
+		itemNamePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		subScrollPanel.add(itemName);
+		JLabel itemName = new JLabel("  " + item.getItemName());
+		itemName.setFont(itemNameFont);
+		itemName.setForeground(darkRed);
+		itemName.setBackground(Color.blue);
+		itemName.setAlignmentX(Component.LEFT_ALIGNMENT);
+		itemName.setMinimumSize(new Dimension(400, 50));
+		itemName.setMaximumSize(new Dimension(400, 50));
+		
+
+		JLabel itemSize = new JLabel(Integer.toString(item.getItemSize()));
+		itemSize.setFont(defaultButtons);
+		itemSize.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+		JLabel quantity = new JLabel (Integer.toString(item.getItemAmount()));
+		quantity.setFont(defaultButtons);
+		quantity.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+		String pattern = "###.##";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+		JLabel price = new JLabel("$" + decimalFormat.format((serverFunctions.getProduct(item.getId()).getPrice())));
+		price.setFont(defaultButtons);
+		price.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+		itemNamePanel.add(itemName);
+		itemNamePanel.add(Box.createRigidArea(new Dimension(375,0)));
+		itemNamePanel.add(itemSize);
+		itemNamePanel.add(Box.createRigidArea(new Dimension(75,10)));
+		itemNamePanel.add(quantity);
+		itemNamePanel.add(Box.createRigidArea(new Dimension(75,10)));
+		itemNamePanel.add(price);
+
+		subScrollPanel.add(itemNamePanel);
 
 		//for loop, for all additions
 		for(orderItemModification modification : item.getAdditions()) { 
-			JLabel currentAddition = new JLabel("Addition: " + modification.getIngredientName());
+			JLabel currentAddition = new JLabel("          Addition: " + modification.getIngredientName());
+			currentAddition.setFont(defaultButtons);
+			currentAddition.setAlignmentX(Component.LEFT_ALIGNMENT);
 			subScrollPanel.add(currentAddition);
+			
 		}
 
 		for(orderItemModification modification : item.getSubtractions()) {
-			JLabel currentSubtraction = new JLabel("Subtractions: " + modification.getIngredientName());
+			JLabel currentSubtraction = new JLabel("          Subtractions: " + modification.getIngredientName());
+			currentSubtraction.setFont(defaultButtons);
+			currentSubtraction.setAlignmentX(Component.LEFT_ALIGNMENT);
 			subScrollPanel.add(currentSubtraction);
 		}
 
 
-		JScrollPane scrollPane = new JScrollPane(subScrollPanel);
-		mainPanel.add(scrollPane, BorderLayout.CENTER);
+		//JScrollPane scrollPane = new JScrollPane(subScrollPanel);
+		//mainPanel.add(scrollPane);
+		mainPanel.add(subScrollPanel);
 	}
 
 
