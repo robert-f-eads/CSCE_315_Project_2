@@ -154,6 +154,20 @@ public class DbTools {
                     stderr.close();
                 }
 
+                if (currentTable.tableName != "productsToIngredients") {
+                    Statement stmt = dbConnection.createStatement();
+                    String sqlStatement = String.format("SELECT id FROM %s ORDER BY id DESC LIMIT 1", currentTable.tableName); 
+                    ResultSet result = stmt.executeQuery(sqlStatement);
+                    result.next();
+                    ////ALTER SEQUENCE <table>_id_seq RESTART WITH <number>
+                    int temp =  result.getInt("id");
+                    sqlStatement = String.format("ALTER SEQUENCE %s_id_seq RESTART WITH %d", currentTable.tableName, temp + 1);
+                    int results = stmt.executeUpdate(sqlStatement); 
+                    
+                }
+            
+
+
             }
         } catch (Exception e) {
             System.out.println("Error Detected:");
