@@ -4,12 +4,45 @@ import java.util.*;
 public class serverViewFunctions {
     private
         Dictionary<Integer, ingredient> ingredients = new Hashtable<Integer, ingredient>();
+        Dictionary<Integer, material> materials = new Hashtable<Integer, material>();
         Dictionary<Integer, product> products = new Hashtable<Integer, product>();
         //For product search bar use "SELECT id FROM products WHERE name ILIKE '%Search_string%'"
 
     public serverViewFunctions() {
         importIngredients();
+        importMaterials();
         importProducts();
+    }
+
+    private void importMaterials() {
+       try{
+            dbFunctions dbConnection = new dbFunctions();
+            dbConnection.createDbConnection();
+            String sqlStatement = "SELECT * FROM materials";
+            ResultSet result = dbConnection.dbQuery(sqlStatement);
+            
+            //Import all ingredients
+            while(result.next()) {
+                /*
+                    int id;
+                    String name;
+                    String size;
+                    int quantityRemaining;
+                    String measurementUnits;
+                    int itemsPerUnit;
+                    double pricePerUnitLastOrder;
+                    String lastOrderDate;
+                    double unitsInLastOrder;
+                */
+                material temp_material = new material(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4), 
+                result.getString(5), result.getInt(6), result.getDouble(7), result.getString(8), result.getDouble(9));
+                materials.put(temp_material.getId(), temp_material);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        } 
     }
 
     private void importIngredients() {
@@ -58,7 +91,7 @@ public class serverViewFunctions {
         }
     }//Close importProducts
 
-    void updateDbWithOrder(orderTicketInfo new_ticket) {
+    public void updateDbWithOrder(orderTicketInfo new_ticket) {
         try{
             //Create database connection object
             dbFunctions dbConnection = new dbFunctions();
@@ -106,6 +139,26 @@ public class serverViewFunctions {
                     sqlStatement += String.format("VALUES (%d, %d, %d)", ticketId, itemId, modification.getIngredientId());
                     resultInt = dbConnection.dbUpsert(sqlStatement);
                 }
+
+                /*
+                int id = item.getId();
+                product temp_product = products.get(id);
+                for(orderItemModification modification : item.getAdditions()) {
+                    ingredient temp_ingredient = ingredients.get(modification.getId());
+                    
+                }
+                for(orderItemModification modification : item.getSubtractions()) {
+
+                }
+                
+                for(ingredient ingred : temp_product.ingredients()) {
+
+                }
+
+                ingerigent number - 1
+
+
+                */
             }
 
         } catch (Exception e) {
@@ -116,8 +169,60 @@ public class serverViewFunctions {
         
     }//Close updateDbWithOrder
 
+    
+    public boolean isAdmin(int employeeId) {
+        ResultSet result;
+        boolean check = false;
+        dbFunctions dbConnection = new dbFunctions();
+        try{
+            dbConnection.createDbConnection();
+            String sqlStatement = String.format("SELECT isadmin FROM employees WHERE id = %d", employeeId);
+            result = dbConnection.dbQuery(sqlStatement);
+            
+            //Check employee permissions
+            while(result.next()) {
+                check = result.getBoolean("isadmin");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+        return check;
+    } 
+
+    
+    public String getEmployeeName(int employeeId) {
+        ResultSet result;
+        String name = "";
+        dbFunctions dbConnection = new dbFunctions();
+        try{
+            dbConnection.createDbConnection();
+            String sqlStatement = String.format("SELECT firstname, lastname FROM employees WHERE id = %d", employeeId);
+            result = dbConnection.dbQuery(sqlStatement);
+            
+            //Check employee permissions
+            while(result.next()) {
+                name = result.getString("firstname") + " " + result.getString("lastname");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+        return name;
+    }
+    
+    
     public 
         product getProduct(int id) {return products.get(id);}
+        material getMaterial(int id) {return materials.get(id);}
+        ingredient getIngredient(int id) {return ingredients.get(id);}
+        
+
+
 
     
     
