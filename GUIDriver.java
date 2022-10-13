@@ -182,7 +182,7 @@ public class GUIDriver {
 		mainPanel.add(subtractionsHeader);
 	
 		JPanel subtractionsButtonPanel = new JPanel();
-		subtractionsButtonPanel.setLayout(new BoxLayout(subtractionsButtonPanel, BoxLayout.X_AXIS));
+		subtractionsButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		mainPanel.add(subtractionsButtonPanel);
 		subtractionsButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 	
@@ -193,27 +193,39 @@ public class GUIDriver {
 		// add spacing between each button
 		// product.ingredients.size()
 		List<JButton> buttonList = new ArrayList<JButton>();
+        System.out.println(product.ingredients.size());
 		for (int index = 0; index < product.ingredients.size(); index++) {	//product.ingredients.size(); i++) {
-			JButton button = new JButton(product.ingredients().get(index).getName());
             int myIndex = index;
-			button.addActionListener(new ActionListener() 
+			SubtractionButton button = new SubtractionButton(serverFunctions, product, myIndex);
+			button.mainButton.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					orderItem temp = serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().lastElement(), product.ingredients().get(myIndex).getId());
-					//serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().remove(newTicket.getOrderItems.lastElement());
-					newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
-					newTicket.addItemToOrder(temp);//(newTicket.getOrderItems().lastElement());
+					orderItem temp = serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().lastElement(), product.ingredients().get(myIndex).getId(), button.selected);
+					
+					if (button.selected) { //remove subtraction from item in order
+						button.selected = false;
+						button.mainButton.setBackground(Color.white);
+						mainPanel.revalidate();
+						mainPanel.repaint();
+					}
+					else { //add subtraction to item in order
+						button.selected = true;
+						button.mainButton.setBackground(blueHighlight);
+						mainPanel.revalidate();
+						mainPanel.repaint();
+					}
+
+						newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement()); //add item
+						newTicket.addItemToOrder(temp);
+
+ 
 				}
 			} );
-			button.setFont(defaultButtons);
-			buttonList.add(button);
-			subtractionsButtonPanel.add(button);
-			button.setAlignmentX(Component.LEFT_ALIGNMENT);
-			button.setBackground(Color.white);
-			button.setForeground(darkRed);
-	
-			subtractionsButtonPanel.add(Box.createRigidArea(new Dimension(15, 0)));
+			
+			buttonList.add(button.mainButton);
+			subtractionsButtonPanel.add(button.mainButton);
+			subtractionsButtonPanel.add(Box.createRigidArea(new Dimension(15, 10)));
 		}
 
 		//ADDITIONS
@@ -389,6 +401,7 @@ public class GUIDriver {
 							}
 							else {
 								tempItem.quantityDecrease.setForeground(Color.lightGray);
+								
 							}
 						}
 					}
@@ -412,12 +425,15 @@ public class GUIDriver {
 								System.out.println(currentlySelectedComponent.itemInformation.itemName);
 								currentlySelectedComponent.mainPanel.setBackground(Color.white);
 								currentlySelectedComponent.itemNamePanel.setBackground(Color.white);
+								currentlySelectedComponent.quantityIncrease.setBackground(Color.white);
+								currentlySelectedComponent.quantityDecrease.setBackground(Color.white);
+
 							}
 							currentlySelectedComponent = tempItem;
 							currentlySelectedComponent.mainPanel.setBackground(blueHighlight);
 							currentlySelectedComponent.itemNamePanel.setBackground(blueHighlight);
 							currentlySelectedComponent.quantityIncrease.setBackground(blueHighlight);
-							currentlySelectedComponent.quantityIncrease.setBackground(blueHighlight);
+							currentlySelectedComponent.quantityDecrease.setBackground(blueHighlight);
 							mainPanel.revalidate();
 							mainPanel.repaint();
 						}
@@ -814,7 +830,7 @@ class TilePanel {
 		itemName.setFont(itemNameFont);
 		itemName.setLineWrap(true);
 		itemName.setEditable(false);
-		itemName. setHighlighter(null);
+		itemName.setHighlighter(null);
 		itemName.setMaximumSize(new Dimension(175, 75));
 
 		JLabel picLabel = new JLabel();
@@ -944,10 +960,29 @@ class ItemInOrder {
 			currentSubtraction.setAlignmentX(Component.LEFT_ALIGNMENT);
 			mainPanel.add(currentSubtraction);
 		}
-
-
-		//mainPanel.add(subScrollPanel);
 	}
-
-
 }
+
+
+class SubtractionButton {
+	public JButton mainButton;
+	public boolean selected;
+	public product product;
+	private static Font defaultButtons =  new Font("SansSerif", Font.PLAIN, 25); 
+	static Color darkRed = new Color(165,58,59);
+
+
+	public SubtractionButton(serverViewFunctions serverFunctions, product product, int myIndex) {
+		this.product = product;
+		mainButton = new JButton(product.ingredients().get(myIndex).getName());
+		selected = false;
+		mainButton.setFont(defaultButtons);
+		mainButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mainButton.setBackground(Color.white);
+		mainButton.setForeground(darkRed);
+		mainButton.setRolloverEnabled(false);
+		mainButton.setFocusPainted(false);
+
+	}
+}
+

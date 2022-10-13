@@ -193,6 +193,15 @@ class orderItemModification {
         String print = String.format("Id: %d\nOrder Id: %d\nItem Number in Order: %d\nIngredient Id: %d\nIngredient Name: %s", id, orderId, itemNumberInOrder, ingredientId, ingredientName);
         return print;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) {return true;}
+        if(!(o instanceof orderItemModification)) {return false;}
+        orderItemModification order = (orderItemModification) o;
+        if(order.getIngredientId() == ingredientId) {return true;}
+        return false;
+    }
 }
 
 class ingredient {

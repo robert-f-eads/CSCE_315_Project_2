@@ -283,21 +283,25 @@ public class serverViewFunctions {
         return item;
     }
 
-    public orderItem updateItemWithSubtraction(orderItem item, int ingredientId) {
+    public orderItem updateItemWithSubtraction(orderItem item, int ingredientId, boolean isSelected) {
         orderItemModification modification = new orderItemModification();
         modification.setItemNumberInOrder(item.getItemNumberInOrder());
         modification.setingredientId(ingredientId);
         modification.setIngredientName(ingredients.get(ingredientId).getName());
-        if(item.getSubtractions().indexOf(modification) == -1) {
-            item.addSubtraction(modification);
-        }   
+        if(isSelected) {item.removeSubraction(modification);}   
+        else {item.addSubtraction(modification);}
+        
         return item;
     }
-    public void updateItemWithAddition(orderItem item, int ingredientId) {
+    public orderItem updateItemWithAddition(orderItem item, int ingredientId) {
         orderItemModification modification = new orderItemModification();
         modification.setItemNumberInOrder(item.getItemNumberInOrder());
         modification.setingredientId(ingredientId);
+        modification.setIngredientName(ingredients.get(ingredientId).getName());
+
+        //Wait for Alexia then check if button bool is true
         item.addAddition(modification);
+        return item;
     } 
 
     public void updateOrderWithItem(orderTicketInfo orderTicket, orderItem item){
@@ -312,6 +316,7 @@ public class serverViewFunctions {
         newItem.setItemName(item.getItemName());
         newItem.setItemAmount(item.getItemAmount());
         newItem.setItemSize(item.getItemSize());
+        newItem.setProductId(item.getProductId());
         for(orderItemModification modification : item.getAdditions()) {newItem.addAddition(modification);}
         for(orderItemModification modification : item.getSubtractions()) {newItem.addSubtraction(modification);}
 
