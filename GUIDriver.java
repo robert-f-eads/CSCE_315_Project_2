@@ -53,34 +53,34 @@ public class GUIDriver {
 	boolean currentPageIsTile;
 	boolean currentPageIsModifications;
 
-	public void updateAdditions(String searchBarText, JPanel searchPanel) {
-		searchPanel.removeAll();
-		searchPanel.setLayout(new FlowLayout());
+	// public void updateAdditions(String searchBarText, JPanel searchPanel) {
+	// 	searchPanel.removeAll();
+	// 	searchPanel.setLayout(new FlowLayout());
 	
-		try {
-			dbConnection.createDbConnection();
-			String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
-			ResultSet results = dbConnection.dbQuery(sqlStatement);
-			while(results.next()) {
-				ingredient tempIngredient = serverFunctions.getIngredient(results.getInt("id")); 
-				JButton button = new JButton(tempIngredient.getName());
-				button.setFont(defaultButtons);
-				searchPanel.add(button);
-				button.setAlignmentX(Component.LEFT_ALIGNMENT);
-				button.setBackground(Color.white);
-				button.setForeground(darkRed);
+	// 	try {
+	// 		dbConnection.createDbConnection();
+	// 		String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
+	// 		ResultSet results = dbConnection.dbQuery(sqlStatement);
+	// 		while(results.next()) {
+	// 			ingredient tempIngredient = serverFunctions.getIngredient(results.getInt("id")); 
+	// 			JButton button = new JButton(tempIngredient.getName());
+	// 			button.setFont(defaultButtons);
+	// 			searchPanel.add(button);
+	// 			button.setAlignmentX(Component.LEFT_ALIGNMENT);
+	// 			button.setBackground(Color.white);
+	// 			button.setForeground(darkRed);
 	
-				searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName()+": "+e.getMessage());
-			System.exit(0);
-		} 
+	// 			searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+	// 		}
+	// 	} catch (Exception e) {
+	// 		e.printStackTrace();
+	// 		System.err.println(e.getClass().getName()+": "+e.getMessage());
+	// 		System.exit(0);
+	// 	} 
 	
-		searchPanel.revalidate();
-		searchPanel.repaint();
-	}
+	// 	searchPanel.revalidate();
+	// 	searchPanel.repaint();
+	// }
 	
 	public void updateModifications(product product) { // needs product object parameter product product
 		mainPanel.removeAll();
@@ -126,6 +126,15 @@ public class GUIDriver {
 		size20.setAlignmentX(Component.LEFT_ALIGNMENT);
 		size20.setBackground(Color.white);
 		size20.setForeground(darkRed);
+		size20.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 20);
+                    newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
+					newTicket.addItemToOrder(temp);
+				}
+			} );
 	
 		sizeButtonPanel.add(Box.createRigidArea(new Dimension(60, 0)));
 		
@@ -135,6 +144,15 @@ public class GUIDriver {
 		size32.setAlignmentX(Component.LEFT_ALIGNMENT);
 		size32.setBackground(Color.white);
 		size32.setForeground(darkRed);
+		size32.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 32);
+                    newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
+					newTicket.addItemToOrder(temp);
+				}
+			} );
 	
 		sizeButtonPanel.add(Box.createRigidArea(new Dimension(60, 0)));
 	
@@ -144,6 +162,15 @@ public class GUIDriver {
 		size40.setAlignmentX(Component.LEFT_ALIGNMENT);
 		size40.setBackground(Color.white);
 		size40.setForeground(darkRed);
+		size40.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 40);
+                    newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
+					newTicket.addItemToOrder(temp);
+				}
+			} );
 		
 		
 		JLabel subtractionsHeader = new JLabel("Subtractions");
@@ -165,10 +192,20 @@ public class GUIDriver {
 		// create a button for each ingredient
 		// add spacing between each button
 		// product.ingredients.size()
-	
 		List<JButton> buttonList = new ArrayList<JButton>();
-		for (int i = 0; i < 3; i++) {	//product.ingredients.size(); i++) {
-			JButton button = new JButton(product.ingredients.get(i).getName());
+		for (int index = 0; index < product.ingredients.size(); index++) {	//product.ingredients.size(); i++) {
+			JButton button = new JButton(product.ingredients().get(index).getName());
+            int myIndex = index;
+			button.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					orderItem temp = serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().lastElement(), product.ingredients().get(myIndex).getId());
+					//serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().remove(newTicket.getOrderItems.lastElement());
+					newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
+					newTicket.addItemToOrder(temp);//(newTicket.getOrderItems().lastElement());
+				}
+			} );
 			button.setFont(defaultButtons);
 			buttonList.add(button);
 			subtractionsButtonPanel.add(button);
@@ -178,54 +215,56 @@ public class GUIDriver {
 	
 			subtractionsButtonPanel.add(Box.createRigidArea(new Dimension(15, 0)));
 		}
+
+		//ADDITIONS
+		
+		// JLabel additionsHeader = new JLabel("Additions");
+		// additionsHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
 	
-		JLabel additionsHeader = new JLabel("Additions");
-		additionsHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// //Creating additions header font
+		// Font additionsHeaderFont = new Font("SansSerif", Font.PLAIN, 28);
+		// additionsHeader.setFont(additionsHeaderFont);
+		// mainPanel.add(additionsHeader);
 	
-		//Creating additions header font
-		Font additionsHeaderFont = new Font("SansSerif", Font.PLAIN, 28);
-		additionsHeader.setFont(additionsHeaderFont);
-		mainPanel.add(additionsHeader);
+		// //Search panel will house static search bar in top left
+		// JPanel searchPanel = new JPanel();
+		// searchPanel.setBackground(Color.green);
+		// //searchPanel.setBounds(13, 87, 800, 30);
+		// searchPanel.setMaximumSize(new Dimension(1050, 50));
+		// mainPanel.add(searchPanel);
+		// searchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// searchPanel.setLayout(new BorderLayout());
 	
-		//Search panel will house static search bar in top left
-		JPanel searchPanel = new JPanel();
-		searchPanel.setBackground(Color.green);
-		//searchPanel.setBounds(13, 87, 800, 30);
-		searchPanel.setMaximumSize(new Dimension(1050, 50));
-		mainPanel.add(searchPanel);
-		searchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		searchPanel.setLayout(new BorderLayout());
+		// //Create text component of search bar
+		// JTextField searchTextField = new JTextField();
+		// searchTextField.setPreferredSize(new Dimension(1050,50));
+		// searchTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
+		// searchTextField.setFont(searchFont);
 	
-		//Create text component of search bar
-		JTextField searchTextField = new JTextField();
-		searchTextField.setPreferredSize(new Dimension(1050,50));
-		searchTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
-		Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
-		searchTextField.setFont(searchFont);
+		// // Panel to display search results
+		// JPanel searchResultPanel = new JPanel();
+		// searchResultPanel.setBackground(Color.orange);
+		// // searchResultPanel.setBounds(13, 87, 800, 30);
+		// mainPanel.add(searchResultPanel);
+		// searchResultPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 	
-		// Panel to display search results
-		JPanel searchResultPanel = new JPanel();
-		searchResultPanel.setBackground(Color.orange);
-		// searchResultPanel.setBounds(13, 87, 800, 30);
-		mainPanel.add(searchResultPanel);
-		searchResultPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// //Create button component of search bar
+		// JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
+		// searchButton.setPreferredSize(new Dimension(50,50));
+		// searchButton.addActionListener(new ActionListener() 
+		// 	{
+		// 		@Override
+		// 		public void actionPerformed(ActionEvent e) {
+		// 			currentTextFieldEntry = searchTextField.getText();
+		// 			updateAdditions(currentTextFieldEntry, searchResultPanel);
+		// 		}
+		// 	} );
 	
-		//Create button component of search bar
-		JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
-		searchButton.setPreferredSize(new Dimension(50,50));
-		searchButton.addActionListener(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					currentTextFieldEntry = searchTextField.getText();
-					updateAdditions(currentTextFieldEntry, searchResultPanel);
-				}
-			} );
-	
-		searchPanel.add(searchButton, BorderLayout.LINE_START);
-		searchPanel.add(searchTextField, BorderLayout.LINE_END);		
+		// searchPanel.add(searchButton, BorderLayout.LINE_START);
+		// searchPanel.add(searchTextField, BorderLayout.LINE_END);		
 			
-		serverFunctions.createOrderTicketItem
+		
 	
 		mainPanel.revalidate();
 		mainPanel.repaint();
@@ -247,7 +286,9 @@ public class GUIDriver {
 				{
 					@Override
 					public void actionPerformed(ActionEvent e) {
+                        newTicket = serverFunctions.createOrderTicketItem(newTicket, tempProduct);
 						updateModifications(tempPanel.productInformation); //product ??
+                        
 					}
 				} );
 
@@ -293,7 +334,7 @@ public class GUIDriver {
 		duplicate.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					newTicket = duplicateItem(newTicket, currentlySelectedComponent.itemInformation);
+					newTicket = serverFunctions.duplicateItem(newTicket, currentlySelectedComponent.itemInformation);
 					updateMainView();
 				}
 			}
@@ -317,7 +358,7 @@ public class GUIDriver {
 		removeItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newTicket = deleteFromOrder(newTicket, currentlySelectedComponent.itemInformation);
+				newTicket = serverFunctions.deleteFromOrder(newTicket, currentlySelectedComponent.itemInformation);
 				updateMainView();
 			}
 		}
@@ -367,6 +408,7 @@ public class GUIDriver {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 							if (currentlySelectedComponent != null) {
+								System.out.println(currentlySelectedComponent.itemInformation.getItemName());
 								System.out.println(currentlySelectedComponent.itemInformation.itemName);
 								currentlySelectedComponent.mainPanel.setBackground(Color.white);
 								currentlySelectedComponent.itemNamePanel.setBackground(Color.white);
@@ -374,7 +416,10 @@ public class GUIDriver {
 							currentlySelectedComponent = tempItem;
 							currentlySelectedComponent.mainPanel.setBackground(blueHighlight);
 							currentlySelectedComponent.itemNamePanel.setBackground(blueHighlight);
-							updateMainView();
+							currentlySelectedComponent.quantityIncrease.setBackground(blueHighlight);
+							currentlySelectedComponent.quantityIncrease.setBackground(blueHighlight);
+							mainPanel.revalidate();
+							mainPanel.repaint();
 						}
 					}
 				);
@@ -463,26 +508,6 @@ public class GUIDriver {
 		rightPanel.repaint();
 	}
 
-	public orderTicketInfo duplicateItem(orderTicketInfo orderTicket, orderItem item) {
-        orderItem newItem = new orderItem();
-        
-        //Duplicate item
-        newItem.setItemNumberInOrder(orderTicket.getOrderItems().size() + 1);
-        newItem.setItemName(item.getItemName());
-        newItem.setItemAmount(item.getItemAmount());
-        newItem.setItemSize(item.getItemSize());
-        for(orderItemModification modification : item.getAdditions()) {newItem.addAddition(modification);}
-        for(orderItemModification modification : item.getSubtractions()) {newItem.addSubtraction(modification);}
-
-        orderTicket.addItemToOrder(newItem);
-		return orderTicket;
-    }
-
-	public orderTicketInfo deleteFromOrder(orderTicketInfo orderTicket, orderItem item) {
-        orderTicket.removeItemFromOrder(item);
-		return orderTicket;
-    }
-
 	public void stateMachine() {
 		//defaults to main page
 		//if (text is entered and the search button is pressed) and currentPage is Main
@@ -503,7 +528,7 @@ public class GUIDriver {
 		
 		//TESTING REMOVE
 		//Item 1
-        orderItemModification add1_1 = new orderItemModification();
+        /*orderItemModification add1_1 = new orderItemModification();
         add1_1.setingredientId(0);
         orderItemModification add1_2 = new orderItemModification();
         add1_2.setingredientId(1);
@@ -547,7 +572,7 @@ public class GUIDriver {
         newTicket.setOrderPriceTotal(4.99);
         newTicket.addItemToOrder(item1);
         newTicket.addItemToOrder(item2);
-        //remove testing
+        //remove testing*/
 
 
 		//Create JFrame and initial settings
@@ -677,7 +702,7 @@ public class GUIDriver {
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					newTicket.addItemToOrder(currentProduct);
+					//newTicket.addItemToOrder(new );
 					updateMainView();
 				}
 			}
@@ -697,7 +722,9 @@ public class GUIDriver {
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					updateTileView(currentTextFieldEntry);
+					//updateTileView(currentTextFieldEntry);
+                    //serverFunctions.updateDbWithOrder(newTicket);
+					updateMainView();
 					orderCreated = true;
 				}
 			}
@@ -826,9 +853,7 @@ class ItemInOrder {
 			return;
 		}
 
-
 		itemInformation = item;
-
 
 		mainPanel = new JButton();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
@@ -838,7 +863,6 @@ class ItemInOrder {
 		mainPanel.setFocusPainted(false);
 		
 
-
 		subScrollPanel = new JPanel();
 		subScrollPanel.setLayout(new BoxLayout(subScrollPanel, BoxLayout.PAGE_AXIS));
 		subScrollPanel.setBackground(Color.white);
@@ -846,14 +870,12 @@ class ItemInOrder {
 
 		itemNamePanel = new JPanel();
 		itemNamePanel.setLayout(new BoxLayout(itemNamePanel, BoxLayout.LINE_AXIS));
-		//itemNamePanel.setBackground(Color.white);
 		itemNamePanel.setOpaque(false);
 		itemNamePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JLabel itemName = new JLabel("  " + item.getItemName());
 		itemName.setFont(itemNameFont);
 		itemName.setForeground(darkRed);
-		//itemName.setBackground(Color.blue);
 		itemName.setOpaque(false);
 		itemName.setAlignmentX(Component.LEFT_ALIGNMENT);
 		itemName.setMinimumSize(new Dimension(400, 50));
@@ -878,7 +900,6 @@ class ItemInOrder {
 		quantityIncrease.setFocusPainted(false);
 
 		
-
 		quantityDecrease = new JButton("-");
 		quantityDecrease.setBackground(Color.white);
 		quantityDecrease.setBorderPainted(false);
@@ -886,14 +907,13 @@ class ItemInOrder {
 		quantityDecrease.setFocusPainted(false);
 
 
-		
 
 		String pattern = "###.##";
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        JLabel price = new JLabel("$" + decimalFormat.format((serverFunctions.getProduct(item.getProductId())).getPrice()));
 
-		JLabel price = new JLabel("$" + decimalFormat.format((serverFunctions.getProduct(item.getId()).getPrice())));
 		price.setFont(defaultButtons);
-		price.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		price.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		itemNamePanel.add(itemName);
 		itemNamePanel.add(Box.createRigidArea(new Dimension(375,0)));

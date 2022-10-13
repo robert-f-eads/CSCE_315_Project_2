@@ -7,7 +7,7 @@ public class dbFunctions {
     //Member Functions
     void createDbConnection() {
         try {
-            dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2","csce315_901_hassan", "930006274");
+            dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2","", "");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());

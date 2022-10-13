@@ -71,6 +71,7 @@ class orderItem {
     private
         int id;
         int orderId;
+        int productId;
         int itemNumberInOrder;
         String itemName;
         int itemAmount;
@@ -83,6 +84,7 @@ class orderItem {
     public orderItem() {
         id = -1;
         orderId = -1;
+        productId = -1;
         itemNumberInOrder = 1;
         itemName = "";
         itemAmount = 1;
@@ -107,6 +109,7 @@ class orderItem {
         //Getters
         int getId() {return id;}
         int getOrderId() {return orderId;}
+        int getProductId() {return productId;}
         int getItemNumberInOrder() {return itemNumberInOrder;}
         String getItemName() {return itemName;}
         int getItemAmount() {return itemAmount;}
@@ -117,6 +120,7 @@ class orderItem {
         //Setters
         void setId(int id) {this.id = id;}
         void setOrderId(int orderId) {this.orderId = orderId;}
+        void setProductId(int productId) {this.productId = productId;}
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
         void setItemName(String itemName) {this.itemName = itemName;}
         void setItemAmount(int itemAmount) {this.itemAmount = itemAmount;}

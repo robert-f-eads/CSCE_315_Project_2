@@ -7,7 +7,6 @@ public class serverViewFunctions {
         Dictionary<Integer, material> materials = new Hashtable<Integer, material>();
         Dictionary<Integer, product> products = new Hashtable<Integer, product>();
         Dictionary<Integer, orderTicketInfo> orderTickets = new Hashtable<Integer, orderTicketInfo>();
-        //For product search bar use "SELECT id FROM products WHERE name ILIKE '%Search_string%'"
 
     public serverViewFunctions() {
         importIngredients();
@@ -26,42 +25,16 @@ public class serverViewFunctions {
             
             //Import all ingredients
             while(result.next()) {
-                /*
-                    int id;
-                    String timestamp;
-                    String customerFirstName;
-                    int rewardsMemberId;
-                    int employeeId;
-                    double orderPriceTotal; 
-                    Vector<orderItem> items;
-                */
                 orderTicketInfo oti = new orderTicketInfo(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4), 
                     result.getInt(5), result.getDouble(6));
 
                 sqlStatement = "SELECT * FROM orderItems WHERE orderId=" + oti.getId();
                 ResultSet itemResult = dbConnection.dbQuery(sqlStatement);
                 while(itemResult.next()) {
-                    /*
-                    int id;
-                    int orderId;
-                    int itemNumberInOrder;
-                    String itemName;
-                    int itemAmount;
-                    int itemSize;
-                    Vector<orderItemModification> additions;
-                    Vector<orderItemModification> subtractions;
-                    */
                     orderItem oi = new orderItem(itemResult.getInt(1), itemResult.getInt(2), itemResult.getInt(3), itemResult.getString(4), itemResult.getInt(5), itemResult.getInt(6));
                     sqlStatement = "SELECT * FROM orderItemAdditions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
                     ResultSet additionResult = dbConnection.dbQuery(sqlStatement);
                     while(additionResult.next()) {
-                        /*
-                        int id;
-                        int orderId;
-                        int itemNumberInOrder;
-                        int ingredientId;
-                        String ingredientName = "";
-                        */ 
                         orderItemModification a = new orderItemModification(additionResult.getInt(1), additionResult.getInt(2), additionResult.getInt(3), additionResult.getInt(4), additionResult.getString(4));
                         oi.addAddition(a);
                     }
@@ -69,13 +42,6 @@ public class serverViewFunctions {
                     sqlStatement = "SELECT * FROM orderItemSubtractions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
                     ResultSet subtractionResult = dbConnection.dbQuery(sqlStatement);
                     while(subtractionResult.next()) {
-                        /*
-                        int id;
-                        int orderId;
-                        int itemNumberInOrder;
-                        int ingredientId;
-                        String ingredientName = "";
-                        */ 
                         orderItemModification s = new orderItemModification(subtractionResult.getInt(1), subtractionResult.getInt(2), subtractionResult.getInt(3), subtractionResult.getInt(4), subtractionResult.getString(4));
                         oi.addSubtraction(s);
                     }
@@ -90,27 +56,6 @@ public class serverViewFunctions {
         } 
     }
 
-    // private void importIngredients() {
-    //     try{
-    //         dbFunctions dbConnection = new dbFunctions();
-    //         dbConnection.createDbConnection();
-    //         String sqlStatement = "SELECT * FROM ingredients";
-    //         ResultSet result = dbConnection.dbQuery(sqlStatement);
-            
-    //         //Import all ingredients
-    //         while(result.next()) {
-    //             ingredient temp_ingredient = new ingredient(result.getInt(1), result.getString(2), result.getString(3), result.getDouble(4), 
-    //             result.getString(5), result.getDouble(6), result.getString(7), result.getDouble(8));
-    //             ingredients.put(temp_ingredient.getId(), temp_ingredient);
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         System.err.println(e.getClass().getName()+": "+e.getMessage());
-    //         System.exit(0);
-    //     }
-    // }//Close importIngredients
-
-
     private void importMaterials() {
        try{
             dbFunctions dbConnection = new dbFunctions();
@@ -120,17 +65,6 @@ public class serverViewFunctions {
             
             //Import all ingredients
             while(result.next()) {
-                /*
-                    int id;
-                    String name;
-                    String size;
-                    int quantityRemaining;
-                    String measurementUnits;
-                    int itemsPerUnit;
-                    double pricePerUnitLastOrder;
-                    String lastOrderDate;
-                    double unitsInLastOrder;
-                */
                 material temp_material = new material(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4), 
                 result.getString(5), result.getInt(6), result.getDouble(7), result.getString(8), result.getDouble(9));
                 materials.put(temp_material.getId(), temp_material);
@@ -194,13 +128,13 @@ public class serverViewFunctions {
             dbFunctions dbConnection = new dbFunctions();
             dbConnection.createDbConnection();
             String sqlStatement;
-
+            
             //Insert into ordertickets
             sqlStatement = "INSERT INTO ordertickets (timestamp, customerfirstname, rewardsmemberid, employeeid, orderpricetotal)";
             sqlStatement += String.format("VALUES ('%s', '%s', %d, %d, %.2f)", new_ticket.getTimestamp(), new_ticket.getCustomerFirstName(), 
                 new_ticket.getRewardsMemberId(), new_ticket.getEmployeeId(), new_ticket.getOrderPriceTotal());
             int resultInt = dbConnection.dbUpsert(sqlStatement);
-
+            
             //Retreive ticket id
             sqlStatement = "SELECT * FROM ordertickets ORDER BY id DESC LIMIT 1";
             ResultSet result = dbConnection.dbQuery(sqlStatement);
@@ -332,7 +266,63 @@ public class serverViewFunctions {
 
 
 
-    
-    
+    public orderTicketInfo createOrderTicketItem(orderTicketInfo orderTicket, product tempProduct) {
+        orderItem tempItem = new orderItem();
+        int nextItemId = orderTicket.getOrderItems().size() + 1;
+        tempItem.setItemNumberInOrder(nextItemId);
+        tempItem.setItemName(tempProduct.getName());
+        tempItem.setItemAmount(1);
+        tempItem.setProductId(tempProduct.getId());
+
+        orderTicket.addItemToOrder(tempItem);
+        return orderTicket;
+    }
+
+    public orderItem updateItemWithSize(orderItem item, int size) {
+        item.setItemSize(size);
+        return item;
+    }
+
+    public orderItem updateItemWithSubtraction(orderItem item, int ingredientId) {
+        orderItemModification modification = new orderItemModification();
+        modification.setItemNumberInOrder(item.getItemNumberInOrder());
+        modification.setingredientId(ingredientId);
+        modification.setIngredientName(ingredients.get(ingredientId).getName());
+        if(item.getSubtractions().indexOf(modification) == -1) {
+            item.addSubtraction(modification);
+        }   
+        return item;
+    }
+    public void updateItemWithAddition(orderItem item, int ingredientId) {
+        orderItemModification modification = new orderItemModification();
+        modification.setItemNumberInOrder(item.getItemNumberInOrder());
+        modification.setingredientId(ingredientId);
+        item.addAddition(modification);
+    } 
+
+    public void updateOrderWithItem(orderTicketInfo orderTicket, orderItem item){
+        orderTicket.addItemToOrder(item);
+    }
+
+    public orderTicketInfo duplicateItem(orderTicketInfo orderTicket, orderItem item) {
+        orderItem newItem = new orderItem();
+        
+        //Duplicate item
+        newItem.setItemNumberInOrder(orderTicket.getOrderItems().size() + 1);
+        newItem.setItemName(item.getItemName());
+        newItem.setItemAmount(item.getItemAmount());
+        newItem.setItemSize(item.getItemSize());
+        for(orderItemModification modification : item.getAdditions()) {newItem.addAddition(modification);}
+        for(orderItemModification modification : item.getSubtractions()) {newItem.addSubtraction(modification);}
+
+        orderTicket.addItemToOrder(newItem);
+		return orderTicket;
+    }
+
+	public orderTicketInfo deleteFromOrder(orderTicketInfo orderTicket, orderItem item) {
+        orderTicket.removeItemFromOrder(item);
+		return orderTicket;
+    }
+
 
 }
