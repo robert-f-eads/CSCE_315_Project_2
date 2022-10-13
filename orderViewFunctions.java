@@ -1,10 +1,17 @@
 import java.util.Vector;
 import java.sql.ResultSet;
 
+/**
+ * @author Shreyes, Robert, Alexia, Emma
+ */
 public class orderViewFunctions {
     serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
 
+    /**
+     * 
+     * @return order tickets as received from dbFunctions
+     */
     public Vector<orderTicketInfo> getOrders() {
         Vector<orderTicketInfo> orderTickets = new Vector<>();
         try {
