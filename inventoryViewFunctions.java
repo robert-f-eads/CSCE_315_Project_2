@@ -5,16 +5,28 @@ public class inventoryViewFunctions {
     serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
 
+    /**
+     * 
+     * @return all the ingredients in the database
+     */
     public Vector<ingredient> getIngredients() {
         return getIngredients("");
     }
 
-
+    /**
+     * 
+     * @return all the materials in the database
+     */
     public Vector<material> getMaterials() {
         return getMaterials("");
     }
 
     // filter by a search term
+    /**
+     * 
+     * @param filter what to limit the database search for ingredients by
+     * @return all ingredients which have filter as part of their name
+     */
     public Vector<ingredient> getIngredients(String filter) {
         Vector<ingredient> ingredients = new Vector<>();
         try {
@@ -34,6 +46,11 @@ public class inventoryViewFunctions {
     }
 
     // filter by a search term
+    /**
+     * 
+     * @param filter what to limit the database search for materials by
+     * @return all materials which have the filter as part of their name
+     */
     public Vector<material> getMaterials(String filter) {
         Vector<material> materials = new Vector<>();
         try {
@@ -52,6 +69,9 @@ public class inventoryViewFunctions {
         return materials;
     }
 
+    /**
+     * initialize the server functions and db connection
+     */
     public inventoryViewFunctions() {
         serverFunctions = new serverViewFunctions();
         dbConnection = new dbFunctions();
