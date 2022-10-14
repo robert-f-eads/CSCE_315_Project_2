@@ -126,19 +126,6 @@ public class serverViewFunctions {
             //Calculate order total
             newTicket.setOrderPriceTotal(getCurrentOrderTotal(newTicket));
 
-            // Testing
-            System.out.println(newTicket);
-            for (orderItem item : newTicket.getOrderItems()) {
-                System.out.println(item);
-                for (orderItemModification modification : item.getAdditions()) {
-                    System.out.println(modification);
-                }
-                for (orderItemModification modification : item.getSubtractions()) {
-                    System.out.println(modification);
-                }
-            }
-            //End Testing
-
             //Create database connection object
             dbFunctions dbConnection = new dbFunctions();
             dbConnection.createDbConnection();

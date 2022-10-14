@@ -620,8 +620,6 @@ public class GUIDriver {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 							if (currentlySelectedComponent != null) {
-								System.out.println(currentlySelectedComponent.itemInformation.getItemName());
-								System.out.println(currentlySelectedComponent.itemInformation.itemName);
 								currentlySelectedComponent.mainPanel.setBackground(Color.white);
 								currentlySelectedComponent.itemNamePanel.setBackground(Color.white);
 								currentlySelectedComponent.quantityIncrease.setBackground(Color.white);
