@@ -112,6 +112,9 @@ public class DbTools {
 
                 for(String user : users) {
                     stmt.executeUpdate(String.format("GRANT ALL ON %s TO %s", currentTable.tableName, user));
+                    if(currentTable.tableName != "productsToIngredients") {
+                        stmt.executeUpdate(String.format("GRANT ALL ON %s_id_seq TO %s", currentTable.tableName, user));
+                    }
                 }
                 
             }
@@ -152,6 +155,18 @@ public class DbTools {
                     System.out.println(line);  
                     while((line = stderr.readLine()) != null) {System.out.println(line);}
                     stderr.close();
+                }
+
+                if (currentTable.tableName != "productsToIngredients") {
+                    Statement stmt = dbConnection.createStatement();
+                    String sqlStatement = String.format("SELECT id FROM %s ORDER BY id DESC LIMIT 1", currentTable.tableName); 
+                    ResultSet result = stmt.executeQuery(sqlStatement);
+                    result.next();
+                    ////ALTER SEQUENCE <table>_id_seq RESTART WITH <number>
+                    int temp =  result.getInt("id");
+                    sqlStatement = String.format("ALTER SEQUENCE %s_id_seq RESTART WITH %d", currentTable.tableName, temp + 1);
+                    int results = stmt.executeUpdate(sqlStatement); 
+                    
                 }
 
             }

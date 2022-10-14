@@ -5,7 +5,7 @@ import java.sql.ResultSet;
  * @author Shreyes, Robert, Alexia, Emma
  */
 public class orderViewFunctions {
-    serverViewFunctions serverFunctions;
+   /* serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
 
     /**
@@ -33,5 +33,5 @@ public class orderViewFunctions {
     public orderViewFunctions() {
         serverFunctions = new serverViewFunctions();
         dbConnection = new dbFunctions();
-    }
+    }*/
 }

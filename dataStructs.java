@@ -19,7 +19,7 @@ class orderTicketInfo {
         java.util.Date date = new java.util.Date();
         timestamp = formatter.format(date);
         customerFirstName = "";
-        rewardsMemberId = -1;
+        rewardsMemberId = 0;
         employeeId = -1;
         orderPriceTotal = -1;
         items = new Vector<orderItem>();
@@ -65,16 +65,18 @@ class orderTicketInfo {
             id, timestamp, customerFirstName, rewardsMemberId, employeeId, orderPriceTotal);
         return print;
     }
-}   
+}//End orderTicketInfo   
 
 class orderItem {
     private
         int id;
         int orderId;
+        int productId;
         int itemNumberInOrder;
         String itemName;
         int itemAmount;
         int itemSize;
+        double itemPrice;
         Vector<orderItemModification> additions;
         Vector<orderItemModification> subtractions;
 
@@ -83,10 +85,12 @@ class orderItem {
     public orderItem() {
         id = -1;
         orderId = -1;
+        productId = -1;
         itemNumberInOrder = 1;
         itemName = "";
         itemAmount = 1;
-        itemSize = -1;
+        itemSize = 20;
+        itemPrice = -1;
         additions = new Vector<orderItemModification>();
         subtractions = new Vector<orderItemModification>();
     }
@@ -107,20 +111,24 @@ class orderItem {
         //Getters
         int getId() {return id;}
         int getOrderId() {return orderId;}
+        int getProductId() {return productId;}
         int getItemNumberInOrder() {return itemNumberInOrder;}
         String getItemName() {return itemName;}
         int getItemAmount() {return itemAmount;}
         int getItemSize() {return itemSize;}
+        double getItemPrice() {return itemPrice;}
         Vector<orderItemModification> getAdditions() {return additions;}
         Vector<orderItemModification> getSubtractions() {return subtractions;}
 
         //Setters
         void setId(int id) {this.id = id;}
         void setOrderId(int orderId) {this.orderId = orderId;}
+        void setProductId(int productId) {this.productId = productId;}
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
         void setItemName(String itemName) {this.itemName = itemName;}
         void setItemAmount(int itemAmount) {this.itemAmount = itemAmount;}
         void setItemSize(int itemSize) {this.itemSize = itemSize;}
+        void setItemPrice(double itemPrice) {this.itemPrice = itemPrice;}
         void addAddition(orderItemModification modification) {additions.add(modification);}
         void removeAddition(orderItemModification modification) {additions.remove(modification);}
         void addSubtraction(orderItemModification modification) {subtractions.add(modification);}
@@ -133,7 +141,7 @@ class orderItem {
             id, orderId, itemNumberInOrder, itemName, itemAmount, itemSize);
         return print;
     }        
-}
+}//End orderItem
 
 class orderItemModification {
     private
@@ -167,6 +175,14 @@ class orderItemModification {
         this.ingredientName = ingredientName;
     }
 
+    public orderItemModification(orderItemModification otherMod) {
+        this.id = otherMod.getId();
+        this.orderId = otherMod.getOrderId();
+        this.itemNumberInOrder = otherMod.getItemNumberInOrder();
+        this.ingredientId = otherMod.getIngredientId();
+        this.ingredientName = otherMod.getIngredientName();
+    }
+
 
     public
         //Getters
@@ -181,7 +197,7 @@ class orderItemModification {
         void setOrderId(int orderId) {this.orderId = orderId;}
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
         void setingredientId(int ingredientId) {this.ingredientId = ingredientId;}
-        void setingredientName(String ingredientName) {this.ingredientName = ingredientName;}
+        void setIngredientName(String ingredientName) {this.ingredientName = ingredientName;}
      
 
     @Override
@@ -189,7 +205,16 @@ class orderItemModification {
         String print = String.format("Id: %d\nOrder Id: %d\nItem Number in Order: %d\nIngredient Id: %d\nIngredient Name: %s", id, orderId, itemNumberInOrder, ingredientId, ingredientName);
         return print;
     }
-}
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) {return true;}
+        if(!(o instanceof orderItemModification)) {return false;}
+        orderItemModification order = (orderItemModification) o;
+        if(order.getIngredientId() == ingredientId) {return true;}
+        return false;
+    }
+}//End orderItemModification
 
 class ingredient {
 
@@ -258,7 +283,7 @@ class ingredient {
             ", unitsInLastOrder='" + getUnitsInLastOrder() + "'" +
             "}";
     }
-}
+}//End ingredient
 
 class material {
     private
@@ -330,7 +355,7 @@ class material {
             id, name, size, quantityRemaining, measurementUnits, itemsPerUnit, pricePerUnitLastOrder, lastOrderDate, unitsInLastOrder);
         return print;
     }
-}
+}//End material
 
 class product {
     private
@@ -376,4 +401,4 @@ class product {
             id, name, price);
         return print;
     }
-}
+}//End product

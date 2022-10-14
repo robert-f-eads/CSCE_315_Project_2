@@ -1,8 +1,9 @@
 import java.sql.*;
 
 public class dbFunctions {
-    //TODO - Create connection username and password object here
+    
     Connection dbConnection = null;
+    dbLogin user = new dbLogin();
 
     //Member Functions
     /**
@@ -10,13 +11,13 @@ public class dbFunctions {
      */
     void createDbConnection() {
         try {
-            dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2","csce315_901_ong", "123");
+            dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2", user.user, user.pswd);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(0);
         }
-    }
+    }//End createDbConnection
 
     /**
      * close the database connection
@@ -28,7 +29,7 @@ public class dbFunctions {
         } catch(Exception e) {
             System.out.println("Connection NOT Closed.");
         }
-    }
+    }//End closeDbConnection
 
     /**
      * 
@@ -39,7 +40,7 @@ public class dbFunctions {
             return true;
         }
         return false;
-    }
+    }//End checkDbConnection
 
     /**
      * 
@@ -59,7 +60,7 @@ public class dbFunctions {
             System.exit(0);
         }
         return result; 
-    }
+    }//End dpUpsert
 
     /**
      * 
@@ -79,6 +80,6 @@ public class dbFunctions {
             System.exit(0);
         }
         return result;
-    }
+    }//dbQuery
 
 }
