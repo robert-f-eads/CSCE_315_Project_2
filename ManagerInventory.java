@@ -65,7 +65,6 @@ public class ManagerInventory extends ManagerViewScreen {
             if(table.equals("products")) {
                 sql = "UPDATE products SET name='" + name.getText() + "', price=" + price.getText() + " WHERE id=" + id.getText();
             } else {
-                System.out.println("update ingredients");
                 sql = "UPDATE ingredients SET name='" + name.getText() + "', expirationdate= date'" + expiration.getText() + 
                     "', measurementunits='" + measurement.getText() + "', lastorderdate= date'" + last.getText() + "', priceperunitlastorder=" + price.getText() + ", quantityRemaining=" + 
                     quantity.getText() + ", unitsinlastorder=" + units.getText() +

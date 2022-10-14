@@ -7,6 +7,7 @@ import java.sql.*;
 public class ManagerView {
     JFrame myFrame;
     JPanel[][] myPanels;
+    JPanel mainPanel;
     JPanel borderPanel;
     int myRows;
     int myCols;
@@ -28,6 +29,8 @@ public class ManagerView {
             }
         }
         borderPanel = new JPanel();
+
+        mainPanel = new JPanel();
 
         this.setHomeView();
     }
@@ -148,6 +151,7 @@ public class ManagerView {
         for(int i = 0; i < myRows; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j] = new JPanel();
+                myPanels[i][j].setBackground(new Color((int) (Math.random() * 100)));
                 myFrame.add(myPanels[i][j]);
             }
         }

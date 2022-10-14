@@ -1,12 +1,15 @@
+import java.awt.Component;
+
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 
 public class ManagerHome extends ManagerViewScreen {
     public ManagerHome(ManagerView managerView) {super(managerView);}
 
     public void setHomeView() {
+        managerView.mainPanel.setLayout(new BoxLayout(managerView.mainPanel, BoxLayout.PAGE_AXIS));
         int buttonWidth = 150;
         int buttonHeight = 150;
-        JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
         JButton serverView = managerView.createButton("Server View", buttonWidth, buttonHeight);
         JButton orderHistory = managerView.createButton("Order History", buttonWidth, buttonHeight);
         JButton inventoryStatus = managerView.createButton("Inventory Status", buttonWidth, buttonHeight);
@@ -31,7 +34,6 @@ public class ManagerHome extends ManagerViewScreen {
             managerView.setTrendView();
         });
                 
-        managerView.myPanels[0][0].add(back);
         managerView.myPanels[0][2].add(smoothieKing);
         managerView.myPanels[0][4].add(serverView);
         managerView.myPanels[2][1].add(orderHistory);
