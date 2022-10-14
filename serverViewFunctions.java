@@ -6,12 +6,53 @@ public class serverViewFunctions {
         Dictionary<Integer, ingredient> ingredients = new Hashtable<Integer, ingredient>();
         Dictionary<Integer, material> materials = new Hashtable<Integer, material>();
         Dictionary<Integer, product> products = new Hashtable<Integer, product>();
+        Dictionary<Integer, orderTicketInfo> orderTickets = new Hashtable<Integer, orderTicketInfo>();
 
     public serverViewFunctions() {
         importIngredients();
         importMaterials();
         importProducts();
+        importOrderTickets();
     }
+
+    private void importOrderTickets() {
+        try{
+             dbFunctions dbConnection = new dbFunctions();
+             dbConnection.createDbConnection();
+             // TODO see if sql has get first ten, then next ten, and page it
+             String sqlStatement = "SELECT * FROM orderTickets LIMIT 10";
+             ResultSet result = dbConnection.dbQuery(sqlStatement);
+             
+             //Import all ingredients
+             while(result.next()) {
+                 orderTicketInfo oti = new orderTicketInfo(result.getInt(1), result.getString(2), result.getString(3), result.getInt(4), 
+                     result.getInt(5), result.getDouble(6));
+                 sqlStatement = "SELECT * FROM orderItems WHERE orderId=" + oti.getId();
+                 ResultSet itemResult = dbConnection.dbQuery(sqlStatement);
+                 while(itemResult.next()) {
+                     orderItem oi = new orderItem(itemResult.getInt(1), itemResult.getInt(2), itemResult.getInt(3), itemResult.getString(4), itemResult.getInt(5), itemResult.getInt(6));
+                     sqlStatement = "SELECT * FROM orderItemAdditions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
+                     ResultSet additionResult = dbConnection.dbQuery(sqlStatement);
+                     while(additionResult.next()) {
+                         orderItemModification a = new orderItemModification(additionResult.getInt(1), additionResult.getInt(2), additionResult.getInt(3), additionResult.getInt(4), additionResult.getString(4));
+                         oi.addAddition(a);
+                     }
+                     sqlStatement = "SELECT * FROM orderItemSubtractions WHERE orderId=" + oti.getId() + " AND itemNumberInOrder=" + oi.getItemNumberInOrder();
+                     ResultSet subtractionResult = dbConnection.dbQuery(sqlStatement);
+                     while(subtractionResult.next()) {
+                         orderItemModification s = new orderItemModification(subtractionResult.getInt(1), subtractionResult.getInt(2), subtractionResult.getInt(3), subtractionResult.getInt(4), subtractionResult.getString(4));
+                         oi.addSubtraction(s);
+                     }
+                     oti.addItemToOrder(oi);
+                 }
+                 orderTickets.put(oti.getId(), oti);
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+             System.err.println(e.getClass().getName()+": "+e.getMessage());
+             System.exit(0);
+         } 
+     }
 
     private void importMaterials() {
        try{
@@ -239,6 +280,7 @@ public class serverViewFunctions {
         product getProduct(int id) {return products.get(id);}
         material getMaterial(int id) {return materials.get(id);}
         ingredient getIngredient(int id) {return ingredients.get(id);}
+        orderTicketInfo getOrderTicket(int id) {return orderTickets.get(id);}
 
 
     public orderTicketInfo createOrderTicketItem(orderTicketInfo orderTicket, product tempProduct) {

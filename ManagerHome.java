@@ -39,7 +39,8 @@ public class ManagerHome extends ManagerViewScreen {
         managerView.mainPanel.add(gridBoxPanel);
 
         serverView.addActionListener(e -> {
-            System.out.println("Switch to server view");
+            new GUIWindow();
+            managerView.myFrame.dispose();
         });
         orderHistory.addActionListener(e -> {
             managerView.setOrderView();

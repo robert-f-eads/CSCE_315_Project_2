@@ -1,14 +1,12 @@
 import java.sql.*;
+import src.dbLogin.dbLogin;
 
 public class dbFunctions {
     
     Connection dbConnection = null;
+
     dbLogin user = new dbLogin();
 
-    //Member Functions
-    /**
-     * create a connection to the database
-     */
     void createDbConnection() {
         try {
             dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2", user.user, user.pswd);
@@ -17,7 +15,7 @@ public class dbFunctions {
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(0);
         }
-    }//End createDbConnection
+    }
 
     /**
      * close the database connection
@@ -29,7 +27,7 @@ public class dbFunctions {
         } catch(Exception e) {
             System.out.println("Connection NOT Closed.");
         }
-    }//End closeDbConnection
+    }
 
     /**
      * 
@@ -40,7 +38,7 @@ public class dbFunctions {
             return true;
         }
         return false;
-    }//End checkDbConnection
+    }
 
     /**
      * 
@@ -60,7 +58,7 @@ public class dbFunctions {
             System.exit(0);
         }
         return result; 
-    }//End dpUpsert
+    }
 
     /**
      * 
@@ -80,6 +78,6 @@ public class dbFunctions {
             System.exit(0);
         }
         return result;
-    }//dbQuery
+    }
 
 }

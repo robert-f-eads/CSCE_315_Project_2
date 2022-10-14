@@ -27,6 +27,8 @@ public class GUIDriver {
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
 	static Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
 
+	JFrame frame;
+
 	JPanel mainPanel;
 	JPanel rightPanel;
 
@@ -720,6 +722,10 @@ public class GUIDriver {
 			managerViewButton.setFocusPainted(false);
 			managerViewButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed),  BorderFactory.createEmptyBorder(8, 8, 10, 10)));
 			managerViewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			managerViewButton.addActionListener(e -> {
+				new ManagerView();
+				frame.dispose();
+			});
 			rightPanel.add(managerViewButton);
 		}
 		rightPanel.add(logout);
@@ -759,7 +765,7 @@ public class GUIDriver {
 		dbConnection = new dbFunctions();
 		
 		//Create JFrame and initial settings
-		JFrame frame = new JFrame("Smoothie King");
+		frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(maxWidth, maxHeight));
 		frame.setMinimumSize(new Dimension(maxWidth, maxHeight));
