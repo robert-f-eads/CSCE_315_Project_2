@@ -3,6 +3,9 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class ManagerView {
     JFrame myFrame;
@@ -78,8 +81,8 @@ public class ManagerView {
         JLabel trends = createLabel("Trends", buttonWidth, buttonHeight);
         JLabel startDateLabel = createLabel("Start Date", buttonWidth, buttonHeight);
         JLabel endDateLabel = createLabel("End Date", buttonWidth, buttonHeight);
-        JTextField startDate = createTextField("(mm/dd/yyyy)", buttonWidth, buttonHeight);
-        JTextField endDate = createTextField("(mm/dd/yyyy)", buttonWidth, buttonHeight);
+        HintTextField startDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
+        HintTextField endDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
 
         back.addActionListener(e -> {
             this.setHomeView();
@@ -129,6 +132,35 @@ public class ManagerView {
         myFrame.repaint();
     }
 
+    private void setUneditedAttribute(String table, String id, int attributeIndex, HintTextField attribute) {
+        String sql = "SELECT * FROM " + table + " WHERE id=" + id;
+        ResultSet row = myDbConnection.dbQuery(sql);
+        ResultSetMetaData meta;
+        try {
+            meta = row.getMetaData();
+            while(row.next()) {
+                for(int i = 0; i < meta.getColumnCount(); i++) {
+                    if(i == attributeIndex) {
+                        // row naturally indexes from 0
+                        attribute.setText(row.getObject(i + 1) + "");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateTable(JTable table, String tableName, int limit) {
+        ResultSet row;
+        if(limit == -1) {
+            row = myDbConnection.dbQuery("SELECT * FROM " + tableName);
+        } else {
+            row = myDbConnection.dbQuery("SELECT * FROM " + tableName + " LIMIT " + limit);
+        }
+        table.setModel(resultSetToTableModel(null, row));
+    }
+
     public void setInventoryView() {
         this.clearView();
         setBorderLayout();
@@ -143,46 +175,68 @@ public class ManagerView {
 
         JLabel inventory = createLabel("Inventory", buttonWidth, buttonHeight);
 
-        JTextField searchText = createTextField("Search", buttonWidth, buttonHeight);
-        JTextField id = createTextField("Id", buttonWidth, buttonHeight);
-        JTextField name = createTextField("Name", buttonWidth, buttonHeight);
-        JTextField expiration = createTextField("Expiration", buttonWidth, buttonHeight);
-        JTextField quantity = createTextField("Quantity", buttonWidth, buttonHeight);
-        JTextField measurement = createTextField("Measurement", buttonWidth, buttonHeight);
-        JTextField price = createTextField("Price", buttonWidth, buttonHeight);
-        JTextField last = createTextField("Last", buttonWidth, buttonHeight);
-        JTextField units = createTextField("Units", buttonWidth, buttonHeight);
-        JTextField tableText = createTextField("Table", buttonWidth, buttonHeight);
+        HintTextField searchText = new HintTextField("Search", buttonWidth, buttonHeight);
+        HintTextField id = new HintTextField("Id", buttonWidth, buttonHeight);
+
+        HintTextField[] attributeFields = new HintTextField[7];
+        HintTextField name = new HintTextField("name", buttonWidth, buttonHeight);
+        HintTextField expiration = new HintTextField("expiration", buttonWidth, buttonHeight);
+        HintTextField quantity = new HintTextField("Quantity", buttonWidth, buttonHeight);
+        HintTextField measurement = new HintTextField("Measurement", buttonWidth, buttonHeight);
+        HintTextField price = new HintTextField("Price", buttonWidth, buttonHeight);
+        HintTextField last = new HintTextField("Last", buttonWidth, buttonHeight);
+        HintTextField units = new HintTextField("Units", buttonWidth, buttonHeight);
+        attributeFields[0] = name;
+        attributeFields[1] = expiration;
+        attributeFields[2] = quantity;
+        attributeFields[3] = measurement;
+        attributeFields[4] = price;
+        attributeFields[5] = last;
+        attributeFields[6] = units;
+
+        HintTextField tableText = new HintTextField("Table", buttonWidth, buttonHeight);
 
         JTable inventoryTable = new JTable();
-        ResultSet inventoryRow = myDbConnection.dbQuery("SELECT * FROM ingredients");
-        inventoryTable.setModel(resultSetToTableModel(null, inventoryRow));
-
         JTable productTable = new JTable();
-        ResultSet productRow = myDbConnection.dbQuery("SELECT * FROM products");
-        productTable.setModel(resultSetToTableModel(null, productRow));
+        updateTable(inventoryTable, "ingredients", -1);
+        updateTable(productTable, "products", -1);
 
         back.addActionListener(e -> {
             this.setHomeView();
         });
         searchButton.addActionListener(e -> {
-            System.out.println("Perform Search");
-            productTable.setModel(resultSetToTableModel(null, myDbConnection.dbQuery("SELECT * FROM products WHERE name ILIKE '%" + searchText.getText() + "%'")));
-            inventoryTable.setModel(resultSetToTableModel(null, myDbConnection.dbQuery("SELECT * FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
+            productTable.setModel(resultSetToTableModel(null,
+                myDbConnection.dbQuery("SELECT * FROM products WHERE name ILIKE '%" + searchText.getText() + "%'")));
+            inventoryTable.setModel(resultSetToTableModel(null,
+                myDbConnection.dbQuery("SELECT * FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
             myFrame.repaint();
             myFrame.revalidate();
         });
         update.addActionListener(e -> {
             String table = tableText.getText();
+            for(int i = 0; i < attributeFields.length; i++) {
+                HintTextField attributeField = attributeFields[i];
+                if(attributeField.getText().equals(attributeField.getHint())) {
+                    // we add one to i because we do not include id as an attribute
+                    setUneditedAttribute(table, id.getText(), i + 1, attributeField);
+                }
+            }
             String sql = "";
             if(table.equals("products")) {
                 sql = "UPDATE products SET name='" + name.getText() + "', price=" + price.getText() + " WHERE id=" + id.getText();
             } else {
-                sql = "UPDATE ingredients SET priceperunitlastorder=" + price.getText() + ", quantityRemaining=" + 
+                System.out.println("update ingredients");
+                sql = "UPDATE ingredients SET name='" + name.getText() + "', expirationdate= date'" + expiration.getText() + 
+                    "', measurementunits='" + measurement.getText() + "', lastorderdate= date'" + last.getText() + "', priceperunitlastorder=" + price.getText() + ", quantityRemaining=" + 
                     quantity.getText() + ", unitsinlastorder=" + units.getText() +
                     "WHERE id=" + id.getText();
             }
+            for(HintTextField attributeField : attributeFields) {
+                attributeField.resetText();
+            }
             myDbConnection.dbUpsert(sql);
+            updateTable(productTable, "products", -1);
+            updateTable(inventoryTable, "ingredients", -1);
         });
         add.addActionListener(e -> {
             String table = tableText.getText();
@@ -194,7 +248,9 @@ public class ManagerView {
                     expiration.getText() + "', " + quantity.getText() + ", '" + measurement.getText() + "', " + 
                     price.getText() + ", '" + last.getText() + "', " + units.getText() + ")";
             }
-            System.out.println(myDbConnection.dbUpsert(sql));
+            myDbConnection.dbUpsert(sql);
+            updateTable(productTable, "products", -1);
+            updateTable(inventoryTable, "ingredients", -1);
         });
         delete.addActionListener(e -> {
             String table = tableText.getText();
@@ -204,7 +260,9 @@ public class ManagerView {
             } else {
                 sql = "DELETE FROM ingredients WHERE id=" + id.getText();
             }
-            System.out.println(myDbConnection.dbUpsert(sql));
+            myDbConnection.dbUpsert(sql);
+            updateTable(productTable, "products", -1);
+            updateTable(inventoryTable, "ingredients", -1);
         });
 
         JPanel pageStart = new JPanel();
@@ -230,11 +288,12 @@ public class ManagerView {
         borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.WEST);
         borderPanel.add(new JScrollPane(productTable), BorderLayout.EAST);
 
-        pageStart.revalidate();
-        pageStart.repaint();
-        borderPanel.revalidate();
-        borderPanel.repaint();
+        // pageStart.revalidate();
+        // pageStart.repaint();
+        // borderPanel.revalidate();
+        // borderPanel.repaint();
         myFrame.repaint();
+        myFrame.revalidate();
     }
 
     public void setOrderView() {
@@ -254,18 +313,57 @@ public class ManagerView {
         JLabel orders = createLabel("Orders", buttonWidth, buttonHeight);
         JLabel startDateLabel = createLabel("Start Date", buttonWidth, buttonHeight);
         JLabel endDateLabel = createLabel("End Date", buttonWidth, buttonHeight);
-        JTextField startDate = createTextField("(mm/dd/yyyy)", buttonWidth, buttonHeight);
-        JTextField endDate = createTextField("(mm/dd/yyyy)", buttonWidth, buttonHeight);
+        HintTextField startDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
+        HintTextField endDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
 
         JTable ordersTable = new JTable();
-        ResultSet row = myDbConnection.dbQuery("SELECT * FROM ordertickets WHERE timestamp < CURRENT_DATE AND timestamp > date '2022-09-28' LIMIT 30");
+        ResultSet row = myDbConnection.dbQuery("SELECT * FROM ordertickets");
         ordersTable.setModel(resultSetToTableModel(null, row));
         ordersTable.setSize(900, 700);
 
         back.addActionListener(e -> {
             this.setHomeView();
         });
+        week.addActionListener(e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            LocalDateTime weekAgo = now.minus(1, ChronoUnit.WEEKS);
+            startDate.setText(dtf.format(weekAgo));
+            endDate.setText(dtf.format(now));
+        });
+        week2.addActionListener(e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            LocalDateTime week2Ago = now.minus(2, ChronoUnit.WEEKS);
+            startDate.setText(dtf.format(week2Ago));
+            endDate.setText(dtf.format(now));
+        });
+        month.addActionListener(e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            LocalDateTime monthAgo = now.minus(1, ChronoUnit.MONTHS);
+            startDate.setText(dtf.format(monthAgo));
+            endDate.setText(dtf.format(now));
+        });
+        year.addActionListener(e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            LocalDateTime yearAgo = now.minus(1, ChronoUnit.YEARS);
+            startDate.setText(dtf.format(yearAgo));
+            endDate.setText(dtf.format(now));
+        });
+        quarter.addActionListener(e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            LocalDateTime quarterAgo = now.minus(3, ChronoUnit.MONTHS);
+            startDate.setText(dtf.format(quarterAgo));
+            endDate.setText(dtf.format(now));
+        });
         generate.addActionListener(e -> {
+            ordersTable.setModel(resultSetToTableModel(null,
+                myDbConnection.dbQuery("SELECT * FROM ordertickets WHERE timestamp > date '" + startDate.getText() + "' AND timestamp < date '" + endDate.getText() + "' LIMIT 30000")));
+            myFrame.repaint();
+            myFrame.revalidate();
             System.out.println("Generate order history");
         });
 
@@ -344,12 +442,6 @@ public class ManagerView {
         JLabel l = new JLabel(text);
         l.setSize(width, height);
         return l;
-    }
-
-    private JTextField createTextField(String text, int width, int height) {
-        JTextField tf = new JTextField(text);
-        tf.setSize(width, height);
-        return tf;
     }
 
     private void setGridLayout() {
