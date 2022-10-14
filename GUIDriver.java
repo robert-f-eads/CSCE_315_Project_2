@@ -9,9 +9,8 @@ import java.sql.*;
 
 public class GUIDriver {
 	public static void main(String args[]) {
-		// GUIWindow newGUIWindow = new GUIWindow();
-		// newGUIWindow.updateMainView();
-		new ManagerView();
+		GUIWindow newGUIWindow = new GUIWindow();
+		newGUIWindow.updateMainView();
 	}
 }
 
