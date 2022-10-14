@@ -14,7 +14,6 @@ public class GUIDriver {
 		
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		GUIWindow newGUIWindow = new GUIWindow();
-		//newGUIWindow.updateMainView();
 	}
 }
 
@@ -26,12 +25,18 @@ public class GUIDriver {
 	static Color blueHighlight = new Color(184, 204, 220);
 	static Border line = new LineBorder(Color.black);
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
+	static Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
 
 	JPanel mainPanel;
 	JPanel rightPanel;
 
 	JLabel serverName;
 	JButton logout;
+	JPanel customerNamePanel;
+	JTextField customerNameField;
+	JTextField searchTextField;
+	JPanel rewardsMemberIdPanel;
+	JTextField rewardsMemberIdField;
 	JButton cancel;
 	JButton finishAndPay = null;
 	JButton createNewOrder;
@@ -53,53 +58,145 @@ public class GUIDriver {
 	boolean currentPageIsTile;
 	boolean currentPageIsModifications;
 
-	// public void updateAdditions(String searchBarText, JPanel searchPanel) {
-	// 	searchPanel.removeAll();
-	// 	searchPanel.setLayout(new FlowLayout());
+	public void showLoginScreen() {
+		rightPanel.removeAll();
+		rightPanel.revalidate();
+		rightPanel.repaint();
+
+		resetMainPanel();
+
+
+		JPanel loginPanel = new JPanel();
+		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.LINE_AXIS));
+		loginPanel.setBackground(Color.white);
+		//loginPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.black));
+
+		//Creating login field
+		JTextField loginTextField = new JTextField();
+		loginTextField.setPreferredSize(new Dimension(990,50));
+		loginTextField.setSize(new Dimension(990,50));
+		loginTextField.setHorizontalAlignment(JTextField.LEFT);
+		loginTextField.setFont(searchFont);
+		loginTextField.setAlignmentY(Component.CENTER_ALIGNMENT);
+		loginTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		//loginTextField.setBorderPainted(false);
+		//FIX VERTICAL ALIGNMENT
+
+
+		JButton loginButton = new JButton("Login");
+		loginButton.setForeground(Color.black);
+		loginButton.setMargin(new Insets(8, 10, 8, 10));
+		loginButton.setBackground(Color.white);
+		loginButton.setRolloverEnabled(false);
+		loginButton.setFocusPainted(false);
+		loginButton.setFont(defaultButtons);
+		loginButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					currentEmployeeId = Integer.parseInt(loginTextField.getText());
+					updateLoginButtons();
+				}
+			}
+		);
+
+		loginPanel.add(loginButton);
+		loginPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		loginPanel.add(loginTextField);
+
+		mainPanel.add(loginPanel);
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
+
+	public void updateAdditions(String searchBarText, JPanel searchPanel) {
+		searchPanel.removeAll();
+		searchPanel.setLayout(new FlowLayout());
 	
-	// 	try {
-	// 		dbConnection.createDbConnection();
-	// 		String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
-	// 		ResultSet results = dbConnection.dbQuery(sqlStatement);
-	// 		while(results.next()) {
-	// 			ingredient tempIngredient = serverFunctions.getIngredient(results.getInt("id")); 
-	// 			JButton button = new JButton(tempIngredient.getName());
-	// 			button.setFont(defaultButtons);
-	// 			searchPanel.add(button);
-	// 			button.setAlignmentX(Component.LEFT_ALIGNMENT);
-	// 			button.setBackground(Color.white);
-	// 			button.setForeground(darkRed);
+		try {
+			dbConnection.createDbConnection();
+			String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
+			ResultSet results = dbConnection.dbQuery(sqlStatement);
+			while(results.next()) {
+				ingredient tempIngredient = serverFunctions.getIngredient(results.getInt("id")); 
+				JButton button = new JButton(tempIngredient.getName());
+				button.setFont(defaultButtons);
+				searchPanel.add(button);
+				button.setAlignmentX(Component.LEFT_ALIGNMENT);
+				button.setBackground(Color.white);
+				button.setForeground(darkRed);
+				searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+				//LISTENER THAT ADDS ADDITIONS TO ORDER ITEM
+				button.addActionListener(new ActionListener() 
+				{
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						orderItem temp = serverFunctions.updateItemWithAddition(newTicket.getOrderItems().lastElement(), tempIngredient.getId(), false) ;
+						updateModifications(currentProduct);
+
+						newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement()); //add item
+						newTicket.addItemToOrder(temp);
+					}
+				} );
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName()+": "+e.getMessage());
+			System.exit(0);
+		} 
 	
-	// 			searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
-	// 		}
-	// 	} catch (Exception e) {
-	// 		e.printStackTrace();
-	// 		System.err.println(e.getClass().getName()+": "+e.getMessage());
-	// 		System.exit(0);
-	// 	} 
-	
-	// 	searchPanel.revalidate();
-	// 	searchPanel.repaint();
-	// }
+		
+		searchPanel.revalidate();
+		searchPanel.repaint();
+	}
 	
 	public void updateModifications(product product) { // needs product object parameter product product
 		mainPanel.removeAll();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		Border padding = new EmptyBorder(10, 10, 10, 10);
 		mainPanel.setBorder(new CompoundBorder(line,padding));
 
 		currentProduct = product;
 	
 		//Creating product label
-		JLabel productName = new JLabel("Product Name"); //pull from database
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
+		topPanel.setBackground(Color.white);
+		topPanel.setMinimumSize(new Dimension(1100,75));
+
+
+		JLabel productName = new JLabel(product.getName()); //pull from database
+		productName.setMinimumSize(new Dimension(300, 75));
+		productName.setPreferredSize(new Dimension(300, 75));
+		productName.setMaximumSize(new Dimension(300, 75));
 		productName.setAlignmentX(Component.LEFT_ALIGNMENT);
-		// productName.setVerticalAlignment(JLabel.NORTH);
 	
 		//Creating product header font
 		Font productNameFont = new Font("SansSerif", Font.PLAIN, 35); 
 		productName.setFont(productNameFont);
 		productName.setForeground(darkRed);
-		mainPanel.add(productName);
+
+		JButton finishItem = new JButton(" Finish Item  ");
+		finishItem.setBackground(darkRed);
+		finishItem.setForeground(Color.white);
+		finishItem.setFont(defaultButtons);
+		finishItem.setAlignmentX(Component.LEFT_ALIGNMENT);
+		finishItem.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateMainView();
+				}
+			} );
+		//ACTION LISTENER THAT TAKES OUT THE LATEST ORDER ITEM
+		
+		topPanel.add(productName);
+		topPanel.add(Box.createRigidArea(new Dimension(600, 75)));
+		topPanel.add(finishItem);
+		topPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		mainPanel.add(topPanel);
 	
 	
 		JLabel sizeHeader = new JLabel("Size");
@@ -112,63 +209,108 @@ public class GUIDriver {
 	
 		JPanel sizeButtonPanel = new JPanel();
 		sizeButtonPanel.setLayout(new BoxLayout(sizeButtonPanel, BoxLayout.X_AXIS));
-		mainPanel.add(sizeButtonPanel);
 		sizeButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-	
 		sizeButtonPanel.setBackground(Color.white);
+		mainPanel.add(sizeButtonPanel);
+
 		
-		// sizeButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-		// sizeButtonPanel.add(Box.createHorizontalGlue());
-	
 		JButton size20 = new JButton("20oz.");
+		JButton size32 = new JButton("32oz.");
+		JButton size40 = new JButton("40oz.");
+
 		size20.setFont(defaultButtons);
 		sizeButtonPanel.add(size20);
 		size20.setAlignmentX(Component.LEFT_ALIGNMENT);
+		if (newTicket.getOrderItems().lastElement().getItemSize() == 20) {
+			size20.setBackground(blueHighlight);
+		}
+		else {
+			size20.setBackground(Color.white);
+		}
+
 		size20.setBackground(Color.white);
 		size20.setForeground(darkRed);
+		size20.setRolloverEnabled(false);
+		size20.setFocusPainted(false);
 		size20.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					size20.setBackground(blueHighlight);
+					size32.setBackground(Color.white);
+					size40.setBackground(Color.white);
+
 					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 20);
                     newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
 					newTicket.addItemToOrder(temp);
+
+					mainPanel.revalidate();
+					mainPanel.repaint();
 				}
 			} );
 	
 		sizeButtonPanel.add(Box.createRigidArea(new Dimension(60, 0)));
 		
-		JButton size32 = new JButton("32oz.");
 		size32.setFont(defaultButtons);
 		sizeButtonPanel.add(size32);
 		size32.setAlignmentX(Component.LEFT_ALIGNMENT);
 		size32.setBackground(Color.white);
 		size32.setForeground(darkRed);
+		size32.setRolloverEnabled(false);
+		size32.setFocusPainted(false);
+		if (newTicket.getOrderItems().lastElement().getItemSize() == 32) {
+			size32.setBackground(blueHighlight);
+		}
+		else {
+			size32.setBackground(Color.white);
+		}
 		size32.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					size20.setBackground(Color.white);
+					size32.setBackground(blueHighlight);
+					size40.setBackground(Color.white);
+
 					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 32);
                     newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
 					newTicket.addItemToOrder(temp);
+					
+					mainPanel.revalidate();
+					mainPanel.repaint();
 				}
 			} );
 	
 		sizeButtonPanel.add(Box.createRigidArea(new Dimension(60, 0)));
 	
-		JButton size40 = new JButton("40oz.");
 		size40.setFont(defaultButtons);
 		sizeButtonPanel.add(size40);
 		size40.setAlignmentX(Component.LEFT_ALIGNMENT);
 		size40.setBackground(Color.white);
 		size40.setForeground(darkRed);
+		size40.setRolloverEnabled(false);
+		size40.setFocusPainted(false);
+		if (newTicket.getOrderItems().lastElement().getItemSize() == 40) {
+			size40.setBackground(blueHighlight);
+		}
+		else {
+			size40.setBackground(Color.white);
+		}
 		size40.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
+
+					size20.setBackground(Color.white);
+					size32.setBackground(Color.white);
+					size40.setBackground(blueHighlight);
+					
 					orderItem temp = serverFunctions.updateItemWithSize(newTicket.getOrderItems().lastElement(), 40);
                     newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement());
 					newTicket.addItemToOrder(temp);
+
+					mainPanel.revalidate();
+					mainPanel.repaint();
 				}
 			} );
 		
@@ -183,32 +325,41 @@ public class GUIDriver {
 	
 		JPanel subtractionsButtonPanel = new JPanel();
 		subtractionsButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		mainPanel.add(subtractionsButtonPanel);
 		subtractionsButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-	
 		subtractionsButtonPanel.setBackground(Color.white);
+
 	
 		// TODO: for loop using imported ingredients
 		// create a button for each ingredient
 		// add spacing between each button
 		// product.ingredients.size()
 		List<JButton> buttonList = new ArrayList<JButton>();
-        System.out.println(product.ingredients.size());
 		for (int index = 0; index < product.ingredients.size(); index++) {	//product.ingredients.size(); i++) {
             int myIndex = index;
 			SubtractionButton button = new SubtractionButton(serverFunctions, product, myIndex);
+			if (!(serverFunctions.isInSubtractions(newTicket.getOrderItems().lastElement(), product.ingredients.get(myIndex).getName()))) {
+				button.mainButton.setBackground(Color.white);
+				mainPanel.revalidate();
+				mainPanel.repaint();
+			}
+			else { //add subtraction to item in order
+				button.mainButton.setBackground(blueHighlight);
+				mainPanel.revalidate();
+				mainPanel.repaint();
+			}
+
 			button.mainButton.addActionListener(new ActionListener() 
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					orderItem temp = serverFunctions.updateItemWithSubtraction(newTicket.getOrderItems().lastElement(), product.ingredients().get(myIndex).getId(), button.selected);
-					
-					if (button.selected) { //remove subtraction from item in order
+					//milk -> modifications subtraction with 
+					if(button.selected) {
 						button.selected = false;
 						button.mainButton.setBackground(Color.white);
 						mainPanel.revalidate();
 						mainPanel.repaint();
-					}
+						}				
 					else { //add subtraction to item in order
 						button.selected = true;
 						button.mainButton.setBackground(blueHighlight);
@@ -216,10 +367,8 @@ public class GUIDriver {
 						mainPanel.repaint();
 					}
 
-						newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement()); //add item
-						newTicket.addItemToOrder(temp);
-
- 
+					newTicket.removeItemFromOrder(newTicket.getOrderItems().lastElement()); //add item
+					newTicket.addItemToOrder(temp);
 				}
 			} );
 			
@@ -227,85 +376,134 @@ public class GUIDriver {
 			subtractionsButtonPanel.add(button.mainButton);
 			subtractionsButtonPanel.add(Box.createRigidArea(new Dimension(15, 10)));
 		}
+		mainPanel.add(subtractionsButtonPanel);
 
-		//ADDITIONS
+
+		JLabel additionsHeader = new JLabel("Additions");
+		additionsHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
+	
+		//Creating additions header font
+		Font additionsHeaderFont = new Font("SansSerif", Font.PLAIN, 28);
+		additionsHeader.setFont(additionsHeaderFont);
+	
+		//Search panel for additions
+		JPanel searchPanel = new JPanel();
+		searchPanel.setBackground(Color.white);
+		//searchPanel.setBounds(13, 87, 800, 30);
+		searchPanel.setPreferredSize(new Dimension(1100, 50));
+		searchPanel.setMaximumSize(new Dimension(1100, 50));
+		searchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
+	
+		//Create text component of search bar
+		JTextField additionSearchTextField = new JTextField();
+		additionSearchTextField.setPreferredSize(new Dimension(1050,50));
+		additionSearchTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+		additionSearchTextField.setFont(searchFont);
+	
+		// Panel to display search results
+		JPanel searchResultPanel = new JPanel();
+		searchResultPanel.setBackground(Color.white);
+		searchResultPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+	
+
+		//Create button component of search bar
+		JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
+		searchButton.setPreferredSize(new Dimension(50,50));
+		searchButton.setBackground(Color.white);
+		searchButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					currentTextFieldEntry = additionSearchTextField.getText();
+					updateAdditions(currentTextFieldEntry, searchResultPanel);
+				}
+			} );
+	
+
+		JPanel additionButtonPanel = new JPanel();
+		additionButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		additionButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		additionButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		additionButtonPanel.setBackground(Color.white);
+
+
+		//for every addition in the current item, create a modification button, and display it
+		for (int k = 0; k < newTicket.getOrderItems().lastElement().getAdditions().size();  k++) {
+			AdditionButton tempButton = new AdditionButton(serverFunctions, newTicket.getOrderItems().lastElement().getAdditions().get(k).getIngredientName(), newTicket.getOrderItems().lastElement().getAdditions().get(k).getIngredientId(), product);
+			tempButton.mainButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//REMOVE ITEM FROM ITEM THING
+					serverFunctions.updateItemWithAddition(newTicket.getOrderItems().lastElement(), tempButton.id, true);
+					updateModifications(tempButton.product);
+				}
+			} );
+			additionButtonPanel.add(tempButton.mainButton);
+
+		} 
+
 		
-		// JLabel additionsHeader = new JLabel("Additions");
-		// additionsHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
-	
-		// //Creating additions header font
-		// Font additionsHeaderFont = new Font("SansSerif", Font.PLAIN, 28);
-		// additionsHeader.setFont(additionsHeaderFont);
-		// mainPanel.add(additionsHeader);
-	
-		// //Search panel will house static search bar in top left
-		// JPanel searchPanel = new JPanel();
-		// searchPanel.setBackground(Color.green);
-		// //searchPanel.setBounds(13, 87, 800, 30);
-		// searchPanel.setMaximumSize(new Dimension(1050, 50));
-		// mainPanel.add(searchPanel);
-		// searchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		// searchPanel.setLayout(new BorderLayout());
-	
-		// //Create text component of search bar
-		// JTextField searchTextField = new JTextField();
-		// searchTextField.setPreferredSize(new Dimension(1050,50));
-		// searchTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
-		// Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
-		// searchTextField.setFont(searchFont);
-	
-		// // Panel to display search results
-		// JPanel searchResultPanel = new JPanel();
-		// searchResultPanel.setBackground(Color.orange);
-		// // searchResultPanel.setBounds(13, 87, 800, 30);
-		// mainPanel.add(searchResultPanel);
-		// searchResultPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-	
-		// //Create button component of search bar
-		// JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
-		// searchButton.setPreferredSize(new Dimension(50,50));
-		// searchButton.addActionListener(new ActionListener() 
-		// 	{
-		// 		@Override
-		// 		public void actionPerformed(ActionEvent e) {
-		// 			currentTextFieldEntry = searchTextField.getText();
-		// 			updateAdditions(currentTextFieldEntry, searchResultPanel);
-		// 		}
-		// 	} );
-	
-		// searchPanel.add(searchButton, BorderLayout.LINE_START);
-		// searchPanel.add(searchTextField, BorderLayout.LINE_END);		
+		searchPanel.add(searchButton);
+		searchPanel.add(additionSearchTextField);		
 			
-		
+		mainPanel.add(additionsHeader);
+		mainPanel.add(additionButtonPanel);
+		mainPanel.add(searchPanel);
+		mainPanel.add(searchResultPanel);
+
 	
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
 
 
+	public void clearMainPanel() {
+		mainPanel.removeAll();
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
 	public void updateTileView(String searchBarText) {
 		mainPanel.removeAll();
-		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+
+		JPanel subScrollPanel = new JPanel();
+		subScrollPanel.setLayout(new BoxLayout(subScrollPanel, BoxLayout.PAGE_AXIS));
+		subScrollPanel.setBackground(Color.white);
+		subScrollPanel.add(Box.createRigidArea(new Dimension(0,15)));
 
 		try {
 			dbConnection.createDbConnection();
 			String sqlStatement = String.format("SELECT id FROM products WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
-			while(results.next()) {
-				product tempProduct = serverFunctions.getProduct(results.getInt("id")); 
-				TilePanel tempPanel = new TilePanel(tempProduct.getName(), tempProduct);
-				tempPanel.mainPanel.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent e) {
-                        newTicket = serverFunctions.createOrderTicketItem(newTicket, tempProduct);
-						updateModifications(tempPanel.productInformation); //product ??
-                        
-					}
-				} );
+ 
+						
+			while (results.next()) { //for all tiles
+				JPanel rowOfTiles = new JPanel();
+				rowOfTiles.setLayout(new BoxLayout(rowOfTiles,BoxLayout.LINE_AXIS));
+				rowOfTiles.setBackground(Color.white);
+				rowOfTiles.setAlignmentX(Component.LEFT_ALIGNMENT);
+				for (int j = 0; j < 5; j++) { //for five at a time
+					product tempProduct = serverFunctions.getProduct(results.getInt("id")); 
+					TilePanel tempPanel = new TilePanel(tempProduct.getName(), tempProduct);
+					tempPanel.mainPanel.addActionListener(new ActionListener() 
+					{
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							newTicket = serverFunctions.createOrderTicketItem(newTicket, tempProduct);
+							updateModifications(tempPanel.productInformation); //product ??
+							
+						}
+					} );
+					rowOfTiles.add(tempPanel.mainPanel);
+					rowOfTiles.add(Box.createRigidArea(new Dimension(15, 0)));
+					if (j < 4 && !results.next())
+						break;
+				}
 
-				mainPanel.add(tempPanel.mainPanel);
-				mainPanel.add(Box.createRigidArea(new Dimension(15,300)));
+				subScrollPanel.add(rowOfTiles);
+				subScrollPanel.add(Box.createRigidArea(new Dimension(15,10)));
 			}
 		} catch (Exception e) {
             e.printStackTrace();
@@ -313,7 +511,9 @@ public class GUIDriver {
             System.exit(0);
         } 
 
-
+		JScrollPane scrollPanel = new JScrollPane(subScrollPanel);		
+		scrollPanel.setHorizontalScrollBar(null);
+		mainPanel.add(scrollPanel);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
@@ -352,14 +552,6 @@ public class GUIDriver {
 			}
 		);
 
-
-		/*JButton edit = new JButton("Edit");
-		edit.setBackground(darkRed);
-		edit.setFont(defaultButtons);
-		edit.setForeground(Color.white);
-		edit.setRolloverEnabled(false);
-		edit.setFocusPainted(false);*/
-
 	
 		JButton removeItem = new JButton("Remove Item");
 		removeItem.setBackground(darkRed);
@@ -397,10 +589,15 @@ public class GUIDriver {
 					public void actionPerformed(ActionEvent e) {
 							if (tempItem.itemInformation.getItemAmount() > 1) {
 								tempItem.itemInformation.setItemAmount(item.getItemAmount() - 1);
+								tempItem.quantityDecrease.setForeground(Color.black);
 								updateMainView();
+								mainPanel.revalidate();
+								mainPanel.repaint();
 							}
 							else {
-								tempItem.quantityDecrease.setForeground(Color.lightGray);
+								//tempItem.quantityDecrease.setForeground(Color.lightGray);
+								mainPanel.revalidate();
+								mainPanel.repaint();
 								
 							}
 						}
@@ -427,8 +624,8 @@ public class GUIDriver {
 								currentlySelectedComponent.itemNamePanel.setBackground(Color.white);
 								currentlySelectedComponent.quantityIncrease.setBackground(Color.white);
 								currentlySelectedComponent.quantityDecrease.setBackground(Color.white);
-
 							}
+
 							currentlySelectedComponent = tempItem;
 							currentlySelectedComponent.mainPanel.setBackground(blueHighlight);
 							currentlySelectedComponent.itemNamePanel.setBackground(blueHighlight);
@@ -443,8 +640,17 @@ public class GUIDriver {
 			}
 		}
 
+		JPanel orderTotal = new JPanel();
+		orderTotal.setBackground(Color.white);
+		orderTotal.setLayout(new BoxLayout(orderTotal, BoxLayout.LINE_AXIS));
+		JLabel orderPrice = new JLabel("Order Total:                                                                                                     $" + Double.toString(serverFunctions.getCurrentOrderTotal(newTicket)));
+		orderPrice.setFont(defaultButtons);
+		orderTotal.add(orderPrice);
+		orderTotal.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+		subScrollPanel.add(orderTotal);
 		JScrollPane scrollPanel = new JScrollPane(subScrollPanel);
+		scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		mainPanel.add(scrollPanel);
 		mainPanel.revalidate();
@@ -476,10 +682,15 @@ public class GUIDriver {
 		}
 
 		rightPanel.add(logout);
-		rightPanel.add(Box.createRigidArea(new Dimension(0,675)));
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 400))); //this may need to be edited
+		rightPanel.add(customerNamePanel);
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+		rightPanel.add(rewardsMemberIdPanel);
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 175)));
 		rightPanel.add(cancel);
-		rightPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		rightPanel.add(finishAndPay);
+		
 
 		rightPanel.revalidate();
 		rightPanel.repaint();
@@ -488,6 +699,7 @@ public class GUIDriver {
 	public void updateLoginButtons() {
 		rightPanel.removeAll();
 		mainPanel.removeAll();
+		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		serverName = new JLabel(serverFunctions.getEmployeeName(currentEmployeeId)); //pull from database
 		serverName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -511,10 +723,17 @@ public class GUIDriver {
 			rightPanel.add(managerViewButton);
 		}
 		rightPanel.add(logout);
-		rightPanel.add(Box.createRigidArea(new Dimension(0, 675)));
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 650))); //this may need to be edited
+		//rightPanel.add(customerNamePanel);
+		//rightPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+		//rightPanel.add(rewardsMemberIdPanel);
+		// rightPanel.add(Box.createRigidArea(new Dimension(0, 100)));
 		rightPanel.add(cancel);
-		rightPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		rightPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		rightPanel.add(createNewOrder);
+
+
+		searchTextField.setEditable(false);
 
 
 		mainPanel.revalidate();
@@ -524,17 +743,14 @@ public class GUIDriver {
 		rightPanel.repaint();
 	}
 
-	public void stateMachine() {
-		//defaults to main page
-		//if (text is entered and the search button is pressed) and currentPage is Main
-			//update tile part
+	public void updatecustomerName(String customerName) {
+		String[] splittedString = customerName.trim().split(" ");
+		newTicket.setCustomerFirstName(splittedString[0]);
+	}
 
-		//if (on tile click and currentPage is tile)
-			//go to modifications
-		
-		//if (on modification exit and currentPage is modification)
-			//add database info, orderID and ticket etc
-			// go back to main view
+	public void updateRewardsMemberId(String rewardsMemberId) {
+		String strippedString = rewardsMemberId.trim();
+		newTicket.setRewardsMemberId(Integer.parseInt(strippedString));
 	}
 
 	public GUIWindow() {
@@ -542,55 +758,6 @@ public class GUIDriver {
 		serverFunctions = new serverViewFunctions();
 		dbConnection = new dbFunctions();
 		
-		//TESTING REMOVE
-		//Item 1
-        /*orderItemModification add1_1 = new orderItemModification();
-        add1_1.setingredientId(0);
-        orderItemModification add1_2 = new orderItemModification();
-        add1_2.setingredientId(1);
-        orderItemModification subtract1_1 = new orderItemModification();
-        subtract1_1.setingredientId(2);
-        
-        orderItem item1 = new orderItem();
-        item1.setItemNumberInOrder(0);
-        item1.setItemName("Test Drink 1");
-        item1.setItemAmount(1);
-        item1.setItemSize(20);
-        item1.addAddition(add1_1);
-        item1.addAddition(add1_2);
-		item1.setId(20);
-        item1.addSubtraction(subtract1_1);
-        
-        //Item 2
-        orderItemModification add2_1 = new orderItemModification();
-        add2_1.setingredientId(0);
-		add2_1.setIngredientName("Good morning");
-        orderItemModification subtract2_1 = new orderItemModification();
-        subtract2_1.setingredientId(1);
-        orderItemModification subtract2_2 = new orderItemModification();
-        subtract2_2.setingredientId(2);
-
-        orderItem item2 = new orderItem();
-        item2.setItemNumberInOrder(1);
-        item2.setItemName("very very veyr long name");
-        item2.setItemAmount(2);
-        item2.setItemSize(32);
-		item2.setId(21);
-        item2.addAddition(add2_1);
-        item2.addSubtraction(subtract2_1);
-        item2.addSubtraction(subtract2_2);
-        
-        //Order ticket
-        newTicket = new orderTicketInfo();
-        newTicket.setCustomerFirstName("Test-Person");
-        newTicket.setRewardsMemberId(2);
-        newTicket.setEmployeeId(2);
-        newTicket.setOrderPriceTotal(4.99);
-        newTicket.addItemToOrder(item1);
-        newTicket.addItemToOrder(item2);
-        //remove testing*/
-
-
 		//Create JFrame and initial settings
 		JFrame frame = new JFrame("Smoothie King");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -620,12 +787,13 @@ public class GUIDriver {
 		
 		//Search panel will house static search bar in top left
 		JPanel searchPanel = new JPanel();
-		searchPanel.setBackground(Color.orange);
+		searchPanel.setBackground(Color.white);
 		searchPanel.setBounds(13, 87, 1100, 50);
 		searchPanel.setLayout(new BorderLayout());
 
 		//Create text component of search bar
-		JTextField searchTextField = new JTextField();
+		searchTextField = new JTextField();
+		searchTextField.setEditable(false);
 		searchTextField.setPreferredSize(new Dimension(1050,50));
 		searchTextField.setHorizontalAlignment(JTextField.LEFT);
 		Font searchFont = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
@@ -640,6 +808,7 @@ public class GUIDriver {
 				public void actionPerformed(ActionEvent e) {
 					currentTextFieldEntry = searchTextField.getText();
 					updateTileView(currentTextFieldEntry);
+					searchTextField.setText("");
 				}
 			}
 		);
@@ -662,36 +831,18 @@ public class GUIDriver {
 		JPanel loginPanel = new JPanel();
 		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.LINE_AXIS));
 		loginPanel.setBackground(Color.white);
+		//loginPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.black));
 
 		//Creating login field
 		JTextField loginTextField = new JTextField();
 		loginTextField.setPreferredSize(new Dimension(500,50));
-		loginTextField.setSize(new Dimension(505,50));
+		loginTextField.setSize(new Dimension(500,50));
 		loginTextField.setHorizontalAlignment(JTextField.LEFT);
 		loginTextField.setFont(searchFont);
 		loginTextField.setAlignmentY(Component.CENTER_ALIGNMENT);
+		//loginTextField.setBorderPainted(false);
 		//FIX VERTICAL ALIGNMENT
 
-		JButton loginButton = new JButton("Login");
-		loginButton.setForeground(Color.black);
-		loginButton.setMargin(new Insets(8, 10, 10, 10));
-		loginButton.setBackground(Color.white);
-		loginButton.setRolloverEnabled(false);
-		loginButton.setFocusPainted(false);
-		loginButton.setFont(defaultButtons);
-		loginButton.addActionListener(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					currentEmployeeId = Integer.parseInt(loginTextField.getText());
-					updateLoginButtons();
-				}
-			}
-		);
-
-		loginPanel.add(loginButton);
-		loginPanel.add(loginTextField);
-		
 
 		//Creating Logout Button
 		logout = new JButton("      Logout      ");
@@ -703,9 +854,95 @@ public class GUIDriver {
 		logout.setFocusPainted(false);
 		logout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed));	
 		logout.setAlignmentX(Component.CENTER_ALIGNMENT);
+		logout.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					currentEmployeeId = -1;
+					showLoginScreen();
+				}
+			}
+		);
+
+		customerNamePanel = new JPanel();
+		customerNamePanel.setLayout(new BoxLayout(customerNamePanel, BoxLayout.LINE_AXIS));
+		customerNamePanel.setBackground(Color.white);
+		customerNamePanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.black));
+
+		customerNameField = new JTextField();
+		customerNameField.setPreferredSize(new Dimension(140, 40));
+		customerNameField.setMaximumSize(new Dimension(140, 40));
+		customerNameField.setBackground(Color.white);
+		customerNameField.setForeground(darkRed);
+		customerNameField.setHorizontalAlignment(JTextField.LEFT);
+		customerNameField.setBorder(BorderFactory.createEmptyBorder());
+		customerNameField.setFont(searchFont); //if we're using this font for all textfields, we should rename this textFieldFont
+		customerNameField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JButton customerNameButton = new JButton("Customer Name");
+		customerNameButton.setPreferredSize(new Dimension(150, 40));
+		customerNameButton.setMaximumSize(new Dimension(150, 40));
+		customerNameButton.setForeground(Color.black);
+		customerNameButton.setMargin(new Insets(4, 5, 5, 5));
+		customerNameButton.setBackground(Color.white);
+		customerNameButton.setRolloverEnabled(false);
+		customerNameButton.setFocusPainted(false);
+		Font customerFont = new Font("SansSerif", Font.PLAIN, 16);
+		customerNameButton.setFont(customerFont);
+		customerNameButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updatecustomerName(customerNameField.getText());
+				}
+			}
+		);
+
+		customerNamePanel.add(customerNameButton);
+		customerNamePanel.add(Box.createRigidArea(new Dimension(2,0)));
+		customerNamePanel.add(customerNameField);
 
 
-		cancel = new JButton("      Finish Item      ");
+		// REWARDS MEMBER ID PANEL: lets employee type in the rewards member id and add it to the order ticket
+		rewardsMemberIdPanel = new JPanel();
+		rewardsMemberIdPanel.setLayout(new BoxLayout(rewardsMemberIdPanel, BoxLayout.LINE_AXIS));
+		rewardsMemberIdPanel.setBackground(Color.white);
+		rewardsMemberIdPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.black));
+
+		rewardsMemberIdField = new JTextField();
+		rewardsMemberIdField.setPreferredSize(new Dimension(140, 40));
+		rewardsMemberIdField.setMaximumSize(new Dimension(140, 40));
+		rewardsMemberIdField.setBackground(Color.white);
+		rewardsMemberIdField.setForeground(darkRed);
+		rewardsMemberIdField.setHorizontalAlignment(JTextField.LEFT);
+		rewardsMemberIdField.setBorder(BorderFactory.createEmptyBorder());
+		rewardsMemberIdField.setFont(searchFont); //if we're using this font for all textfields, we should rename this textFieldFont
+		rewardsMemberIdField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JButton rewardsMemberIdButton = new JButton("Member ID");
+		rewardsMemberIdButton.setPreferredSize(new Dimension(150, 40));
+		rewardsMemberIdButton.setMaximumSize(new Dimension(150, 40));
+		rewardsMemberIdButton.setForeground(Color.black);
+		rewardsMemberIdButton.setMargin(new Insets(4, 5, 5, 5));
+		rewardsMemberIdButton.setBackground(Color.white);
+		rewardsMemberIdButton.setRolloverEnabled(false);
+		rewardsMemberIdButton.setFocusPainted(false);
+		rewardsMemberIdButton.setFont(customerFont);
+		rewardsMemberIdButton.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateRewardsMemberId(rewardsMemberIdField.getText());
+				}
+			}
+		);
+
+		rewardsMemberIdPanel.add(rewardsMemberIdButton);
+		rewardsMemberIdPanel.add(Box.createRigidArea(new Dimension(2,0)));
+		rewardsMemberIdPanel.add(rewardsMemberIdField);
+
+
+		cancel = new JButton("      Cancel     ");
 		//cancel.setBounds(32, 50, 150, 75);
 		cancel.setFont(defaultButtons);
 		cancel.setBackground(Color.white);
@@ -718,15 +955,16 @@ public class GUIDriver {
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//newTicket.addItemToOrder(new );
-					updateMainView();
+					resetMainPanel();
+					updateLoginButtons();
+					//REMOVE ORDER TICKET
+					newTicket = new orderTicketInfo();
 				}
 			}
 		);
 
 
 		finishAndPay = new JButton("Finish and Pay");
-		//finishAndPay.setBounds(32, 50, 150, 75);
 		finishAndPay.setFont(defaultButtons);
 		finishAndPay.setBackground(Color.white);
 		finishAndPay.setForeground(darkRed);
@@ -738,10 +976,13 @@ public class GUIDriver {
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//updateTileView(currentTextFieldEntry);
-                    //serverFunctions.updateDbWithOrder(newTicket);
-					updateMainView();
+					newTicket.setCustomerFirstName(customerNameField.getText());
+                    serverFunctions.updateDbWithOrder(newTicket);
+					updateLoginButtons();
+					clearMainPanel();
 					orderCreated = true;
+					customerNameField.setText("");
+					rewardsMemberIdField.setText("");
 				}
 			}
 		);
@@ -764,6 +1005,7 @@ public class GUIDriver {
 					//UPDATE STUFF HERE
 					newTicket = new orderTicketInfo();
 					newTicket.setEmployeeId(currentEmployeeId);
+					searchTextField.setEditable(true);
 					updateMainView();
 				}
 			});
@@ -792,7 +1034,7 @@ public class GUIDriver {
 		leftPanel.setLayout(null);
 
 
-		mainPanel.add(loginPanel, BorderLayout.PAGE_START);
+		//mainPanel.add(loginPanel, BorderLayout.PAGE_START);
 		//ALL TESTING DONE HERE
 		//Adding logo, search , and main panel to left panel
 		leftPanel.add(logoPanel);
@@ -803,6 +1045,8 @@ public class GUIDriver {
 		frame.add(rightPanel);
 		frame.add(leftPanel);
         frame.setVisible(true);
+
+		showLoginScreen();
 	}
 
 }
@@ -836,9 +1080,9 @@ class TilePanel {
 		JLabel picLabel = new JLabel();
 		picLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		try {
-			picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/pumpkinWhatever.png").getImage().getScaledInstance(175, 225, Image.SCALE_SMOOTH)));
-			//picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/" + itemNameString.replaceAll("\\s", "") + ".png").getImage().getScaledInstance(175, 225, Image.SCALE_SMOOTH)));
-		}
+			//picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/pumpkinWhatever.png").getImage().getScaledInstance(175, 225, Image.SCALE_SMOOTH)));
+			picLabel.setIcon(new ImageIcon(new ImageIcon("ProductImages/" + itemNameString + ".png").getImage().getScaledInstance(175, 225, Image.SCALE_SMOOTH)));
+		} //.replaceAll("\\s", "")
 		catch (Exception e) {
 			System.out.println(e);
 		}
@@ -877,12 +1121,14 @@ class ItemInOrder {
 		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mainPanel.setRolloverEnabled(false);
 		mainPanel.setFocusPainted(false);
+		mainPanel.setBorderPainted(false);
 		
 
 		subScrollPanel = new JPanel();
 		subScrollPanel.setLayout(new BoxLayout(subScrollPanel, BoxLayout.PAGE_AXIS));
 		subScrollPanel.setBackground(Color.white);
 		subScrollPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
 
 		itemNamePanel = new JPanel();
 		itemNamePanel.setLayout(new BoxLayout(itemNamePanel, BoxLayout.LINE_AXIS));
@@ -894,8 +1140,8 @@ class ItemInOrder {
 		itemName.setForeground(darkRed);
 		itemName.setOpaque(false);
 		itemName.setAlignmentX(Component.LEFT_ALIGNMENT);
-		itemName.setMinimumSize(new Dimension(400, 50));
-		itemName.setMaximumSize(new Dimension(400, 50));
+		itemName.setMinimumSize(new Dimension(350, 50));
+		itemName.setMaximumSize(new Dimension(350, 50));
 		
 
 		JLabel itemSize = new JLabel(Integer.toString(item.getItemSize()));
@@ -918,6 +1164,7 @@ class ItemInOrder {
 		
 		quantityDecrease = new JButton("-");
 		quantityDecrease.setBackground(Color.white);
+		//quantityDecrease.setForeground(Color.lightGray);
 		quantityDecrease.setBorderPainted(false);
 		quantityDecrease.setRolloverEnabled(false);
 		quantityDecrease.setFocusPainted(false);
@@ -932,14 +1179,16 @@ class ItemInOrder {
 		price.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		itemNamePanel.add(itemName);
-		itemNamePanel.add(Box.createRigidArea(new Dimension(375,0)));
+		itemNamePanel.add(Box.createRigidArea(new Dimension(325,0)));
 		itemNamePanel.add(itemSize);
-		itemNamePanel.add(Box.createRigidArea(new Dimension(75,10)));
+		itemNamePanel.add(Box.createRigidArea(new Dimension(50,10)));
 		itemNamePanel.add(quantityDecrease);
 		itemNamePanel.add(quantity);
 		itemNamePanel.add(quantityIncrease);
-		itemNamePanel.add(Box.createRigidArea(new Dimension(75,10)));
+		itemNamePanel.add(Box.createRigidArea(new Dimension(50,10)));
 		itemNamePanel.add(price);
+		itemNamePanel.add(Box.createRigidArea(new Dimension(70,10)));
+
 
 		mainPanel.add(itemNamePanel);
 
@@ -949,7 +1198,7 @@ class ItemInOrder {
 			currentAddition.setOpaque(false);
 			currentAddition.setFont(defaultButtons);
 			currentAddition.setAlignmentX(Component.LEFT_ALIGNMENT);
-			subScrollPanel.add(currentAddition);
+			mainPanel.add(currentAddition);
 			
 		}
 
@@ -974,15 +1223,43 @@ class SubtractionButton {
 
 	public SubtractionButton(serverViewFunctions serverFunctions, product product, int myIndex) {
 		this.product = product;
-		mainButton = new JButton(product.ingredients().get(myIndex).getName());
 		selected = false;
+		
+		mainButton = new JButton(product.ingredients().get(myIndex).getName());
 		mainButton.setFont(defaultButtons);
 		mainButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mainButton.setBackground(Color.white);
 		mainButton.setForeground(darkRed);
 		mainButton.setRolloverEnabled(false);
 		mainButton.setFocusPainted(false);
-
 	}
 }
 
+
+class AdditionButton {
+	public JButton mainButton;
+	public boolean selected;
+	public int id;
+	public product product;
+	public String name;
+	private static Font defaultButtons =  new Font("SansSerif", Font.PLAIN, 25); 
+	static Color darkRed = new Color(165,58,59);
+	static Color blueHighlight = new Color(184, 204, 220);
+
+
+	public AdditionButton(serverViewFunctions serverFunctions,  String name, int id, product product) {
+		selected = false;
+		this.name = name;
+		this.id = id;
+		this.product = product;
+		
+		mainButton = new JButton(name);
+		mainButton.setFont(defaultButtons);
+		mainButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mainButton.setBackground(blueHighlight);
+		mainButton.setForeground(darkRed);
+		mainButton.setRolloverEnabled(false);
+		mainButton.setFocusPainted(false);
+
+	}
+}

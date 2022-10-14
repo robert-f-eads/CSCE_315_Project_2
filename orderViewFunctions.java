@@ -2,7 +2,7 @@ import java.util.Vector;
 import java.sql.ResultSet;
 
 public class orderViewFunctions {
-    serverViewFunctions serverFunctions;
+   /* serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
 
     public Vector<orderTicketInfo> getOrders() {
@@ -26,5 +26,5 @@ public class orderViewFunctions {
     public orderViewFunctions() {
         serverFunctions = new serverViewFunctions();
         dbConnection = new dbFunctions();
-    }
+    }*/
 }

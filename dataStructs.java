@@ -19,7 +19,7 @@ class orderTicketInfo {
         java.util.Date date = new java.util.Date();
         timestamp = formatter.format(date);
         customerFirstName = "";
-        rewardsMemberId = -1;
+        rewardsMemberId = 0;
         employeeId = -1;
         orderPriceTotal = -1;
         items = new Vector<orderItem>();
@@ -65,7 +65,7 @@ class orderTicketInfo {
             id, timestamp, customerFirstName, rewardsMemberId, employeeId, orderPriceTotal);
         return print;
     }
-}   
+}//End orderTicketInfo   
 
 class orderItem {
     private
@@ -76,6 +76,7 @@ class orderItem {
         String itemName;
         int itemAmount;
         int itemSize;
+        double itemPrice;
         Vector<orderItemModification> additions;
         Vector<orderItemModification> subtractions;
 
@@ -88,7 +89,8 @@ class orderItem {
         itemNumberInOrder = 1;
         itemName = "";
         itemAmount = 1;
-        itemSize = -1;
+        itemSize = 20;
+        itemPrice = -1;
         additions = new Vector<orderItemModification>();
         subtractions = new Vector<orderItemModification>();
     }
@@ -114,6 +116,7 @@ class orderItem {
         String getItemName() {return itemName;}
         int getItemAmount() {return itemAmount;}
         int getItemSize() {return itemSize;}
+        double getItemPrice() {return itemPrice;}
         Vector<orderItemModification> getAdditions() {return additions;}
         Vector<orderItemModification> getSubtractions() {return subtractions;}
 
@@ -125,6 +128,7 @@ class orderItem {
         void setItemName(String itemName) {this.itemName = itemName;}
         void setItemAmount(int itemAmount) {this.itemAmount = itemAmount;}
         void setItemSize(int itemSize) {this.itemSize = itemSize;}
+        void setItemPrice(double itemPrice) {this.itemPrice = itemPrice;}
         void addAddition(orderItemModification modification) {additions.add(modification);}
         void removeAddition(orderItemModification modification) {additions.remove(modification);}
         void addSubtraction(orderItemModification modification) {subtractions.add(modification);}
@@ -137,7 +141,7 @@ class orderItem {
             id, orderId, itemNumberInOrder, itemName, itemAmount, itemSize);
         return print;
     }        
-}
+}//End orderItem
 
 class orderItemModification {
     private
@@ -171,6 +175,14 @@ class orderItemModification {
         this.ingredientName = ingredientName;
     }
 
+    public orderItemModification(orderItemModification otherMod) {
+        this.id = otherMod.getId();
+        this.orderId = otherMod.getOrderId();
+        this.itemNumberInOrder = otherMod.getItemNumberInOrder();
+        this.ingredientId = otherMod.getIngredientId();
+        this.ingredientName = otherMod.getIngredientName();
+    }
+
 
     public
         //Getters
@@ -202,7 +214,7 @@ class orderItemModification {
         if(order.getIngredientId() == ingredientId) {return true;}
         return false;
     }
-}
+}//End orderItemModification
 
 class ingredient {
 
@@ -271,7 +283,7 @@ class ingredient {
             ", unitsInLastOrder='" + getUnitsInLastOrder() + "'" +
             "}";
     }
-}
+}//End ingredient
 
 class material {
     private
@@ -343,7 +355,7 @@ class material {
             id, name, size, quantityRemaining, measurementUnits, itemsPerUnit, pricePerUnitLastOrder, lastOrderDate, unitsInLastOrder);
         return print;
     }
-}
+}//End material
 
 class product {
     private
@@ -389,4 +401,4 @@ class product {
             id, name, price);
         return print;
     }
-}
+}//End product
