@@ -112,6 +112,9 @@ public class DbTools {
 
                 for(String user : users) {
                     stmt.executeUpdate(String.format("GRANT ALL ON %s TO %s", currentTable.tableName, user));
+                    if(currentTable.tableName != "productsToIngredients") {
+                        stmt.executeUpdate(String.format("GRANT ALL ON %s_id_seq TO %s", currentTable.tableName, user));
+                    }
                 }
                 
             }
@@ -165,8 +168,6 @@ public class DbTools {
                     int results = stmt.executeUpdate(sqlStatement); 
                     
                 }
-            
-
 
             }
         } catch (Exception e) {
