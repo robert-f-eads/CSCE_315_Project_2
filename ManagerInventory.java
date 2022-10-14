@@ -12,6 +12,7 @@ public class ManagerInventory extends ManagerViewScreen {
         JButton update = managerView.createButton("Update", buttonWidth, buttonHeight);
         JButton add = managerView.createButton("Add", buttonWidth, buttonHeight);
         JButton delete = managerView.createButton("Delete", buttonWidth, buttonHeight);
+        JButton toggleTable = managerView.createButton("Toggle Table", buttonWidth, buttonHeight);
 
         JLabel inventory = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
 
@@ -34,7 +35,7 @@ public class ManagerInventory extends ManagerViewScreen {
         attributeFields[5] = last;
         attributeFields[6] = units;
 
-        HintTextField tableText = new HintTextField("Table", buttonWidth, buttonHeight);
+        HintTextField tableText = new HintTextField("ingredients", buttonWidth, buttonHeight);
 
         JTable inventoryTable = new JTable();
         JTable productTable = new JTable();

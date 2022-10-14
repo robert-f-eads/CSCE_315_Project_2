@@ -126,8 +126,10 @@ public class ManagerView {
 
     public void setHomeView() {
         this.clearView();
-        this.setGridLayout();
+        this.setGridBoxLayout();
+        // this.setGridLayout();
         (new ManagerHome(this)).setHomeView();
+        myFrame.revalidate();
         myFrame.repaint();
     }
 
@@ -160,6 +162,20 @@ public class ManagerView {
         myFrame.setVisible(true);
     }
 
+    private void setGridBoxLayout() {
+        myFrame.getContentPane().removeAll();
+        // myFrame.setLayout(new GridBagLayout());
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setSize(1000,1000);
+        mainPanel.invalidate();
+        mainPanel.revalidate();
+        myFrame.add(mainPanel);
+        
+        myFrame.revalidate();
+        myFrame.repaint();
+        myFrame.setVisible(true);
+    }
+
     private void setBorderLayout() {
         myFrame.getContentPane().removeAll();;
         borderPanel = new JPanel(new BorderLayout(10, 10));
@@ -180,5 +196,6 @@ public class ManagerView {
             }
         }
         borderPanel.removeAll();
+        mainPanel.removeAll();
     }
 }
