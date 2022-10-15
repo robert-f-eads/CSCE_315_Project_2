@@ -43,7 +43,8 @@ public class ManagerInventory extends ManagerViewScreen {
         managerView.updateTable(productTable, "products", -1);
 
         back.addActionListener(e -> {
-            managerView.setHomeView();
+            managerView.myFrame.dispose();
+            new ManagerView();
         });
         searchButton.addActionListener(e -> {
             productTable.setModel(managerView.resultSetToTableModel(null,

@@ -12,7 +12,8 @@ public class ManagerReorder extends ManagerViewScreen {
         JLabel reorder = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
 
         back.addActionListener(e -> {
-            managerView.setHomeView();
+            managerView.myFrame.dispose();
+            new ManagerView();
         });
         export.addActionListener(e -> {
             System.out.println("Export to csv");

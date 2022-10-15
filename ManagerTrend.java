@@ -21,7 +21,8 @@ public class ManagerTrend extends ManagerViewScreen {
         HintTextField endDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
 
         back.addActionListener(e -> {
-            managerView.setHomeView();
+            managerView.myFrame.dispose();
+            new ManagerView();
         });
         generate.addActionListener(e -> {
             System.out.println("Generate trends");

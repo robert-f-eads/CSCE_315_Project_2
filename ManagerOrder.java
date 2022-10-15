@@ -61,7 +61,8 @@ public class ManagerOrder extends ManagerViewScreen {
 
 
         back.addActionListener(e -> {
-            managerView.setHomeView();
+            managerView.myFrame.dispose();
+            new ManagerView();
         });
         week.addActionListener(e -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  

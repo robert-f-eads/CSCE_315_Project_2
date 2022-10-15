@@ -759,6 +759,7 @@ public class GUIDriver {
 
 	public GUIWindow() {
 		//Establishing database connection
+
 		serverFunctions = new serverViewFunctions();
 		dbConnection = new dbFunctions();
 		

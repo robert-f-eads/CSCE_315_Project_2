@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ManagerHome extends ManagerViewScreen {
     public ManagerHome(ManagerView managerView) {super(managerView);}
+
 	static Border line = new LineBorder(Color.black);
     static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
     static Color darkRed = new Color(165,58,59);
@@ -19,6 +20,7 @@ public class ManagerHome extends ManagerViewScreen {
 
 
     public void setHomeView() {
+        System.out.println("Setting home view");
        
         JButton orderHistory = new JButton("Order History");
         orderHistory.setForeground(Color.black);
@@ -181,7 +183,7 @@ public class ManagerHome extends ManagerViewScreen {
         managerView.mainPanel.add(leftPanel);
         managerView.mainPanel.add(rightPanel);
 
-        
+        managerView.myFrame.add(managerView.mainPanel);
     }
     
 }

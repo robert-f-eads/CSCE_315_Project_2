@@ -23,7 +23,7 @@ public class ManagerView {
 		myFrame.setResizable(false);
 
 
-       /* myRows = 5;
+        myRows = 5;
         myCols = 5;
 
         myPanels = new JPanel[myRows][myCols];
@@ -31,15 +31,15 @@ public class ManagerView {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j] = new JPanel();
             }
-        }*/
+        }
 
         myDbConnection = new dbFunctions();
+
         myDbConnection.createDbConnection();
 
         borderPanel = new JPanel();
 
         mainPanel = new JPanel();
-        myFrame.add(mainPanel);
         myFrame.setVisible(true);
 
         
@@ -201,13 +201,13 @@ public class ManagerView {
     
     // clears both gridlayout and borderlayout
     private void clearView() {
-        /*for(int i = 0; i < myCols; i++) {
+        for(int i = 0; i < myCols; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j].removeAll();
             }
-        }*/
+        }
         borderPanel.removeAll();
         mainPanel.removeAll();
-        mainPanel.revalidate();
+        myFrame.getContentPane().removeAll();
     }
 }
