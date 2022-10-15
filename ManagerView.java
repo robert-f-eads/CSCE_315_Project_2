@@ -12,26 +12,37 @@ public class ManagerView {
     int myRows;
     int myCols;
     dbFunctions myDbConnection;
-
+    int maxWidth = 1500;
+    int maxHeight = 1080;
     public ManagerView() {
         myFrame = new JFrame();//creating instance of JFrame  
-        myFrame.setSize(1500, 1000);
+        //myFrame.setSize(1500, 1080);
+        myFrame.setPreferredSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setMinimumSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setMaximumSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setResizable(false);
 
-        myRows = 5;
+
+       /* myRows = 5;
         myCols = 5;
-        myDbConnection = new dbFunctions();
-        myDbConnection.createDbConnection();
 
         myPanels = new JPanel[myRows][myCols];
         for(int i = 0; i < myRows; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j] = new JPanel();
             }
-        }
+        }*/
+
+        myDbConnection = new dbFunctions();
+        myDbConnection.createDbConnection();
+
         borderPanel = new JPanel();
 
         mainPanel = new JPanel();
+        myFrame.add(mainPanel);
+        myFrame.setVisible(true);
 
+        
         this.setHomeView();
     }
 
@@ -126,7 +137,7 @@ public class ManagerView {
 
     public void setHomeView() {
         this.clearView();
-        this.setGridBoxLayout();
+        //this.setGridBoxLayout();
         // this.setGridLayout();
         (new ManagerHome(this)).setHomeView();
         myFrame.revalidate();
@@ -190,12 +201,13 @@ public class ManagerView {
     
     // clears both gridlayout and borderlayout
     private void clearView() {
-        for(int i = 0; i < myCols; i++) {
+        /*for(int i = 0; i < myCols; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j].removeAll();
             }
-        }
+        }*/
         borderPanel.removeAll();
         mainPanel.removeAll();
+        mainPanel.revalidate();
     }
 }

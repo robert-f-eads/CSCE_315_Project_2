@@ -1016,7 +1016,7 @@ public class GUIDriver {
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.white);
-		leftPanel.setBounds(0, 0, 1150, maxHeight);
+		leftPanel.setBounds(0, 0, 1050, maxHeight);
 		leftPanel.setLayout(null);
 
 

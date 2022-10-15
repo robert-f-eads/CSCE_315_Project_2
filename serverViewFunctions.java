@@ -200,7 +200,7 @@ public class serverViewFunctions {
                     result = dbConnection.dbQuery(sqlStatement);
                     double quantRemaining = 0;
                     while(result.next()){quantRemaining = result.getDouble("quantityremaining");}
-                    quantRemaining -= 1;
+                    quantRemaining = quantRemaining - (1 * item.getItemAmount());
                     sqlStatement = String.format("UPDATE ingredients SET quantityremaining = %.2f WHERE id = %d", quantRemaining, temp_ingredient.getId());
                     resultInt = dbConnection.dbUpsert(sqlStatement);
                 }
