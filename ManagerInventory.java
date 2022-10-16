@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ManagerInventory extends ManagerViewScreen {
+    boolean toggleInventory = true;
+
     public ManagerInventory(ManagerView managerView) {super(managerView);}
     
     public void setInventoryView() {
@@ -12,21 +14,27 @@ public class ManagerInventory extends ManagerViewScreen {
         JButton update = managerView.createButton("Update", buttonWidth, buttonHeight);
         JButton add = managerView.createButton("Add", buttonWidth, buttonHeight);
         JButton delete = managerView.createButton("Delete", buttonWidth, buttonHeight);
-        JButton toggleTable = managerView.createButton("Toggle Table", buttonWidth, buttonHeight);
+        JButton toggleTable = managerView.createButton("Switch to Product Table", buttonWidth, buttonHeight);
 
         JLabel inventory = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
+        inventory.setFont(new Font("SansSerif", Font.PLAIN, 28));
+        inventory.setBackground(Color.green);
+        inventory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        HintTextField searchText = new HintTextField("Search", buttonWidth, buttonHeight);
-        HintTextField id = new HintTextField("Id", buttonWidth, buttonHeight);
+
+        HintTextField searchText = formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
+        HintTextField id = formatTextArea(new HintTextField("Id", buttonWidth, buttonHeight));
+
 
         HintTextField[] attributeFields = new HintTextField[7];
-        HintTextField name = new HintTextField("name", buttonWidth, buttonHeight);
-        HintTextField expiration = new HintTextField("expiration", buttonWidth, buttonHeight);
-        HintTextField quantity = new HintTextField("Quantity", buttonWidth, buttonHeight);
-        HintTextField measurement = new HintTextField("Measurement", buttonWidth, buttonHeight);
-        HintTextField price = new HintTextField("Price", buttonWidth, buttonHeight);
-        HintTextField last = new HintTextField("Last", buttonWidth, buttonHeight);
-        HintTextField units = new HintTextField("Units", buttonWidth, buttonHeight);
+        HintTextField name = formatTextArea(new HintTextField("Name", buttonWidth, buttonHeight));
+        HintTextField expiration = formatTextArea(new HintTextField("Expiration", buttonWidth, buttonHeight));
+        HintTextField quantity = formatTextArea(new HintTextField("Quantity", buttonWidth, buttonHeight));
+        HintTextField measurement = formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
+        HintTextField price = formatTextArea(new HintTextField("Price", buttonWidth, buttonHeight));
+        HintTextField last = formatTextArea(new HintTextField("Last", buttonWidth, buttonHeight));
+        HintTextField units = formatTextArea(new HintTextField("Units", buttonWidth, buttonHeight));
+
         attributeFields[0] = name;
         attributeFields[1] = expiration;
         attributeFields[2] = quantity;
@@ -35,7 +43,7 @@ public class ManagerInventory extends ManagerViewScreen {
         attributeFields[5] = last;
         attributeFields[6] = units;
 
-        HintTextField tableText = new HintTextField("ingredients", buttonWidth, buttonHeight);
+        HintTextField tableText = formatTextArea(new HintTextField("ingredients", buttonWidth, buttonHeight));
 
         JTable inventoryTable = new JTable();
         JTable productTable = new JTable();
@@ -46,6 +54,8 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.myFrame.dispose();
             new ManagerView();
         });
+
+        
         searchButton.addActionListener(e -> {
             productTable.setModel(managerView.resultSetToTableModel(null,
                 managerView.myDbConnection.dbQuery("SELECT * FROM products WHERE name ILIKE '%" + searchText.getText() + "%'")));
@@ -54,6 +64,8 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.myFrame.repaint();
             managerView.myFrame.revalidate();
         });
+
+
         update.addActionListener(e -> {
             String table = tableText.getText();
             for(int i = 0; i < attributeFields.length; i++) {
@@ -79,6 +91,8 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.updateTable(productTable, "products", -1);
             managerView.updateTable(inventoryTable, "ingredients", -1);
         });
+
+
         add.addActionListener(e -> {
             String table = tableText.getText();
             String sql = "";
@@ -93,6 +107,8 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.updateTable(productTable, "products", -1);
             managerView.updateTable(inventoryTable, "ingredients", -1);
         });
+
+
         delete.addActionListener(e -> {
             String table = tableText.getText();
             String sql = "";
@@ -106,12 +122,35 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.updateTable(inventoryTable, "ingredients", -1);
         });
 
+        JPanel title = new JPanel();
+        title.setLayout(new BoxLayout(title, BoxLayout.LINE_AXIS));
+        title.setBackground(Color.white);
+        title.add(Box.createRigidArea(new Dimension(700, 0)));
+        title.add(inventory);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel topButtons = new JPanel();
+        topButtons.setBackground(Color.white);
+        topButtons.setLayout(new BoxLayout(topButtons, BoxLayout.LINE_AXIS));
+        //topButtons.add(Box.createRigidArea(new Dimension(15, 0)));
+        topButtons.add(back);
+        topButtons.add(Box.createRigidArea(new Dimension(465, 0)));
+        topButtons.add(searchText);
+        topButtons.add(searchButton);
+        topButtons.add(Box.createRigidArea(new Dimension(200, 0)));
+        topButtons.add(toggleTable);
+        topButtons.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
         JPanel pageStart = new JPanel();
-        pageStart.add(back);
-        pageStart.add(inventory);
-        pageStart.add(searchText);
-        pageStart.add(searchButton);
-        managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
+        pageStart.setBackground(Color.white);
+        pageStart.setLayout(new BoxLayout(pageStart, BoxLayout.PAGE_AXIS));
+        pageStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        pageStart.add(title);
+        pageStart.add(Box.createRigidArea(new Dimension(0, 25)));
+        pageStart.add(topButtons);
+
         JPanel south = new JPanel();
         south.add(id);
         south.add(name);
@@ -125,8 +164,42 @@ public class ManagerInventory extends ManagerViewScreen {
         south.add(add);
         south.add(delete);
         south.add(tableText);
+
+
+        managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
+        managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
         managerView.borderPanel.add(south, BorderLayout.SOUTH);
-        managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.WEST);
-        managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.EAST);
+
+
+        toggleTable.addActionListener(e -> {
+            managerView.borderPanel.removeAll();
+            if (toggleInventory) {
+                System.out.println("Toggling to product table");
+                toggleTable.setText("Switch to Inventory Table");
+                managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
+                managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.CENTER);
+                managerView.borderPanel.add(south, BorderLayout.SOUTH);
+                toggleInventory = false;
+            }
+            else {
+                System.out.println("Toggling to inventory table");
+                toggleTable.setText("Switch to Product Table");
+                managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
+                managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
+                managerView.borderPanel.add(south, BorderLayout.SOUTH);
+                toggleInventory = true;
+            }
+            managerView.borderPanel.revalidate();
+            managerView.borderPanel.repaint();
+        });
     }
+
+    HintTextField formatTextArea(HintTextField b) {
+        b.setFont(new Font("SansSerif", Font.PLAIN, 23));
+        b.setBackground(Color.white);
+        b.setMinimumSize(new Dimension(400,75));
+        b.setMaximumSize(new Dimension(400,75));
+        return b;
+    }
+    
 }

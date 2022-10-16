@@ -147,7 +147,12 @@ public class ManagerView {
 
     JButton createButton(String text, int width, int height) {
         JButton b = new JButton(text);
-        b.setSize(width, height);
+        b.setForeground(new Color(165,58,59));
+        b.setFont(new Font("SansSerif", Font.PLAIN, 23));
+		b.setBackground(Color.white);
+		b.setRolloverEnabled(false);
+		b.setFocusPainted(false);
+
         return b;
     }
 
