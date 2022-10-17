@@ -13,7 +13,7 @@ public class ManagerView {
     int myCols;
     dbFunctions myDbConnection;
     int maxWidth = 1500;
-    int maxHeight = 1080;
+    int maxHeight = 980; 
     public ManagerView() {
         myFrame = new JFrame();//creating instance of JFrame  
         //myFrame.setSize(1500, 1080);
@@ -109,13 +109,15 @@ public class ManagerView {
         this.clearView();
         setGridLayout();
         (new ManagerTrend(this)).setTrendView();
+        myFrame.revalidate();
         myFrame.repaint();
     }
 
     public void setReorderView() {
         this.clearView();
-        setGridLayout();
+        setBorderLayout();
         (new ManagerReorder(this)).setReorderView();
+        myFrame.revalidate();
         myFrame.repaint();
     }
 

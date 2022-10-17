@@ -22,18 +22,18 @@ public class ManagerInventory extends ManagerViewScreen {
         inventory.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
-        HintTextField searchText = formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
-        HintTextField id = formatTextArea(new HintTextField("Id", buttonWidth, buttonHeight));
+        HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
+        HintTextField id = (HintTextField) formatTextArea(new HintTextField("Id", buttonWidth, buttonHeight));
 
 
         HintTextField[] attributeFields = new HintTextField[7];
-        HintTextField name = formatTextArea(new HintTextField("Name", buttonWidth, buttonHeight));
-        HintTextField expiration = formatTextArea(new HintTextField("Expiration", buttonWidth, buttonHeight));
-        HintTextField quantity = formatTextArea(new HintTextField("Quantity", buttonWidth, buttonHeight));
-        HintTextField measurement = formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
-        HintTextField price = formatTextArea(new HintTextField("Price", buttonWidth, buttonHeight));
-        HintTextField last = formatTextArea(new HintTextField("Last", buttonWidth, buttonHeight));
-        HintTextField units = formatTextArea(new HintTextField("Units", buttonWidth, buttonHeight));
+        HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", buttonWidth, buttonHeight));
+        HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", buttonWidth, buttonHeight));
+        HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", buttonWidth, buttonHeight));
+        HintTextField measurement = (HintTextField) formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
+        HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", buttonWidth, buttonHeight));
+        HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", buttonWidth, buttonHeight));
+        HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", buttonWidth, buttonHeight));
 
         attributeFields[0] = name;
         attributeFields[1] = expiration;
@@ -43,7 +43,8 @@ public class ManagerInventory extends ManagerViewScreen {
         attributeFields[5] = last;
         attributeFields[6] = units;
 
-        HintTextField tableText = formatTextArea(new HintTextField("ingredients", buttonWidth, buttonHeight));
+        JTextField tableText = formatTextArea(new JTextField("ingredients"));
+        tableText.setEditable(false);
 
         JTable inventoryTable = new JTable();
         JTable productTable = new JTable();
@@ -51,8 +52,8 @@ public class ManagerInventory extends ManagerViewScreen {
         managerView.updateTable(productTable, "products", -1);
 
         back.addActionListener(e -> {
-            managerView.myFrame.dispose();
             new ManagerView();
+            managerView.myFrame.dispose();
         });
 
         
@@ -176,6 +177,7 @@ public class ManagerInventory extends ManagerViewScreen {
             if (toggleInventory) {
                 System.out.println("Toggling to product table");
                 toggleTable.setText("Switch to Inventory Table");
+                tableText.setText("products");
                 managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
                 managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.CENTER);
                 managerView.borderPanel.add(south, BorderLayout.SOUTH);
@@ -184,6 +186,7 @@ public class ManagerInventory extends ManagerViewScreen {
             else {
                 System.out.println("Toggling to inventory table");
                 toggleTable.setText("Switch to Product Table");
+                tableText.setText("ingredients");
                 managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
                 managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
                 managerView.borderPanel.add(south, BorderLayout.SOUTH);
@@ -194,7 +197,7 @@ public class ManagerInventory extends ManagerViewScreen {
         });
     }
 
-    HintTextField formatTextArea(HintTextField b) {
+    JTextField formatTextArea(JTextField b) {
         b.setFont(new Font("SansSerif", Font.PLAIN, 23));
         b.setBackground(Color.white);
         b.setMinimumSize(new Dimension(400,75));

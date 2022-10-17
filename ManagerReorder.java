@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class ManagerReorder extends ManagerViewScreen {
     public ManagerReorder(ManagerView managerView) {super(managerView);}
@@ -12,15 +13,34 @@ public class ManagerReorder extends ManagerViewScreen {
         JLabel reorder = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
 
         back.addActionListener(e -> {
-            managerView.myFrame.dispose();
             new ManagerView();
+            managerView.myFrame.dispose();
         });
         export.addActionListener(e -> {
             System.out.println("Export to csv");
         });
 
-        managerView.myPanels[0][0].add(back);
-        managerView.myPanels[0][2].add(reorder);
-        managerView.myPanels[4][4].add(export);
+        JPanel flowTop = new JPanel();
+        flowTop.setBackground(Color.white);
+        flowTop.setPreferredSize(new Dimension(1500, 50));
+        flowTop.setMinimumSize(new Dimension(1500, 50));
+        flowTop.setMaximumSize(new Dimension(1500,50));
+        flowTop.add(back);
+        flowTop.add(Box.createRigidArea(new Dimension(1300,0)));
+
+        JPanel flowBot = new JPanel();
+        flowBot.setBackground(Color.white);
+        flowBot.setPreferredSize(new Dimension(1500, 50));
+        flowBot.setMinimumSize(new Dimension(1500, 50));
+        flowBot.setMaximumSize(new Dimension(1500,50));
+        flowBot.add(Box.createRigidArea(new Dimension(1200,0)));
+        flowBot.add(export);
+
+        JTable productTable = new JTable();
+        managerView.updateTable(productTable, "products", -1);
+
+        managerView.borderPanel.add(flowTop, BorderLayout.NORTH);
+        managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.CENTER);
+        managerView.borderPanel.add(flowBot, BorderLayout.SOUTH);
     }
 }

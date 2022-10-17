@@ -21,14 +21,20 @@ public class ManagerTrend extends ManagerViewScreen {
         HintTextField endDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
 
         back.addActionListener(e -> {
-            managerView.myFrame.dispose();
             new ManagerView();
+            managerView.myFrame.dispose();
         });
+
+
         generate.addActionListener(e -> {
             System.out.println("Generate trends");
         });
 
-        managerView.myPanels[0][0].add(back);
+
+        
+
+
+        /*managerView.myPanels[0][0].add(back);
         managerView.myPanels[0][2].add(trends);
         managerView.myPanels[1][0].add(startDateLabel);
         managerView.myPanels[1][2].add(startDate);
@@ -39,6 +45,6 @@ public class ManagerTrend extends ManagerViewScreen {
         managerView.myPanels[3][1].add(week2);
         managerView.myPanels[3][2].add(month);
         managerView.myPanels[3][3].add(quarter);
-        managerView.myPanels[3][4].add(year);
+        managerView.myPanels[3][4].add(year);*/
     }
 }
