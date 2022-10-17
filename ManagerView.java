@@ -112,6 +112,7 @@ public class ManagerView {
     public void setTrendView() {
         this.clearView();
         //setGridLayout();
+        //borderPanel.removeAll();
         (new ManagerTrend(this)).setTrendView();
         myFrame.revalidate();
         myFrame.repaint();
@@ -221,6 +222,6 @@ public class ManagerView {
         }*/ 
         borderPanel.removeAll();
         mainPanel.removeAll();
-        myFrame.getContentPane().removeAll();
+        //myFrame.getContentPane().removeAll();
     }
 }
