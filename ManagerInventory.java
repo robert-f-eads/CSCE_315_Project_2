@@ -26,10 +26,11 @@ public class ManagerInventory extends ManagerViewScreen {
         HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 200, buttonHeight));
 
 
-        HintTextField[] attributeFields = new HintTextField[7];
+        HintTextField[] attributeFields = new HintTextField[8];
         HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", 250, buttonHeight));
         HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", 250, buttonHeight));
         HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", 100, buttonHeight));
+        HintTextField target = (HintTextField) formatTextArea(new HintTextField("Target", 100, buttonHeight));
         HintTextField measurement = (HintTextField) formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
         HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", 150, buttonHeight));
         HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", 250, buttonHeight));
@@ -38,10 +39,11 @@ public class ManagerInventory extends ManagerViewScreen {
         attributeFields[0] = name;
         attributeFields[1] = expiration;
         attributeFields[2] = quantity;
-        attributeFields[3] = measurement;
-        attributeFields[4] = price;
-        attributeFields[5] = last;
-        attributeFields[6] = units;
+        attributeFields[3] = target;
+        attributeFields[4] = measurement;
+        attributeFields[5] = price;
+        attributeFields[6] = last;
+        attributeFields[7] = units;
 
         JTextField tableText = formatTextArea(new JTextField("ingredients"));
         tableText.setEditable(false);
@@ -81,9 +83,10 @@ public class ManagerInventory extends ManagerViewScreen {
                 sql = "UPDATE products SET name='" + name.getText() + "', price=" + price.getText() + " WHERE id=" + id.getText();
             } else {
                 sql = "UPDATE ingredients SET name='" + name.getText() + "', expirationdate= date'" + expiration.getText() + 
-                    "', measurementunits='" + measurement.getText() + "', lastorderdate= date'" + last.getText() + "', priceperunitlastorder=" + price.getText() + ", quantityRemaining=" + 
-                    quantity.getText() + ", unitsinlastorder=" + units.getText() +
-                    "WHERE id=" + id.getText();
+                    "', measurementunits='" + measurement.getText() + "', lastorderdate= date'" + last.getText() + "', priceperunitlastorder=" + 
+                    price.getText() + ", quantityRemaining=" + quantity.getText() + ", quantityTarget=" + target.getText() + ", unitsinlastorder=" + units.getText() +
+                    " WHERE id=" + id.getText();
+                System.out.println(sql);
             }
             for(HintTextField attributeField : attributeFields) {
                 attributeField.resetText();
@@ -101,7 +104,7 @@ public class ManagerInventory extends ManagerViewScreen {
                 sql = "INSERT INTO products VALUES (" + id.getText() + ", '" + name.getText() + "', " + price.getText() + ")";
             } else {
                 sql = "INSERT INTO ingredients VALUES (" + id.getText() + ", '" + name.getText() + "', '" + 
-                    expiration.getText() + "', " + quantity.getText() + ", '" + measurement.getText() + "', " + 
+                    expiration.getText() + "', " + quantity.getText() + ", " + target.getText() + ", '" + measurement.getText() + "', " + 
                     price.getText() + ", '" + last.getText() + "', " + units.getText() + ")";
             }
             managerView.myDbConnection.dbUpsert(sql);
@@ -158,6 +161,7 @@ public class ManagerInventory extends ManagerViewScreen {
         south.add(name);
         south.add(expiration);
         south.add(quantity);
+        south.add(target);
         south.add(measurement);
         south.add(price);
         south.add(last);
