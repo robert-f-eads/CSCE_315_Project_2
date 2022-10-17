@@ -287,6 +287,16 @@ class ingredient {
             ", unitsInLastOrder='" + getUnitsInLastOrder() + "'" +
             "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) {return true;}
+        if(!(o instanceof ingredient)) {return false;}
+        ingredient order = (ingredient) o;
+        if(order.getId() == id) {return true;}
+        return false;
+
+    }
 }//End ingredient
 
 class material {
@@ -415,10 +425,11 @@ class dateStruct {
     String minutes;
     String seconds;
 
-    public dateStruct(String year, String month, String day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+    public dateStruct(String date) {
+        String[] parts = date.split("-");
+        this.year = parts[0];
+        this.month = parts[1];
+        this.day = parts[2];
     }
 
     public String formatString() {return String.format("%s-%s-%s", year, month, day);}

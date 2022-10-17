@@ -41,8 +41,8 @@ public class orderViewFunctions {
         try{ 
             dbConnection.createDbConnection();
 
-            String sqlString = "SELECT orderitems.orderid AS \"Order Id\", orderitems.itemnumberinorder AS \"Item Number In Order\", itemname AS \"Item Name\",";
-            sqlString += "itemamount AS \"Quantity\", itemsize AS \"Size\", ordertickets.timestamp FROM orderitems INNER JOIN ordertickets ON orderitems.orderid = ordertickets.id"; 
+            String sqlString = "SELECT orderitems.orderid AS \"Order Id\", orderitems.itemnumberinorder AS \"Item Number In Order\", itemname AS \"Item Name\", ";
+            sqlString += "itemamount AS \"Quantity\", itemsize AS \"Size\", ordertickets.timestamp AS \"Timestamp\" FROM orderitems INNER JOIN ordertickets ON orderitems.orderid = ordertickets.id "; 
             
             if(useDefaultTime) {
                 sqlString += String.format("WHERE ordertickets.timestamp BETWEEN '%s %s' AND '%s %s'", startDate.formatString(), startDate.getStartOfDay(), endDate.formatString(), endDate.getEndOfDay());
@@ -50,7 +50,7 @@ public class orderViewFunctions {
             else {
                 sqlString += String.format("WHERE ordertickets.timestamp BETWEEN '%s %s' AND '%s %s'", startDate.formatString(), startDate.getTimeOfDay(), endDate.formatString(), endDate.getTimeOfDay());
             }
-
+            System.out.println(sqlString);
             results = dbConnection.dbQuery(sqlString);
         } catch (Exception e) {
             e.printStackTrace();

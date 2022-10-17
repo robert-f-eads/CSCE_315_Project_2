@@ -2,7 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ManagerTrend extends ManagerViewScreen {
-    public ManagerTrend(ManagerView managerView) {super(managerView);}
+    private orderViewFunctions ovf;
+
+    public ManagerTrend(ManagerView managerView) {
+        super(managerView);
+        ovf = new orderViewFunctions();
+    }
     
     public void setTrendView() {
         int buttonWidth = 150;
@@ -28,6 +33,17 @@ public class ManagerTrend extends ManagerViewScreen {
         back.addActionListener(e -> {
             new ManagerView();
             managerView.myFrame.dispose();
+        });
+
+        // TODO make all other trends also be allowed to generate, expand gui to include selection of these trends
+        // TODO make sure when generate is pressed multiple times, it only adds one table total
+        generate.addActionListener(e -> {
+            JTable sales = new JTable(managerView.resultSetToTableModel(null, 
+                ovf.generateSalesReportBetweenDates(new dateStruct("2020-10-10"), 
+                    new dateStruct("2022-10-10"), true)));
+            managerView.borderPanel.add(new JScrollPane(sales));
+            managerView.myFrame.revalidate();
+            managerView.myFrame.repaint();
         });
 
     

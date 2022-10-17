@@ -25,9 +25,13 @@ public class ManagerInventory extends ManagerViewScreen {
         HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
         HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 200, buttonHeight));
 
+       
+
 
         HintTextField[] attributeFields = new HintTextField[8];
         HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", 250, buttonHeight));
+        // name.setPreferredSize(new Dimension(250, buttonHeight));
+        // name.setMaximumSize(new Dimension(250, buttonHeight));
         HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", 250, buttonHeight));
         HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", 100, buttonHeight));
         HintTextField target = (HintTextField) formatTextArea(new HintTextField("Target", 100, buttonHeight));
