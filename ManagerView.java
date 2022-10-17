@@ -111,8 +111,7 @@ public class ManagerView {
 
     public void setTrendView() {
         this.clearView();
-        //setGridLayout();
-        //borderPanel.removeAll();
+        setBorderLayout();
         (new ManagerTrend(this)).setTrendView();
         myFrame.revalidate();
         myFrame.repaint();
