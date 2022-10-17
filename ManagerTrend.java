@@ -54,9 +54,6 @@ public class ManagerTrend extends ManagerViewScreen {
         topButtons.add(generate);
 
 
-
-
-
         topButtons.add(Box.createRigidArea(new Dimension(200, 0)));
         topButtons.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -72,12 +69,13 @@ public class ManagerTrend extends ManagerViewScreen {
 
         JPanel south = new JPanel();
        
-
-        managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
-        managerView.borderPanel.add(south, BorderLayout.SOUTH);
+        managerView.borderPanel.setLayout(new BoxLayout(managerView.borderPanel, BoxLayout.PAGE_AXIS));
+        managerView.borderPanel.add(pageStart);
+        managerView.borderPanel.add(south);
         managerView.borderPanel.setBackground(Color.white);
+        managerView.borderPanel.revalidate();
+        managerView.borderPanel.repaint();
         managerView.myFrame.add(managerView.borderPanel);
-
     }
 
     JTextField formatTextArea(JTextField b) {

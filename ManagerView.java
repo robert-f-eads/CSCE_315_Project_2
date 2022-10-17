@@ -112,6 +112,7 @@ public class ManagerView {
     public void setTrendView() {
         this.clearView();
         //setGridLayout();
+        //borderPanel.removeAll();
         (new ManagerTrend(this)).setTrendView();
         myFrame.revalidate();
         myFrame.repaint();
@@ -165,7 +166,7 @@ public class ManagerView {
     JLabel createLabel(String text, int width, int height) {
         JLabel l = new JLabel(text);
         l.setSize(width, height);
-        l.setPreferredSize(new DimensionUIResource(width, height));
+        //l.setPreferredSize(new DimensionUIResource(width, height));
         l.setMaximumSize(new Dimension(width, height));
         return l;
     }
@@ -221,6 +222,6 @@ public class ManagerView {
         }*/ 
         borderPanel.removeAll();
         mainPanel.removeAll();
-        myFrame.getContentPane().removeAll();
+        //myFrame.getContentPane().removeAll();
     }
 }
