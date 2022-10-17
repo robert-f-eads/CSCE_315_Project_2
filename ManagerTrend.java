@@ -24,22 +24,14 @@ public class ManagerTrend extends ManagerViewScreen {
         int buttonHeight = 150;
         JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
         back = formatButtons(back);
-        JButton week = managerView.createButton("1 Week", buttonWidth, buttonHeight);
-        week = formatButtons(week);
-        JButton week2 = managerView.createButton("2 Weeks", buttonWidth, buttonHeight);
-        week2 = formatButtons(week2);
-        JButton month = managerView.createButton("1 Month", buttonWidth, buttonHeight);
-        month = formatButtons(month);
-        JButton quarter = managerView.createButton("1 Quarter", buttonWidth, buttonHeight);
-        quarter = formatButtons(quarter);
-        JButton year = managerView.createButton("1 Year", buttonWidth, buttonHeight);
-        year = formatButtons(year);
+        JButton week = formatButtons(managerView.createButton("1 Week", buttonWidth, buttonHeight));
+        JButton week2 = formatButtons(managerView.createButton("2 Weeks", buttonWidth, buttonHeight));
+        JButton month = formatButtons(managerView.createButton("1 Month", buttonWidth, buttonHeight));
+        JButton quarter = formatButtons(managerView.createButton("1 Quarter", buttonWidth, buttonHeight));
+        JButton year = formatButtons(managerView.createButton("1 Year", buttonWidth, buttonHeight));
         JButton generateExcess = formatButtons(managerView.createButton("Generate Excess Report", buttonWidth, buttonHeight));
         JButton generateSales = formatButtons(managerView.createButton("Generate Sales Report", buttonWidth, buttonHeight));
 
-
-
-        
 
         JLabel startDateLabel = managerView.createLabel("Start Date", buttonWidth, buttonHeight);
         startDateLabel.setFont((defaultButtons));
@@ -55,6 +47,11 @@ public class ManagerTrend extends ManagerViewScreen {
         // ResultSet row = managerView.myDbConnection.dbQuery("SELECT id AS \"Order Id\", timestamp AS \"Timestamp\", customerfirstname AS \"Customer Name\", rewardsmemberid AS \"Rewards Id\", employeeid AS \"Employee Id\", orderpricetotal AS \"Order Total\" FROM ordertickets");
         // sales.setModel(managerView.resultSetToTableModel(null, row));
         sales.setSize(900, 700);
+        JTable excess = new JTable();
+        excess.setBackground(Color.white);
+        // ResultSet row = managerView.myDbConnection.dbQuery("SELECT id AS \"Order Id\", timestamp AS \"Timestamp\", customerfirstname AS \"Customer Name\", rewardsmemberid AS \"Rewards Id\", employeeid AS \"Employee Id\", orderpricetotal AS \"Order Total\" FROM ordertickets");
+        // sales.setModel(managerView.resultSetToTableModel(null, row));
+        excess.setSize(900, 700);
 
         JPanel title = new JPanel();
         title.setBackground(Color.white);
@@ -72,6 +69,13 @@ public class ManagerTrend extends ManagerViewScreen {
             managerView.myFrame.dispose();
         });
         week.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = week;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime weekAgo = now.minus(1, ChronoUnit.WEEKS);
@@ -81,7 +85,15 @@ public class ManagerTrend extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         week2.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = week2;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime week2Ago = now.minus(2, ChronoUnit.WEEKS);
@@ -91,7 +103,15 @@ public class ManagerTrend extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         month.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = month;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime monthAgo = now.minus(1, ChronoUnit.MONTHS);
@@ -101,7 +121,15 @@ public class ManagerTrend extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         year.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = year;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime yearAgo = now.minus(1, ChronoUnit.YEARS);
@@ -111,7 +139,15 @@ public class ManagerTrend extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         quarter.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = quarter;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime quarterAgo = now.minus(3, ChronoUnit.MONTHS);
@@ -134,13 +170,14 @@ public class ManagerTrend extends ManagerViewScreen {
         //flow.add(orders);
         flow.add(Box.createRigidArea(new Dimension(5,0)));
         flow.add(startDateLabel);
-        flow.add(Box.createRigidArea(new Dimension(5,0)));
+        flow.
+        add(Box.createRigidArea(new Dimension(5,0)));
         flow.add(startDate);
         flow.add(Box.createRigidArea(new Dimension(5,0)));
         flow.add(endDateLabel);
         flow.add(Box.createRigidArea(new Dimension(5,0)));
         flow.add(endDate);
-        flow.add(Box.createRigidArea(new Dimension(200,0)));
+        flow.add(Box.createRigidArea(new Dimension(250,0)));
         flow.add(generateSales);
         flow.add(Box.createRigidArea(new Dimension(5,0)));
         flow.add(generateExcess);
@@ -174,15 +211,15 @@ public class ManagerTrend extends ManagerViewScreen {
         });
 
         generateExcess.addActionListener(e -> {
-           /* sales.setModel(managerView.resultSetToTableModel(null, 
+            excess.setModel(managerView.resultSetToTableModel(null, 
                 ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), 
-                    new dateStruct(endDate.getText()), true)));*/
+                    new dateStruct(endDate.getText()), true)));
 
                     
 
             managerView.borderPanel.removeAll();
             managerView.borderPanel.add(flow);
-            managerView.borderPanel.add(new JScrollPane(sales));
+            managerView.borderPanel.add(new JScrollPane(excess));
             managerView.myFrame.revalidate();
             managerView.myFrame.repaint();
         });

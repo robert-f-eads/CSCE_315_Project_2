@@ -3,10 +3,10 @@ import java.util.*;
 
 public class serverViewFunctions {
     private
-        Dictionary<Integer, ingredient> ingredients = new Hashtable<Integer, ingredient>();
-        Dictionary<Integer, material> materials = new Hashtable<Integer, material>();
-        Dictionary<Integer, product> products = new Hashtable<Integer, product>();
-        Dictionary<Integer, orderTicketInfo> orderTickets = new Hashtable<Integer, orderTicketInfo>();
+        Map<Integer, ingredient> ingredients = new Hashtable<Integer, ingredient>();
+        Map<Integer, material> materials = new Hashtable<Integer, material>();
+        Map<Integer, product> products = new Hashtable<Integer, product>();
+        Map<Integer, orderTicketInfo> orderTickets = new Hashtable<Integer, orderTicketInfo>();
 
     public serverViewFunctions() {
         importIngredients();
@@ -268,6 +268,12 @@ public class serverViewFunctions {
         material getMaterial(int id) {return materials.get(id);}
         ingredient getIngredient(int id) {return ingredients.get(id);}
         orderTicketInfo getOrderTicket(int id) {return orderTickets.get(id);}
+        Map<Integer, ingredient> getIngredients() {return ingredients;}
+        Map<Integer, material> getMaterials() {return materials;}
+        Map<Integer, product> getProducts() {return products;}
+        Map<Integer, orderTicketInfo> getOrderTickets() {return orderTickets;}
+
+
 
 
     public orderTicketInfo createOrderTicketItem(orderTicketInfo orderTicket, product tempProduct) {

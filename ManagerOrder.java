@@ -10,6 +10,7 @@ public class ManagerOrder extends ManagerViewScreen {
     static Color darkRed = new Color(165,58,59);
 	static Color blueHighlight = new Color(184, 204, 220);
 	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
+    JButton currentlySelectedButton;
 
 
     public ManagerOrder(ManagerView managerView) {super(managerView);}
@@ -18,20 +19,13 @@ public class ManagerOrder extends ManagerViewScreen {
     public void setOrderView() {
         int buttonWidth = 150;
         int buttonHeight = 150;
-        JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
-        back = formatButtons(back);
-        JButton week = managerView.createButton("1 Week", buttonWidth, buttonHeight);
-        week = formatButtons(week);
-        JButton week2 = managerView.createButton("2 Weeks", buttonWidth, buttonHeight);
-        week2 = formatButtons(week2);
-        JButton month = managerView.createButton("1 Month", buttonWidth, buttonHeight);
-        month = formatButtons(month);
-        JButton quarter = managerView.createButton("1 Quarter", buttonWidth, buttonHeight);
-        quarter = formatButtons(quarter);
-        JButton year = managerView.createButton("1 Year", buttonWidth, buttonHeight);
-        year = formatButtons(year);
-        JButton generate = managerView.createButton("Generate", buttonWidth, buttonHeight);
-        generate = formatButtons(generate);
+        JButton back = formatButtons(managerView.createButton("Back", buttonWidth, buttonHeight));
+        JButton week = formatButtons(managerView.createButton("1 Week", buttonWidth, buttonHeight));
+        JButton week2 = formatButtons(managerView.createButton("2 Weeks", buttonWidth, buttonHeight));
+        JButton month = formatButtons(managerView.createButton("1 Month", buttonWidth, buttonHeight));
+        JButton quarter = formatButtons(managerView.createButton("1 Quarter", buttonWidth, buttonHeight));
+        JButton year = formatButtons(managerView.createButton("1 Year", buttonWidth, buttonHeight));
+        JButton generate = formatButtons(managerView.createButton("Generate", buttonWidth, buttonHeight));
 
 
         JLabel startDateLabel = managerView.createLabel("Start Date", buttonWidth, buttonHeight);
@@ -65,6 +59,13 @@ public class ManagerOrder extends ManagerViewScreen {
             managerView.myFrame.dispose();
         });
         week.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = week;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime weekAgo = now.minus(1, ChronoUnit.WEEKS);
@@ -75,6 +76,13 @@ public class ManagerOrder extends ManagerViewScreen {
             endDate.setForeground(Color.black);
         });
         week2.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = week2;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime week2Ago = now.minus(2, ChronoUnit.WEEKS);
@@ -84,7 +92,15 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         month.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = month;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime monthAgo = now.minus(1, ChronoUnit.MONTHS);
@@ -94,7 +110,15 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         year.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = year;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime yearAgo = now.minus(1, ChronoUnit.YEARS);
@@ -104,7 +128,15 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         quarter.addActionListener(e -> {
+            if (this.currentlySelectedButton != null) {
+                this.currentlySelectedButton.setBackground(Color.white);
+            }
+            currentlySelectedButton = quarter;
+            currentlySelectedButton.setBackground(blueHighlight);
+
+            
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime quarterAgo = now.minus(3, ChronoUnit.MONTHS);
@@ -114,6 +146,7 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+
         generate.addActionListener(e -> {
             ordersTable.setModel(managerView.resultSetToTableModel(null,
                 managerView.myDbConnection.dbQuery("SELECT * FROM ordertickets WHERE timestamp > date '" + startDate.getText() + "' AND timestamp < date '" + endDate.getText() + "' LIMIT 30000")));

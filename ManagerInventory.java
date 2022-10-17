@@ -8,6 +8,7 @@ public class ManagerInventory extends ManagerViewScreen {
     
     public void setInventoryView() {
         managerView.mainPanel.setLayout(new BoxLayout(managerView.mainPanel, BoxLayout.PAGE_AXIS));
+        managerView.mainPanel.setBackground(Color.white);
 
         int buttonWidth = 150;
         int buttonHeight = 150;
@@ -23,7 +24,7 @@ public class ManagerInventory extends ManagerViewScreen {
         searchButton.setPreferredSize(new Dimension(100,generalHeight));
         update.setPreferredSize(new Dimension(110,generalHeight));
         add.setPreferredSize(new Dimension(100,generalHeight));
-        delete.setPreferredSize(new Dimension(100,generalHeight));
+        delete.setPreferredSize(new Dimension(110,generalHeight));
 
         back.setMaximumSize(new Dimension(110,generalHeight));
         searchButton.setMaximumSize(new Dimension(130,generalHeight));
@@ -79,7 +80,7 @@ public class ManagerInventory extends ManagerViewScreen {
             productTable.setModel(managerView.resultSetToTableModel(null,
                 managerView.myDbConnection.dbQuery("SELECT * FROM products WHERE name ILIKE '%" + searchText.getText() + "%'")));
             inventoryTable.setModel(managerView.resultSetToTableModel(null,
-                managerView.myDbConnection.dbQuery("SELECT * FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
+                managerView.myDbConnection.dbQuery("SELECT id AS \"Ingredient ID\", name AS \"Name\", expirationdate AS \"Expiration Date\", quantityremaining AS \"Quantity Remaining\", measurementunits AS \"Measurement Units\", priceperunitlastorder AS \"Last Order's Price Per Unit\" FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
             managerView.myFrame.repaint();
             managerView.myFrame.revalidate();
         });
@@ -233,6 +234,9 @@ public class ManagerInventory extends ManagerViewScreen {
         managerView.mainPanel.add(header);
         managerView.mainPanel.add(new JScrollPane(inventoryTable));
         managerView.mainPanel.add(south);
+        managerView.mainPanel.add(Box.createRigidArea(new Dimension(0,60)));
+        
+        
 
 
         toggleTable.addActionListener(e -> {
