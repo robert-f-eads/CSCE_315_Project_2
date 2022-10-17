@@ -64,6 +64,17 @@ public class ManagerHome extends ManagerViewScreen {
         generateTrends.setMaximumSize(new Dimension(975,75));
 
 
+        JButton addProduct = new JButton("Generate Trends");
+        addProduct.setForeground(Color.black);
+        addProduct.setFont(defaultButtons);
+		addProduct.setBackground(Color.white);
+		addProduct.setRolloverEnabled(false);
+		addProduct.setFocusPainted(false);
+        addProduct.setPreferredSize(new Dimension(975,75));
+        addProduct.setMinimumSize(new Dimension(975,75));
+        addProduct.setMaximumSize(new Dimension(975,75));
+
+
         managerView.mainPanel.setLayout(null);
 
         

@@ -127,7 +127,7 @@ public class ManagerView {
 
     public void setInventoryView() {
         this.clearView();
-        setBorderLayout();
+        // setBorderLayout();
         (new ManagerInventory(this)).setInventoryView();
         myFrame.repaint();
         myFrame.revalidate();
@@ -146,6 +146,15 @@ public class ManagerView {
         //this.setGridBoxLayout();
         // this.setGridLayout();
         (new ManagerHome(this)).setHomeView();
+        myFrame.revalidate();
+        myFrame.repaint();
+    }
+
+    public void setAddProductView() {
+        this.clearView();
+        //this.setGridBoxLayout();
+        // this.setGridLayout();
+        //(new ManagerHome(this)).setAddProductView();
         myFrame.revalidate();
         myFrame.repaint();
     }

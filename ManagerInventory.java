@@ -7,14 +7,29 @@ public class ManagerInventory extends ManagerViewScreen {
     public ManagerInventory(ManagerView managerView) {super(managerView);}
     
     public void setInventoryView() {
+        managerView.mainPanel.setLayout(new BoxLayout(managerView.mainPanel, BoxLayout.PAGE_AXIS));
+
         int buttonWidth = 150;
         int buttonHeight = 150;
+        int generalHeight = 42;
         JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
         JButton searchButton = managerView.createButton("Search", buttonWidth, buttonHeight);
         JButton update = managerView.createButton("Update", buttonWidth, buttonHeight);
         JButton add = managerView.createButton("Add", buttonWidth, buttonHeight);
         JButton delete = managerView.createButton("Delete", buttonWidth, buttonHeight);
         JButton toggleTable = managerView.createButton("Switch to Product Table", buttonWidth, buttonHeight);
+
+        back.setPreferredSize(new Dimension(110,generalHeight));
+        searchButton.setPreferredSize(new Dimension(100,generalHeight));
+        update.setPreferredSize(new Dimension(110,generalHeight));
+        add.setPreferredSize(new Dimension(100,generalHeight));
+        delete.setPreferredSize(new Dimension(100,generalHeight));
+
+        back.setMaximumSize(new Dimension(110,generalHeight));
+        searchButton.setMaximumSize(new Dimension(130,generalHeight));
+        update.setMaximumSize(new Dimension(110,generalHeight));
+        add.setMaximumSize(new Dimension(100,generalHeight));
+        delete.setMaximumSize(new Dimension(100,generalHeight));
 
         JLabel inventory = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
         inventory.setFont(new Font("SansSerif", Font.PLAIN, 28));
@@ -23,22 +38,18 @@ public class ManagerInventory extends ManagerViewScreen {
 
 
         HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
-        HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 200, buttonHeight));
-
-       
+        HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 60, buttonHeight));
 
 
         HintTextField[] attributeFields = new HintTextField[8];
-        HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", 250, buttonHeight));
-        // name.setPreferredSize(new Dimension(250, buttonHeight));
-        // name.setMaximumSize(new Dimension(250, buttonHeight));
-        HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", 250, buttonHeight));
-        HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", 100, buttonHeight));
-        HintTextField target = (HintTextField) formatTextArea(new HintTextField("Target", 100, buttonHeight));
-        HintTextField measurement = (HintTextField) formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
-        HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", 150, buttonHeight));
-        HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", 250, buttonHeight));
-        HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", 250, buttonHeight));
+        HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", 150, generalHeight));
+        HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", 150, generalHeight));
+        HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", 90, generalHeight));
+        HintTextField target = (HintTextField) formatTextArea(new HintTextField("Target", 90, generalHeight));
+        HintTextField measurement = (HintTextField) formatTextArea(new HintTextField("Measurement", 100, generalHeight));
+        HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", 90, generalHeight));
+        HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", 150, generalHeight));
+        HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", 90, generalHeight));
 
         attributeFields[0] = name;
         attributeFields[1] = expiration;
@@ -51,6 +62,7 @@ public class ManagerInventory extends ManagerViewScreen {
 
         JTextField tableText = formatTextArea(new JTextField("ingredients"));
         tableText.setEditable(false);
+        tableText.setVisible(false);
 
         JTable inventoryTable = new JTable();
         JTable productTable = new JTable();
@@ -150,64 +162,106 @@ public class ManagerInventory extends ManagerViewScreen {
         topButtons.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 
-        JPanel pageStart = new JPanel();
-        pageStart.setBackground(Color.white);
-        pageStart.setLayout(new BoxLayout(pageStart, BoxLayout.PAGE_AXIS));
-        pageStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel header = new JPanel();
+        header.setBackground(Color.white);
+        header.setLayout(new BoxLayout(header, BoxLayout.PAGE_AXIS));
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        pageStart.add(title);
-        pageStart.add(Box.createRigidArea(new Dimension(0, 25)));
-        pageStart.add(topButtons);
+        header.add(title);
+        header.add(Box.createRigidArea(new Dimension(0, 25)));
+        header.add(topButtons);
+        header.add(Box.createRigidArea(new Dimension(0, 25)));
 
         JPanel south = new JPanel();
+        south.setLayout(new BoxLayout(south, BoxLayout.LINE_AXIS));
+        south.setPreferredSize(new Dimension(1500,140));
+        south.setMaximumSize(new Dimension(1500,140));
+        south.setAlignmentX(Component.CENTER_ALIGNMENT);
+        south.setBackground(Color.white);
+
+        south.add(Box.createHorizontalGlue());
         south.setBackground(Color.white);
         south.add(id);
+        south.add(Box.createHorizontalGlue());
         south.add(name);
+        south.add(Box.createHorizontalGlue());
         south.add(expiration);
+        south.add(Box.createHorizontalGlue());
         south.add(quantity);
+        south.add(Box.createHorizontalGlue());
         south.add(target);
+        south.add(Box.createHorizontalGlue());
         south.add(measurement);
+        south.add(Box.createHorizontalGlue());
         south.add(price);
+        south.add(Box.createHorizontalGlue());
         south.add(last);
+        south.add(Box.createHorizontalGlue());
         south.add(units);
+        south.add(Box.createHorizontalGlue());
         south.add(update);
+        south.add(Box.createHorizontalGlue());
         south.add(add);
+        south.add(Box.createHorizontalGlue());
         south.add(delete);
-        south.add(tableText);
+        south.add(Box.createHorizontalGlue());
+        south.add(tableText); 
+        south.add(Box.createHorizontalGlue());
+        south.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        id.setPreferredSize(new Dimension(60, generalHeight));
+        name.setPreferredSize(new Dimension(150, generalHeight));
+        expiration.setPreferredSize(new Dimension(150, generalHeight));
+        quantity.setPreferredSize(new Dimension(90, generalHeight));
+        target.setPreferredSize(new Dimension(90, generalHeight));
+        measurement.setPreferredSize(new Dimension(100, generalHeight));
+        price.setPreferredSize(new Dimension(90, generalHeight));
+        last.setPreferredSize(new Dimension(150, generalHeight));
+        units.setPreferredSize(new Dimension(90, generalHeight));
+
+        id.setMaximumSize(new Dimension(60, generalHeight));
+        name.setMaximumSize(new Dimension(150, generalHeight));
+        expiration.setMaximumSize(new Dimension(150, generalHeight));
+        quantity.setMaximumSize(new Dimension(90, generalHeight));
+        target.setMaximumSize(new Dimension(90, generalHeight));
+        measurement.setMaximumSize(new Dimension(100, generalHeight));
+        price.setMaximumSize(new Dimension(90, generalHeight));
+        last.setMaximumSize(new Dimension(150, generalHeight));
+        units.setMaximumSize(new Dimension(90, generalHeight));
 
 
-        managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
-        managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
-        managerView.borderPanel.add(south, BorderLayout.SOUTH);
+        managerView.mainPanel.add(header);
+        managerView.mainPanel.add(new JScrollPane(inventoryTable));
+        managerView.mainPanel.add(south);
 
 
         toggleTable.addActionListener(e -> {
-            managerView.borderPanel.removeAll();
+            managerView.mainPanel.removeAll();
             if (toggleInventory) {
                 System.out.println("Toggling to product table");
                 toggleTable.setText("Switch to Inventory Table");
                 tableText.setText("products");
-                managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
-                managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.CENTER);
-                managerView.borderPanel.add(south, BorderLayout.SOUTH);
+                managerView.mainPanel.add(header, BorderLayout.PAGE_START);
+                managerView.mainPanel.add(new JScrollPane(productTable));
+                managerView.mainPanel.add(south);
                 toggleInventory = false;
             }
             else {
                 System.out.println("Toggling to inventory table");
                 toggleTable.setText("Switch to Product Table");
                 tableText.setText("ingredients");
-                managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
-                managerView.borderPanel.add(new JScrollPane(inventoryTable), BorderLayout.CENTER);
-                managerView.borderPanel.add(south, BorderLayout.SOUTH);
+                managerView.mainPanel.add(header);
+                managerView.mainPanel.add(new JScrollPane(inventoryTable));
+                managerView.mainPanel.add(south);
                 toggleInventory = true;
             }
-            managerView.borderPanel.revalidate();
-            managerView.borderPanel.repaint();
+            managerView.mainPanel.revalidate();
+            managerView.mainPanel.repaint();
         });
     }
 
     JTextField formatTextArea(JTextField b) {
-        b.setFont(new Font("SansSerif", Font.PLAIN, 23));
+        b.setFont(new Font("SansSerif", Font.PLAIN, 15));
         b.setBackground(Color.white);
         b.setMinimumSize(new Dimension(400,75));
         b.setMaximumSize(new Dimension(400,75));
