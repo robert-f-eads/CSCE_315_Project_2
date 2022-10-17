@@ -31,7 +31,7 @@ public class ManagerTrend extends ManagerViewScreen {
         });
 
 
-        
+
 
 
         /*managerView.myPanels[0][0].add(back);

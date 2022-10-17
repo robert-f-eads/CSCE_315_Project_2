@@ -23,17 +23,17 @@ public class ManagerInventory extends ManagerViewScreen {
 
 
         HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
-        HintTextField id = (HintTextField) formatTextArea(new HintTextField("Id", buttonWidth, buttonHeight));
+        HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 200, buttonHeight));
 
 
         HintTextField[] attributeFields = new HintTextField[7];
-        HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", buttonWidth, buttonHeight));
-        HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", buttonWidth, buttonHeight));
-        HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", buttonWidth, buttonHeight));
+        HintTextField name = (HintTextField) formatTextArea(new HintTextField("Name", 250, buttonHeight));
+        HintTextField expiration = (HintTextField) formatTextArea(new HintTextField("Expiration", 250, buttonHeight));
+        HintTextField quantity = (HintTextField) formatTextArea(new HintTextField("Quantity", 100, buttonHeight));
         HintTextField measurement = (HintTextField) formatTextArea(new HintTextField("Measurement", buttonWidth, buttonHeight));
-        HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", buttonWidth, buttonHeight));
-        HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", buttonWidth, buttonHeight));
-        HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", buttonWidth, buttonHeight));
+        HintTextField price = (HintTextField) formatTextArea(new HintTextField("Price", 150, buttonHeight));
+        HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", 250, buttonHeight));
+        HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", 250, buttonHeight));
 
         attributeFields[0] = name;
         attributeFields[1] = expiration;

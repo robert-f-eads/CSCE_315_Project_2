@@ -222,6 +222,7 @@ class ingredient {
     String name;
     String expirationDate; // Date
     double quantityRemaining;
+    double quantityTarget;
     String measurementUnits;
     double pricePerUnitLastOrder;
     String lastOrderDate; // Date
@@ -232,18 +233,20 @@ class ingredient {
         this.name = "";
         this.expirationDate = "";
         this.quantityRemaining = -1;
+        this.quantityTarget = -1;
         this.measurementUnits = "";
         this.pricePerUnitLastOrder = -1;
         this.lastOrderDate = "";
         this.unitsInLastOrder = -1;
     }
     
-    public ingredient(int id, String name, String expirationDate, double quantityRemaining,
+    public ingredient(int id, String name, String expirationDate, double quantityRemaining, double quantityTarget,
                       String measurementUnits, double pricePerUnitLastOrder, String lastOrderDate, double unitsInLastOrder) {
         this.id = id;
         this.name = name;
         this.expirationDate = expirationDate;
         this.quantityRemaining = quantityRemaining;
+        this.quantityTarget = quantityTarget;
         this.measurementUnits = measurementUnits;
         this.pricePerUnitLastOrder = pricePerUnitLastOrder;
         this.lastOrderDate = lastOrderDate;
@@ -255,6 +258,7 @@ class ingredient {
         String getName() {return this.name;}
         String getExpirationDate() {return this.expirationDate;}
         double getQuantityRemaining() {return this.quantityRemaining;}
+        double getQuantityTarget() {return this.quantityTarget;}
         String getMeasurementUnits() {return this.measurementUnits;}
         double getPricePerUnitLastOrder() {return this.pricePerUnitLastOrder;}
         String getLastOrderDate() {return this.lastOrderDate;}

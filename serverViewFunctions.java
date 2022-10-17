@@ -83,8 +83,8 @@ public class serverViewFunctions {
             
             //Import all ingredients
             while(result.next()) {
-                ingredient temp_ingredient = new ingredient(result.getInt(1), result.getString(2), result.getString(3), result.getDouble(4), 
-                result.getString(5), result.getDouble(6), result.getString(7), result.getDouble(8));
+                ingredient temp_ingredient = new ingredient(result.getInt(1), result.getString(2), result.getString(3), result.getDouble(4),
+                    result.getDouble(5), result.getString(6), result.getDouble(7), result.getString(8), result.getDouble(9));
                 ingredients.put(temp_ingredient.getId(), temp_ingredient);
             }
         } catch (Exception e) {
