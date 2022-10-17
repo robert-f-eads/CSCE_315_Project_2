@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.plaf.DimensionUIResource;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
@@ -6,24 +7,27 @@ import java.sql.*;
 
 public class ManagerView {
     JFrame myFrame;
-    JPanel[][] myPanels;
+    //JPanel[][] myPanels;
     JPanel mainPanel;
     JPanel borderPanel;
     int myRows;
     int myCols;
     dbFunctions myDbConnection;
     int maxWidth = 1500;
-    int maxHeight = 980; 
+    int maxHeight = 1080; 
     public ManagerView() {
         myFrame = new JFrame();//creating instance of JFrame  
-        //myFrame.setSize(1500, 1080);
+        myFrame.setSize(maxWidth, maxHeight);
         myFrame.setPreferredSize(new Dimension(maxWidth, maxHeight));
 		myFrame.setMinimumSize(new Dimension(maxWidth, maxHeight));
 		myFrame.setMaximumSize(new Dimension(maxWidth, maxHeight));
 		myFrame.setResizable(false);
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setBackground(Color.black);
 
 
-        myRows = 5;
+
+       /*myRows = 5;
         myCols = 5;
 
         myPanels = new JPanel[myRows][myCols];
@@ -31,7 +35,7 @@ public class ManagerView {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j] = new JPanel();
             }
-        }
+        }*/
 
         myDbConnection = new dbFunctions();
 
@@ -107,7 +111,7 @@ public class ManagerView {
 
     public void setTrendView() {
         this.clearView();
-        setGridLayout();
+        //setGridLayout();
         (new ManagerTrend(this)).setTrendView();
         myFrame.revalidate();
         myFrame.repaint();
@@ -161,13 +165,15 @@ public class ManagerView {
     JLabel createLabel(String text, int width, int height) {
         JLabel l = new JLabel(text);
         l.setSize(width, height);
+        l.setPreferredSize(new DimensionUIResource(width, height));
+        l.setMaximumSize(new Dimension(width, height));
         return l;
     }
 
-    private void setGridLayout() {
+   /*  private void setGridLayout() {
         myFrame.getContentPane().removeAll();;
         myFrame.setLayout(new GridLayout(myRows, myCols));
-        myPanels = new JPanel[myRows][myCols];
+      myPanels = new JPanel[myRows][myCols];
         for(int i = 0; i < myRows; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j] = new JPanel();
@@ -192,7 +198,7 @@ public class ManagerView {
         myFrame.revalidate();
         myFrame.repaint();
         myFrame.setVisible(true);
-    }
+    }*/
 
     private void setBorderLayout() {
         myFrame.getContentPane().removeAll();;
@@ -208,11 +214,11 @@ public class ManagerView {
     
     // clears both gridlayout and borderlayout
     private void clearView() {
-        for(int i = 0; i < myCols; i++) {
+      /*   for(int i = 0; i < myCols; i++) {
             for(int j = 0; j < myCols; j++) {
                 myPanels[i][j].removeAll();
             }
-        }
+        }*/ 
         borderPanel.removeAll();
         mainPanel.removeAll();
         myFrame.getContentPane().removeAll();

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class ManagerTrend extends ManagerViewScreen {
     public ManagerTrend(ManagerView managerView) {super(managerView);}
@@ -14,37 +15,83 @@ public class ManagerTrend extends ManagerViewScreen {
         JButton year = managerView.createButton("1 Year", buttonWidth, buttonHeight);
         JButton generate = managerView.createButton("Generate", buttonWidth, buttonHeight);
 
-        JLabel trends = managerView.createLabel("Trends", buttonWidth, buttonHeight);
-        JLabel startDateLabel = managerView.createLabel("Start Date", buttonWidth, buttonHeight);
-        JLabel endDateLabel = managerView.createLabel("End Date", buttonWidth, buttonHeight);
-        HintTextField startDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
-        HintTextField endDate = new HintTextField("yyyy-mm-dd", buttonWidth, buttonHeight);
+        JLabel inventory = managerView.createLabel("Trends", buttonWidth, buttonHeight);
+        inventory.setFont(new Font("SansSerif", Font.PLAIN, 28));
+        inventory.setBackground(Color.green);
+        inventory.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
+        HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 200, buttonHeight));
+
 
         back.addActionListener(e -> {
             new ManagerView();
             managerView.myFrame.dispose();
         });
 
+    
 
-        generate.addActionListener(e -> {
-            System.out.println("Generate trends");
-        });
+        JPanel title = new JPanel();
+        title.setLayout(new BoxLayout(title, BoxLayout.LINE_AXIS));
+        title.setBackground(Color.white);
+        title.add(Box.createRigidArea(new Dimension(600, 0)));
+        title.add(inventory);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel topButtons = new JPanel();
+        topButtons.setBackground(Color.white);
+        topButtons.setLayout(new BoxLayout(topButtons, BoxLayout.LINE_AXIS));
+        topButtons.add(back);
+        topButtons.add(Box.createRigidArea(new Dimension(200, 0)));
+        topButtons.add(back);
+        topButtons.add(week);
+        topButtons.add(week2);
+        topButtons.add(month);
+        topButtons.add(quarter);
+        topButtons.add(year);
+        topButtons.add(Box.createRigidArea(new Dimension(75, 0)));
+        topButtons.add(generate);
 
 
 
 
 
-        /*managerView.myPanels[0][0].add(back);
-        managerView.myPanels[0][2].add(trends);
-        managerView.myPanels[1][0].add(startDateLabel);
-        managerView.myPanels[1][2].add(startDate);
-        managerView.myPanels[2][0].add(endDateLabel);
-        managerView.myPanels[2][2].add(endDate);
-        managerView.myPanels[2][4].add(generate);
-        managerView.myPanels[3][0].add(week);
-        managerView.myPanels[3][1].add(week2);
-        managerView.myPanels[3][2].add(month);
-        managerView.myPanels[3][3].add(quarter);
-        managerView.myPanels[3][4].add(year);*/
+        topButtons.add(Box.createRigidArea(new Dimension(200, 0)));
+        topButtons.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+        JPanel pageStart = new JPanel();
+        pageStart.setBackground(Color.white);
+        pageStart.setLayout(new BoxLayout(pageStart, BoxLayout.PAGE_AXIS));
+        pageStart.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        pageStart.add(title);
+        pageStart.add(Box.createRigidArea(new Dimension(0, 25)));
+        pageStart.add(topButtons);
+
+        JPanel south = new JPanel();
+       
+
+        managerView.borderPanel.add(pageStart, BorderLayout.PAGE_START);
+        managerView.borderPanel.add(south, BorderLayout.SOUTH);
+        managerView.borderPanel.setBackground(Color.white);
+        managerView.myFrame.add(managerView.borderPanel);
+
     }
+
+    JTextField formatTextArea(JTextField b) {
+        b.setFont(new Font("SansSerif", Font.PLAIN, 23));
+        b.setBackground(Color.white);
+        b.setMinimumSize(new Dimension(400,75));
+        b.setMaximumSize(new Dimension(400,75));
+        return b;
+    }
+
+
+
+
+
+        
 }
+

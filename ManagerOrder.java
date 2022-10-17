@@ -146,7 +146,6 @@ public class ManagerOrder extends ManagerViewScreen {
         flow.add(quarter);
         flow.add(year);
 
-        
         managerView.borderPanel.setLayout(new BoxLayout(managerView.borderPanel, BoxLayout.PAGE_AXIS));
         managerView.borderPanel.setBackground(Color.white);
         managerView.borderPanel.add(title);
@@ -156,6 +155,7 @@ public class ManagerOrder extends ManagerViewScreen {
 
         managerView.borderPanel.revalidate();
         managerView.borderPanel.repaint();
+
     }
 
     public JButton formatButtons(JButton button) {
