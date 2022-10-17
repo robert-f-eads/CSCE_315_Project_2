@@ -20,8 +20,6 @@ public class ManagerHome extends ManagerViewScreen {
 
 
     public void setHomeView() {
-        System.out.println("Setting home view");
-       
         JButton orderHistory = new JButton("Order History");
         orderHistory.setForeground(Color.black);
         orderHistory.setFont(defaultButtons);

@@ -165,8 +165,8 @@ public class ManagerView {
     JLabel createLabel(String text, int width, int height) {
         JLabel l = new JLabel(text);
         l.setSize(width, height);
-        l.setPreferredSize(new DimensionUIResource(width, height));
-        l.setMaximumSize(new Dimension(width, height));
+        // l.setPreferredSize(new DimensionUIResource(width, height));
+        // l.setMaximumSize(new Dimension(width, height));
         return l;
     }
 
