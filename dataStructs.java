@@ -406,3 +406,23 @@ class product {
         return print;
     }
 }//End product
+
+class dateStruct {
+    String month;
+    String day;
+    String year;
+    String hours;
+    String minutes;
+    String seconds;
+
+    public dateStruct(String year, String month, String day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public String formatString() {return String.format("%s-%s-%s", year, month, day);}
+    public String getEndOfDay() {return "23:59:59";}
+    public String getStartOfDay() {return "00:00:00";}
+    public String getTimeOfDay() {return String.format("%s:%s:%s", hours, minutes, seconds);}
+}

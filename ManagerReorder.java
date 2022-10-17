@@ -2,13 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ManagerReorder extends ManagerViewScreen {
-    public ManagerReorder(ManagerView managerView) {super(managerView);}
+    private orderViewFunctions ovf;
+
+    public ManagerReorder(ManagerView managerView) {
+        super(managerView);
+        ovf = new orderViewFunctions();
+    }
     
     public void setReorderView() {
         int buttonWidth = 150;
         int buttonHeight = 150;
         JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
-        JButton export = managerView.createButton("Export to CSV", buttonWidth, buttonHeight);
+        JButton export = managerView.createButton("Refresh", buttonWidth, buttonHeight);
 
         JLabel reorder = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
 
@@ -36,11 +41,10 @@ public class ManagerReorder extends ManagerViewScreen {
         flowBot.add(Box.createRigidArea(new Dimension(1200,0)));
         flowBot.add(export);
 
-        JTable productTable = new JTable();
-        managerView.updateTable(productTable, "products", -1);
+        JTable restock = new JTable(managerView.resultSetToTableModel(null, ovf.generateRestockReport()));
 
         managerView.borderPanel.add(flowTop, BorderLayout.NORTH);
-        managerView.borderPanel.add(new JScrollPane(productTable), BorderLayout.CENTER);
+        managerView.borderPanel.add(new JScrollPane(restock), BorderLayout.CENTER);
         managerView.borderPanel.add(flowBot, BorderLayout.SOUTH);
     }
 }
