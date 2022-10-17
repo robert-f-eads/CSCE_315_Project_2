@@ -153,6 +153,7 @@ public class ManagerInventory extends ManagerViewScreen {
         pageStart.add(topButtons);
 
         JPanel south = new JPanel();
+        south.setBackground(Color.white);
         south.add(id);
         south.add(name);
         south.add(expiration);
