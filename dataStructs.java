@@ -144,7 +144,7 @@ class orderTicketInfo {
 
 
     /**
-     * Prints out an order ticket in a human readable format
+     * @return an order ticket in a human readable format
      */
     @Override
     public String toString() {
@@ -326,7 +326,7 @@ class orderItem {
         void removeSubraction(orderItemModification modification) {subtractions.remove(modification);}
      
         /**
-         * returns a human readable representation of an orderItem
+         * @return a human readable representation of an orderItem
          */
         @Override
         public String toString() {
@@ -336,6 +336,9 @@ class orderItem {
         }        
 }//End orderItem
 
+/**
+ * @author Robert Eads
+ */
 class orderItemModification {
     private
         int id;
@@ -346,6 +349,9 @@ class orderItemModification {
 
 
     //Constructors
+    /**
+     * Default constructor sets fields to values which indicate they should be altered
+     */
     public orderItemModification() {
         id = -1;
         orderId = -1;
@@ -353,6 +359,13 @@ class orderItemModification {
         ingredientId = -1;
     }
 
+    /**
+     * Parametrized constructor of orderItemModification
+     * @param id the id of the modification
+     * @param orderId the id of the order this modification is a part of 
+     * @param itemNumberInOrder the index of the item in the order this modification applies to
+     * @param ingredientId the id of the ingredient which is being used to modify the order item
+     */
     public orderItemModification(int id, int orderId, int itemNumberInOrder, int ingredientId) {
         this.id = id;
         this.orderId = orderId;
@@ -360,6 +373,14 @@ class orderItemModification {
         this.ingredientId = ingredientId;
     }
 
+    /**
+     * Fully parametrized constructor for an order item modification
+     * @param id the id of the modification
+     * @param orderId the id of the order this modification is a part of 
+     * @param itemNumberInOrder the index of the item in the order this modification applies to
+     * @param ingredientId the id of the ingredient which is being used to modify the order item
+     * @param ingredientName the name of the ingredient which is being used to modify the order item
+     */
     public orderItemModification(int id, int orderId, int itemNumberInOrder, int ingredientId, String ingredientName) {
         this.id = id;
         this.orderId = orderId;
@@ -368,6 +389,10 @@ class orderItemModification {
         this.ingredientName = ingredientName;
     }
 
+    /**
+     * Copy constructor for an order item modification
+     * @param otherMod a modification to duplicate
+     */
     public orderItemModification(orderItemModification otherMod) {
         this.id = otherMod.getId();
         this.orderId = otherMod.getOrderId();
@@ -379,26 +404,73 @@ class orderItemModification {
 
     public
         //Getters
+        /**
+         * Gets the id of the order item modification
+         * @return the id of the order item modification
+         */
         int getId() {return id;}
+        /**
+         * Gets the id of the order ticket this modification is a part of
+         * @return the id of the order ticket this modification is a part of
+         */
         int getOrderId() {return orderId;}
+        /**
+         * Gets the index of the item in the order ticket this modification applies to
+         * @return the index of the item in the order ticket this modification applies to
+         */
         int getItemNumberInOrder() {return itemNumberInOrder;}
+        /**
+         * Gets the id of the ingredient being used to modify an order item
+         * @return the id of the ingredient being used to modify an order item
+         */
         int getIngredientId() {return ingredientId;}
+        /**
+         * Gets the name of the ingredient being used to modify the order item
+         * @return the name of the ingredient being used to modify the order item
+         */
         String getIngredientName() {return ingredientName;}
 
         //Setters
+        /**
+         * Sets the id of the order item modification
+         * @param id the id of the order item modification
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the id of the order this modification is a part of
+         * @param orderId the id of the order this modification is a part of
+         */
         void setOrderId(int orderId) {this.orderId = orderId;}
+        /**
+         * Sets the index of the item in the order ticket this modification applies to
+         * @param itemNumberInOrder the index of the item in the order ticket this modification applies to
+         */
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
+        /**
+         * Sets the id of the ingredient being used to modify the order item
+         * @param ingredientId the id of the ingredient being used to modify the order item
+         */
         void setingredientId(int ingredientId) {this.ingredientId = ingredientId;}
+        /**
+         * Sets the name of the ingredient being used to modify the order item
+         * @param ingredientName the name of the ingredient being used to modify the order item
+         */
         void setIngredientName(String ingredientName) {this.ingredientName = ingredientName;}
      
-
+    /**
+     * @return a human readable string representation of an order item modification
+     */
     @Override
     public String toString() {
         String print = String.format("Id: %d\nOrder Id: %d\nItem Number in Order: %d\nIngredient Id: %d\nIngredient Name: %s", id, orderId, itemNumberInOrder, ingredientId, ingredientName);
         return print;
     }
 
+    /**
+     * Determine whether this order item modification is the same as an arbitrary object
+     * @param o an object to compare this order item modification to
+     * @return whether this modification is the same as another
+     */
     @Override
     public boolean equals(Object o) {
         if(o == this) {return true;}
