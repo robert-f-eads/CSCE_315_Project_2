@@ -326,6 +326,7 @@ class orderItem {
         void removeSubraction(orderItemModification modification) {subtractions.remove(modification);}
      
         /**
+         * Convert the order item to a string
          * @return a human readable representation of an orderItem
          */
         @Override
@@ -458,6 +459,7 @@ class orderItemModification {
         void setIngredientName(String ingredientName) {this.ingredientName = ingredientName;}
      
     /**
+     * Convert the order item modification to a string
      * @return a human readable string representation of an order item modification
      */
     @Override
@@ -481,6 +483,9 @@ class orderItemModification {
     }
 }//End orderItemModification
 
+/**
+ * @author Shreyes Kaliyur
+ */
 class ingredient {
 
     int id;
@@ -493,6 +498,10 @@ class ingredient {
     String lastOrderDate; // Date
     double unitsInLastOrder;
 
+    /**
+     * Default constructor for an ingredient
+     * The value of each field indicates it should be altered in the future
+     */
     public ingredient() {
         this.id = -1;
         this.name = "";
@@ -505,6 +514,18 @@ class ingredient {
         this.unitsInLastOrder = -1;
     }
     
+    /**
+     * Parametrized constructor for an ingredient
+     * @param id the id of the ingredient
+     * @param name the name of the ingredient
+     * @param expirationDate the expiration date of the ingredient
+     * @param quantityRemaining the amount of the ingredient that is remaining
+     * @param quantityTarget the amount of the ingredient we want to have stocked at a minimum
+     * @param measurementUnits the units we use to measure the ingredient
+     * @param pricePerUnitLastOrder the price we payed per unit in our last order
+     * @param lastOrderDate the last time we ordered more of this ingredient
+     * @param unitsInLastOrder the number of units which were in our last order
+     */
     public ingredient(int id, String name, String expirationDate, double quantityRemaining, double quantityTarget,
                       String measurementUnits, double pricePerUnitLastOrder, String lastOrderDate, double unitsInLastOrder) {
         this.id = id;
@@ -519,26 +540,98 @@ class ingredient {
     }
 
     public 
+        /**
+         * Gets the id of the ingredient
+         * @return the id of the ingredient
+         */
         int getId() {return this.id;}
+        /**
+         * Gets the name of the ingredient
+         * @return the name of the ingredient
+         */
         String getName() {return this.name;}
+        /**
+         * Gets the expiration date of the ingredient
+         * @return the expiration date of the ingredient
+         */
         String getExpirationDate() {return this.expirationDate;}
+        /**
+         * Gets the amount of the ingredient we have remaining
+         * @return the amount of the ingredient we have remaining
+         */
         double getQuantityRemaining() {return this.quantityRemaining;}
+        /**
+         * Gets the amount of the ingredient we would like to have in stock at a minimum
+         * @return the amount of the ingredient we would like to have in stock at a minimum
+         */
         double getQuantityTarget() {return this.quantityTarget;}
+        /**
+         * Gets the units we use to measure the ingredient
+         * @return the units we use to measure the ingredient
+         */
         String getMeasurementUnits() {return this.measurementUnits;}
+        /**
+         * Gets the price per unit we paid in our last order
+         * @return the price per unit we paid in our last order
+         */
         double getPricePerUnitLastOrder() {return this.pricePerUnitLastOrder;}
+        /**
+         * Gets the last date we ordered more of this ingredient
+         * @return the last date we ordered more of this ingredient
+         */
         String getLastOrderDate() {return this.lastOrderDate;}
+        /**
+         * Gets the amount of the ingredient we bought in the last order
+         * @return the amount of the ingredient we bought in the last order
+         */
         double getUnitsInLastOrder() {return this.unitsInLastOrder;}
 
+        /**
+         * Sets the id of the ingredient
+         * @param id the id of the ingredient
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the name of the ingredient
+         * @param name the name of the ingredient
+         */
         void setName(String name) {this.name = name;}
+        /**
+         * Sets the date that the ingredient will expire in our stock
+         * @param expirationDate the date that the ingredient will expire in our stock
+         */
         void setExpirationDate(String expirationDate) {this.expirationDate = expirationDate;}
+        /**
+         * Sets the amount of the ingredient we have remaining
+         * @param quantityRemaining the amount of the ingredient we have remaining
+         */
         void setQuantityRemaining(double quantityRemaining) {this.quantityRemaining = quantityRemaining;}
+        /**
+         * Sets the units we use to measure this ingredient
+         * @param measurementUnits the units we use to measure this ingredient
+         */
         void setMeasurementUnits(String measurementUnits) {this.measurementUnits = measurementUnits;}
+        /**
+         * Sets the price we paid per unit in our last order
+         * @param pricePerUnitLastOrder the price we paid per unit in our last order
+         */
         void setPricePerUnitLastOrder(double pricePerUnitLastOrder) {this.pricePerUnitLastOrder = pricePerUnitLastOrder;}
+        /**
+         * Sets the last date we ordered this ingredient
+         * @param lastOrderDate the last date we ordered this ingredient
+         */
         void setLastOrderDate(String lastOrderDate) {this.lastOrderDate = lastOrderDate;}
+        /**
+         * Sets the number of units in the last order we made
+         * @param unitsInLastOrder the number of units in the last order we made
+         */
         void setUnitsInLastOrder(double unitsInLastOrder) { this.unitsInLastOrder = unitsInLastOrder; }
     
 
+    /**
+     * Convert the ingredient to a string
+     * @return a human readable string representation of an ingredient
+     */
     @Override
     public String toString() {
         return "{" +
@@ -553,6 +646,11 @@ class ingredient {
             "}";
     }
 
+    /**
+     * Determine whether this ingredient and an arbitrary object are equal
+     * @param o an object to compare this ingredient against
+     * @return whether this ingredient is equal to another
+     */
     @Override
     public boolean equals(Object o) {
         if(o == this) {return true;}
