@@ -19,7 +19,7 @@ public class ManagerTrend extends ManagerViewScreen {
 
     public ManagerTrend(ManagerView managerView) {
         super(managerView);
-        ovf = new orderViewFunctions();
+        ovf = new orderViewFunctions(managerView.serverFunctions);
     }
 
     public void setTrendView() {

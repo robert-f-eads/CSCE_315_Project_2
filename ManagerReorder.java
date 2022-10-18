@@ -6,7 +6,7 @@ public class ManagerReorder extends ManagerViewScreen {
 
     public ManagerReorder(ManagerView managerView) {
         super(managerView);
-        ovf = new orderViewFunctions();
+        ovf = new orderViewFunctions(managerView.serverFunctions);
     }
     
     public void setReorderView() {

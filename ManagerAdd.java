@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class ManagerAdd extends ManagerViewScreen {
 	dbFunctions dbConnection = new dbFunctions();
+	orderViewFunctions orderFunctions;
 
     static Font searchFont = new Font("SansSerif", Font.PLAIN, 20); 
     static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 23); 
@@ -23,7 +24,10 @@ public class ManagerAdd extends ManagerViewScreen {
 	Vector<AdditionButtonManager> additionButtons = new Vector<AdditionButtonManager>();
 
 
-    public ManagerAdd(ManagerView managerView) {super(managerView);}
+    public ManagerAdd(ManagerView managerView) {
+		super(managerView);
+		orderFunctions = new orderViewFunctions(managerView.serverFunctions);
+	}
 
     public void setAddView() {
         int generalHeight = 42;

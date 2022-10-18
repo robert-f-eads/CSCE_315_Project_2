@@ -30,8 +30,8 @@ public class orderViewFunctions {
         return orderTickets;
     }
 
-    public orderViewFunctions() {
-        serverFunctions = new serverViewFunctions();
+    public orderViewFunctions(serverViewFunctions serverFunctions) {
+        this.serverFunctions = serverFunctions;
         dbConnection = new dbFunctions();
         dbConnection.createDbConnection();
     }
@@ -101,6 +101,7 @@ public class orderViewFunctions {
                 sqlString = String.format("INSERT INTO productstoingredients (productid, ingredientid) VALUES (%d, %d)", productId, ingred.getId());
                 dbConnection.dbUpsert(sqlString);
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
