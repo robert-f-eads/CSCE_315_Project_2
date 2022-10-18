@@ -33,7 +33,7 @@ class orderTicketInfo {
     }
 
     /**
-     * 
+     * Parametrized constructor for orderTicketInfo
      * @param id the orderId
      * @param timestamp the time the order was made
      * @param customerFirstName customer's first name
@@ -154,6 +154,9 @@ class orderTicketInfo {
     }
 }//End orderTicketInfo 
 
+/**
+ * @author Robert Eads
+ */
 class orderItem {
     private
         int id;
@@ -169,6 +172,10 @@ class orderItem {
 
 
     //Constructors
+    /**
+     * Default constructor for orderItem, gives all fields default values
+     * itemSize is set to 20, the smallest size
+     */
     public orderItem() {
         id = -1;
         orderId = -1;
@@ -182,6 +189,15 @@ class orderItem {
         subtractions = new Vector<orderItemModification>();
     }
 
+    /**
+     * Parametrized constructor for an orderItem
+     * @param id the id of the item on the order ticket
+     * @param orderId the orderId this item is a part of
+     * @param itemNumberInOrder the index of this item in the order ticket
+     * @param itemName the name of the item
+     * @param itemAmount the number of this specific item in the order ticket
+     * @param itemSize the size of the item (one of our 3 integer sizes in oz)
+     */
     public orderItem(int id, int orderId, int itemNumberInOrder, String itemName, int itemAmount, int itemSize) {
         this.id = id;
         this.orderId = orderId;
@@ -196,38 +212,128 @@ class orderItem {
 
     public
         //Getters
+        /**
+         * Gets the id of the order item
+         * @return the id of the order item
+         */
         int getId() {return id;}
+        /**
+         * Gets the order id of the order ticket this item is a part of 
+         * @return the order id of the order ticket this item is a part of 
+         */
         int getOrderId() {return orderId;}
+        /**
+         * Gets the id of the product this item refers to
+         * @return the id of the product this item refers to
+         */
         int getProductId() {return productId;}
+        /**
+         * Gets the index of the item in the order ticket
+         * @return the index of the item in the order ticket
+         */
         int getItemNumberInOrder() {return itemNumberInOrder;}
+        /**
+         * Gets the name of the item
+         * @return the name of the item
+         */
         String getItemName() {return itemName;}
+        /**
+         * Gets the count of this specific item in the order ticket
+         * @return the count of this specific item in the order ticket
+         */
         int getItemAmount() {return itemAmount;}
+        /**
+         * Gets the size of the item
+         * @return the size of the item
+         */
         int getItemSize() {return itemSize;}
+        /**
+         * Gets the price of the item not taking into account the count
+         * @return the price of the item not taking into account the count
+         */
         double getItemPrice() {return itemPrice;}
+        /**
+         * Gets the additions to the default item
+         * @return the additions to the default item
+         */
         Vector<orderItemModification> getAdditions() {return additions;}
+        /**
+         * Gets the subtractions from the default item
+         * @return the subtractions from the default item
+         */
         Vector<orderItemModification> getSubtractions() {return subtractions;}
 
         //Setters
+        /**
+         * Sets the id of the order item
+         * @param id the id of the order item
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the order id of the order ticket this item is a part of 
+         * @param orderId the order id of the order ticket this item is a part of 
+         */
         void setOrderId(int orderId) {this.orderId = orderId;}
+        /**
+         * Sets the id of the product that is a part of this order item
+         * @param productId the id of the product that is a part of this order item
+         */
         void setProductId(int productId) {this.productId = productId;}
+        /**
+         * Sets the index of the item in the order
+         * @param itemNumberInOrder the index of the item in the order
+         */
         void setItemNumberInOrder(int itemNumberInOrder) {this.itemNumberInOrder = itemNumberInOrder;}
+        /**
+         * Sets the name of the item
+         * @param itemName the name of the item
+         */
         void setItemName(String itemName) {this.itemName = itemName;}
+        /**
+         * Sets the count of the item in the order ticket
+         * @param itemAmount the count of the item in the order ticket
+         */
         void setItemAmount(int itemAmount) {this.itemAmount = itemAmount;}
+        /**
+         * Sets the size of the item
+         * @param itemSize the size of the item
+         */
         void setItemSize(int itemSize) {this.itemSize = itemSize;}
+        /**
+         * Sets the price of the item
+         * @param itemPrice the price of the item
+         */
         void setItemPrice(double itemPrice) {this.itemPrice = itemPrice;}
+        /**
+         * Adds a modification to the current item
+         * @param modification a modification to be added to the current item
+         */
         void addAddition(orderItemModification modification) {additions.add(modification);}
+        /**
+         * Removes an added modification from the current item
+         * @param modification a modification to be removed from the current list of additions
+         */
         void removeAddition(orderItemModification modification) {additions.remove(modification);}
+        /**
+         * Removes an ingredient from the current item
+         * @param modification a modification to be removed from the current item
+         */
         void addSubtraction(orderItemModification modification) {subtractions.add(modification);}
+        /**
+         * Adds back an ingredient that was removed from the item
+         * @param modification a modification to be readded back to the item
+         */
         void removeSubraction(orderItemModification modification) {subtractions.remove(modification);}
      
-
-    @Override
-    public String toString() {
-        String print = String.format("Id: %d\nOrder Id: %d\nItem Number in Order: %d\nItem Name: %s\nItem Amount: %d\nItem Size: %d",
-            id, orderId, itemNumberInOrder, itemName, itemAmount, itemSize);
-        return print;
-    }        
+        /**
+         * returns a human readable representation of an orderItem
+         */
+        @Override
+        public String toString() {
+            String print = String.format("Id: %d\nOrder Id: %d\nItem Number in Order: %d\nItem Name: %s\nItem Amount: %d\nItem Size: %d",
+                id, orderId, itemNumberInOrder, itemName, itemAmount, itemSize);
+            return print;
+        }        
 }//End orderItem
 
 class orderItemModification {
