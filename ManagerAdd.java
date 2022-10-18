@@ -33,7 +33,9 @@ public class ManagerAdd extends ManagerViewScreen {
         managerView.mainPanel.setBackground(Color.white);
 
         JPanel nameAndCost = new JPanel();
+		nameAndCost.setBackground(Color.white);
         nameAndCost.setLayout(new BoxLayout(nameAndCost, BoxLayout.LINE_AXIS));
+		nameAndCost.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         HintTextField productName = (HintTextField) formatTextArea(new HintTextField("Product Name", 150, generalHeight));
         productName.setFont(new Font("SansSerif", Font.PLAIN, 28)); 
@@ -55,8 +57,18 @@ public class ManagerAdd extends ManagerViewScreen {
         });
 
     /////////////////////////////////////////// STAND BY SHITS FUCKED//////////////////////////////////
+		JPanel title = new JPanel();
+		title.setLayout(new BoxLayout(title, BoxLayout.LINE_AXIS));
+
         JLabel additionsHeader = new JLabel("Product Ingredients");
 		additionsHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
+		additionsHeader.setForeground(darkRed);
+		additionsHeader.setBackground(Color.white);
+
+		title.add(Box.createRigidArea(new Dimension(50, 0)));
+		title.setBackground(Color.white);
+		title.add(additionsHeader);
+		title.setAlignmentX(Component.LEFT_ALIGNMENT);
 	
 		//Creating additions header font
 		Font additionsHeaderFont = new Font("SansSerif", Font.PLAIN, 28);
@@ -82,11 +94,18 @@ public class ManagerAdd extends ManagerViewScreen {
 		searchResultPanel = new JPanel();
 		searchResultPanel.setBackground(Color.white);
 		searchResultPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		searchResultPanel.setPreferredSize(new Dimension(1050, 200));
-		searchResultPanel.setMinimumSize(new Dimension(1050, 200));
-		searchResultPanel.setMaximumSize(new Dimension(1050, 200));
-		searchResultPanel.setBackground(Color.green);
+		searchResultPanel.setPreferredSize(new Dimension(1050, 350));
+		searchResultPanel.setMinimumSize(new Dimension(1050, 350));
+		searchResultPanel.setMaximumSize(new Dimension(1050, 350));
 	
+		JPanel searchResultPanelHolder = new JPanel();
+		searchResultPanelHolder.setAlignmentX(Component.LEFT_ALIGNMENT);
+		searchResultPanelHolder.setLayout(new BoxLayout(searchResultPanelHolder, BoxLayout.LINE_AXIS));
+		searchResultPanelHolder.setBackground(Color.white);
+		searchResultPanelHolder.add(Box.createRigidArea(new Dimension(50, 0)));
+		searchResultPanelHolder.setMaximumSize(new Dimension(1098, 350));
+		searchResultPanelHolder.add(new JScrollPane(searchResultPanel));
+
 
 		//Create button component of search bar
 		JButton searchButton = new JButton(new ImageIcon(((new ImageIcon("searchIcon.png")).getImage()).getScaledInstance(43, 43, java.awt.Image.SCALE_SMOOTH)));
@@ -101,20 +120,33 @@ public class ManagerAdd extends ManagerViewScreen {
 		additionButtonPanel = new JPanel();
 		additionButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		additionButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		additionButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		additionButtonPanel.setBackground(Color.white);
 		        
 
         managerView.mainPanel.add(nameAndCost);
         managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+
+		searchPanel.add(Box.createRigidArea(new Dimension(50, 0)));
 		searchPanel.add(searchButton);
-		searchPanel.add(additionSearchTextField);		
+		searchPanel.add(additionSearchTextField);	
+		
+		JButton createItem = formatButtons(new JButton("Finalize Item"));
+		createItem.addActionListener(e -> {
+			//ROBERT HELP
+			product newProduct = new product(-1, productName.getText(), Double.parseDouble(productCost.getText()));
+			newProduct.setIngredients(ingredients);
+			orderFunctions.addSeasonalItem(newProduct);
+		});
 			
-		managerView.mainPanel.add(additionsHeader);
-		managerView.mainPanel.add(additionButtonPanel);
+		managerView.mainPanel.add(title);
+		managerView.mainPanel.add(new JScrollPane(additionButtonPanel));
+		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 175)));
 		managerView.mainPanel.add(searchPanel);
-		managerView.mainPanel.add(searchResultPanel);
-		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 400)));
+		managerView.mainPanel.add(searchResultPanelHolder);
+		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+		managerView.mainPanel.add(createItem);
+		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 75)));
+		//managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 75)));
         managerView.mainPanel.revalidate();
         managerView.mainPanel.repaint();
     }
@@ -140,35 +172,43 @@ public class ManagerAdd extends ManagerViewScreen {
 
 
 	public void updateAdditions(String searchBarText, JPanel searchPanel) {
-		searchPanel.removeAll();
-		searchPanel.setLayout(new FlowLayout());
-	
+		searchResultPanel.removeAll();
+		searchResultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		try {
 			dbConnection.createDbConnection();
 			String sqlStatement = String.format("SELECT id FROM ingredients WHERE name ILIKE '%s%s%s' ", "%", searchBarText, "%");
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
 			while(results.next()) {
+				
 				ingredient tempIngredient = managerView.serverFunctions.getIngredient(results.getInt("id")); 
-				JButton button = new JButton(tempIngredient.getName());
-				button.setFont(defaultButtons);
-				searchPanel.add(button);
-				button.setAlignmentX(Component.LEFT_ALIGNMENT);
-				button.setBackground(Color.white);
-				button.setForeground(darkRed);
-				searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
-				button.addActionListener(e ->
-				{
-					ingredients.add(tempIngredient);
+				if (!ingredients.contains(tempIngredient)) {
+					JButton button = new JButton(tempIngredient.getName());
+					button.setFont(defaultButtons);
+					searchResultPanel.add(button);
+					button.setAlignmentX(Component.CENTER_ALIGNMENT);
+					button.setBackground(Color.white);
+					button.setForeground(darkRed);
+					searchPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+					button.addActionListener(e ->
+					{
+						ingredients.add(tempIngredient);
+						searchResultPanel.remove(button);
 
-					searchResultPanel.remove(button);
+
+						redrawButtonAdditions();
+						updateAdditions(searchBarText, searchPanel);
+
+
+						managerView.mainPanel.revalidate();
+						managerView.mainPanel.repaint();
+
+					} );
 
 					managerView.mainPanel.revalidate();
 					managerView.mainPanel.repaint();
 
-					updateAdditions(searchBarText, searchPanel);
-					redrawButtonAdditions();
-				} );
+				}
 			}
 		} 
 		catch (Exception e) {
@@ -178,8 +218,8 @@ public class ManagerAdd extends ManagerViewScreen {
 		} 
 	
 		
-		searchPanel.revalidate();
-		searchPanel.repaint();
+		managerView.mainPanel.revalidate();
+		managerView.mainPanel.repaint();
 	}
 
 	public void redrawButtonAdditions() {
@@ -189,14 +229,19 @@ public class ManagerAdd extends ManagerViewScreen {
 			tempButton.mainButton.addActionListener(e -> {
 						ingredients.remove(tempButton.ingredient);
 						additionButtons.remove(tempButton);
+						additionButtonPanel.remove(tempButton.mainButton);
 						updateAdditions(currentSearchEntry, additionButtonPanel);
 						redrawButtonAdditions();
 						managerView.mainPanel.revalidate();
 						managerView.mainPanel.repaint();
+				
 				} 
 			);
-			additionButtonPanel.add(tempButton.mainButton);
+			additionButtonPanel.add(tempButton.mainButton);						
+
 		} 
+		managerView.mainPanel.revalidate();
+		managerView.mainPanel.repaint();
 	}
 
 

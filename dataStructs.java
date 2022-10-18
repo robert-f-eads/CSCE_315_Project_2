@@ -494,6 +494,7 @@ class product {
         void setPrice(double price) {this.price = price;}
         void addIngredient(ingredient ingredientAdded) {ingredients.add(ingredientAdded);}
         void removeIngredient(ingredient ingredientRemoved) {ingredients.remove(ingredientRemoved);}
+        void setIngredients(Vector<ingredient> ingredients) {this.ingredients = ingredients;}
 
 
     @Override
