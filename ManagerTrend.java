@@ -198,21 +198,21 @@ public class ManagerTrend extends ManagerViewScreen {
 
         
         generateSales.addActionListener(e -> {
-            sales.setModel(managerView.resultSetToTableModel(null, 
-                ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), 
-                    new dateStruct(endDate.getText()), true)));
+            // sales.setModel(managerView.resultSetToTableModel(null, 
+            //     ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), 
+            //         new dateStruct(endDate.getText()), true)));
 
 
-            managerView.borderPanel.removeAll();
-            managerView.borderPanel.add(flow);
-            managerView.borderPanel.add(new JScrollPane(sales));
-            managerView.myFrame.revalidate();
-            managerView.myFrame.repaint();
+            // managerView.borderPanel.removeAll();
+            // managerView.borderPanel.add(flow);
+            // managerView.borderPanel.add(new JScrollPane(sales));
+            // managerView.myFrame.revalidate();
+            // managerView.myFrame.repaint();
         });
 
         generateExcess.addActionListener(e -> {
             excess.setModel(managerView.resultSetToTableModel(null, 
-                ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), 
+                ovf.generateExcessReport(// new dateStruct(startDate.getText()), 
                     new dateStruct(endDate.getText()), true)));
 
                     

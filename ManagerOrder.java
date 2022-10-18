@@ -55,8 +55,9 @@ public class ManagerOrder extends ManagerViewScreen {
 
 
         back.addActionListener(e -> {
-            new ManagerView();
-            managerView.myFrame.dispose();
+           // new ManagerView();
+           // managerView.myFrame.dispose();
+           managerView.setHomeView();
         });
         week.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {

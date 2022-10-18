@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.*;
 
 public class ManagerInventory extends ManagerViewScreen {
     boolean toggleInventory = true;
@@ -80,7 +81,7 @@ public class ManagerInventory extends ManagerViewScreen {
             productTable.setModel(managerView.resultSetToTableModel(null,
                 managerView.myDbConnection.dbQuery("SELECT * FROM products WHERE name ILIKE '%" + searchText.getText() + "%'")));
             inventoryTable.setModel(managerView.resultSetToTableModel(null,
-                managerView.myDbConnection.dbQuery("SELECT id AS \"Ingredient ID\", name AS \"Name\", expirationdate AS \"Expiration Date\", quantityremaining AS \"Quantity Remaining\", measurementunits AS \"Measurement Units\", priceperunitlastorder AS \"Last Order's Price Per Unit\" FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
+                managerView.myDbConnection.dbQuery("SELECT * FROM ingredients WHERE name ILIKE '%" + searchText.getText() + "%'")));
             managerView.myFrame.repaint();
             managerView.myFrame.revalidate();
         });
@@ -271,5 +272,17 @@ public class ManagerInventory extends ManagerViewScreen {
         b.setMaximumSize(new Dimension(400,75));
         return b;
     }
+
+    // void updateInventoryTable(JTable table, String tableName, int limit) {
+    //     ResultSet row;
+    //     if(limit == -1) {
+    //         row = managerView.myDbConnection.dbQuery("SELECT * FROM " + tableName);
+    //     } else {
+    //         row = managerView.myDbConnection.dbQuery("SELECT * FROM " + tableName + " LIMIT " + limit);
+    //     }
+    //     table.setModel(managerView.resultSetToTableModel(null, row));
+    // }
+
+
     
 }

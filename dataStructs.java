@@ -437,3 +437,19 @@ class dateStruct {
     public String getStartOfDay() {return "00:00:00";}
     public String getTimeOfDay() {return String.format("%s:%s:%s", hours, minutes, seconds);}
 }
+
+class salesReportItem {
+    public
+        int productId;
+        String productName;
+        int quantitySold;
+        double totalSales;
+
+    public salesReportItem(int id, String name, int quantity, double sales) {
+        productId = id;
+        productName = name;
+        quantitySold = quantity;
+        totalSales = sales;
+
+    }
+}
