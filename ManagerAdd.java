@@ -20,6 +20,8 @@ public class ManagerAdd extends ManagerViewScreen {
 	JPanel additionButtonPanel;
 	JTextField searchBarText;
 
+	Vector<AdditionButtonManager> additionButtons = new Vector<AdditionButtonManager>();
+
 
     public ManagerAdd(ManagerView managerView) {super(managerView);}
 
@@ -101,26 +103,7 @@ public class ManagerAdd extends ManagerViewScreen {
 		additionButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		additionButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		additionButtonPanel.setBackground(Color.white);
-
-
-		for (int k = 0; k < ingredients.size();  k++) {
-			AdditionButton tempButton = new AdditionButton(ingredients.get(k).getName(), ingredients.get(k));
-			int tempIndex = k;
-			tempButton.mainButton.addActionListener(e -> {
-						//REMOVE ITEM FROM ITEM THING
-						ingredients.remove(tempButton.ingredient);
-						//updateAdditions(searchTextField, searchPanel);
-						managerView.mainPanel.revalidate();
-						managerView.mainPanel.repaint();
-				} 
-			);
-			additionButtonPanel.add(tempButton.mainButton);
-		} 
-
-		
-
-        /////////////////////////////////////////// STAND BY SHITS FUCKED //////////////////////////////////
-        
+		        
 
         managerView.mainPanel.add(nameAndCost);
         managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -145,14 +128,14 @@ public class ManagerAdd extends ManagerViewScreen {
     }
 
     public JButton formatButtons(JButton button) {
-    button.setForeground(darkRed);
-    button.setBackground(Color.white);
-    button.setFont(defaultButtons);
-    button.setRolloverEnabled(false);
-    button.setFocusPainted(false);
-    button.setAlignmentY(Component.CENTER_ALIGNMENT);
+		button.setForeground(darkRed);
+		button.setBackground(Color.white);
+		button.setFont(defaultButtons);
+		button.setRolloverEnabled(false);
+		button.setFocusPainted(false);
+		button.setAlignmentY(Component.CENTER_ALIGNMENT);
 
-    return button;
+		return button;
     }
 
 
@@ -167,7 +150,6 @@ public class ManagerAdd extends ManagerViewScreen {
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
 			while(results.next()) {
 				ingredient tempIngredient = managerView.serverFunctions.getIngredient(results.getInt("id")); 
-				///NEED//
 				JButton button = new JButton(tempIngredient.getName());
 				button.setFont(defaultButtons);
 				searchPanel.add(button);
@@ -178,11 +160,15 @@ public class ManagerAdd extends ManagerViewScreen {
 				button.addActionListener(e ->
 				{
 					ingredients.add(tempIngredient);
-					additionButtonPanel.add(button);
+
+					searchResultPanel.remove(button);
+
 					managerView.mainPanel.revalidate();
 					managerView.mainPanel.repaint();
+
+					updateAdditions(searchBarText, searchPanel);
+					redrawButtonAdditions();
 				} );
-				//NEED// THESE BUTTONS GO IN THE GREEN PANEL
 			}
 		} 
 		catch (Exception e) {
@@ -196,7 +182,27 @@ public class ManagerAdd extends ManagerViewScreen {
 		searchPanel.repaint();
 	}
 
-class AdditionButton {
+	public void redrawButtonAdditions() {
+		additionButtonPanel.removeAll();
+		for (int k = 0; k < ingredients.size();  k++) {
+			AdditionButtonManager tempButton = new AdditionButtonManager(ingredients.get(k).getName(), ingredients.get(k));
+			tempButton.mainButton.addActionListener(e -> {
+						ingredients.remove(tempButton.ingredient);
+						additionButtons.remove(tempButton);
+						updateAdditions(currentSearchEntry, additionButtonPanel);
+						redrawButtonAdditions();
+						managerView.mainPanel.revalidate();
+						managerView.mainPanel.repaint();
+				} 
+			);
+			additionButtonPanel.add(tempButton.mainButton);
+		} 
+	}
+
+
+}
+	
+class AdditionButtonManager {
 	public JButton mainButton;
 	public boolean selected;
 	public int id;
@@ -207,7 +213,7 @@ class AdditionButton {
 	static Color blueHighlight = new Color(184, 204, 220);
 
 
-	public AdditionButton(String name, ingredient ingredientTemp) {
+	public AdditionButtonManager(String name, ingredient ingredientTemp) {
 		selected = false;
 		this.name = name;
 		this.ingredient = ingredientTemp;
@@ -221,6 +227,3 @@ class AdditionButton {
 		mainButton.setFocusPainted(false);
 	}
 }
-	
-}
-
