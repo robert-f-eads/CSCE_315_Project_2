@@ -43,12 +43,19 @@ public class orderViewFunctions {
 
             for(Map.Entry<Integer, product> prodId : serverFunctions.getProducts().entrySet()) {
                 //Get amount of items
-                String sqlStatement = String.format("SELECT SUM(itemamount) FROM orderitems WHERE itemname = '%s'", prodId.getValue().getName());
+                String sqlStatement = String.format("SELECT SUM(itemamount) FROM orderitems INNER JOIN ordertickets ON ordertickets.id = orderitems.orderid WHERE itemname = '%s' ", prodId.getValue().getName());
+                sqlStatement += "AND timestamp BETWEEN ";
+                        if(useDefaultTime) {
+                            sqlStatement += String.format("'%s %s' AND '%s %s'", startDate.formatString(), startDate.getStartOfDay(), endDate.formatString(), endDate.getEndOfDay());
+                        }
+                        else {
+                            sqlStatement += String.format("'%s %s' AND '%s %s'", startDate.formatString(), startDate.getTimeOfDay(), endDate.formatString(), endDate.getTimeOfDay());
+                        }
                 ResultSet temp_results = dbConnection.dbQuery(sqlStatement);
                 temp_results.next();
                 int total = temp_results.getInt(1);
-                
-                salesReportItem temp_item = new salesReportItem(prodId.getValue().getId(), prodId.getValue().getName(), total, total * prodId.getValue().getPrice());
+                //SELECT SUM(itemamount) FROM orderitems INNER JOIN ordertickets ON ordertickets.id = orderitems.orderid WHERE itemname = 'keto-champ-coffee' AND timestamp BETWEEN '2022-09-08 00:00:00' AND '2022-09-13 00:00:00'
+                salesReportItem temp_item = new salesReportItem(prodId.getValue().getId(), prodId.getValue().getName(), total, Double.parseDouble(String.format("%.2f", total * prodId.getValue().getPrice())));
                 salesItems.add(temp_item);
             }
 
@@ -101,32 +108,23 @@ public class orderViewFunctions {
         } 
     }//End addSeasonalItem
 
-    public ResultSet generateExcessReport(dateStruct startDate, boolean useDefaultTime) {
-        ResultSet finalResults = null;
+    public Vector<excessReportItem> generateExcessReport(dateStruct startDate, boolean useDefaultTime) {
+        //ResultSet finalResults = null;
+        Vector<excessReportItem> excessItems = new Vector<excessReportItem>(); 
         try{ 
             dbConnection.createDbConnection();
-            Vector<ingredient> targetIngredient = new Vector<ingredient>();
+            //Vector<ingredient> targetIngredient = new Vector<ingredient>();
+            String sqlString = "";
             
-            //Get ingredients
-            String sqlString = String.format("SELECT id FROM ingredients");
-            ResultSet ingredsResults = dbConnection.dbQuery(sqlString);
-            while(ingredsResults.next()) {
-                ingredient temp_ingred = serverFunctions.getIngredient(ingredsResults.getInt("id"));
+            for(Map.Entry<Integer, ingredient> ingred : serverFunctions.getIngredients().entrySet()) { 
                 int totalAmountUsed = 0;
-
-                //Get amount of times in products
-                sqlString = String.format("SELECT id FROM products");
-                ResultSet productResults = dbConnection.dbQuery(sqlString);
-                while(productResults.next()) {
-
-                    //Runs count if ingredient in product
-                    product temp_product = serverFunctions.getProduct(productResults.getInt("id"));
-                    if(temp_product.ingredients().indexOf(temp_ingred) != -1) {
-
+                for(Map.Entry<Integer, product> prod : serverFunctions.getProducts().entrySet()) {
+                    if(prod.getValue().ingredients().contains(ingred.getValue())) {
+                        
                         //sum(itemamount)
                         sqlString = "SELECT sum(itemamount) FROM orderitems INNER JOIN products ON products.name = orderitems.itemname ";
                         sqlString += "INNER JOIN ordertickets ON ordertickets.id = orderitems.orderid ";
-                        sqlString += String.format("WHERE products.id = %d AND timestamp BETWEEN ", temp_product.getId());
+                        sqlString += String.format("WHERE products.id = %d AND timestamp BETWEEN ", prod.getValue().getId());
                         if(useDefaultTime) {
                             sqlString += String.format("'%s %s' AND NOW()", startDate.formatString(), startDate.getStartOfDay());
                         }
@@ -140,18 +138,29 @@ public class orderViewFunctions {
                         int numTimes = itemAmountResults.getInt(1);
                         totalAmountUsed += numTimes;
                     }
-
                 }
 
                 //amount of times in additions
-                sqlString = String.format("SELECT COUNT(*) FROM orderitemadditions WHERE ingredientid = %d", temp_ingred.getId());
+                sqlString = String.format("SELECT COUNT(*) FROM orderitemadditions INNER JOIN ordertickets ON orderitemadditions.orderid = ordertickets.id WHERE ingredientid = %d AND timestamp BETWEEN ", ingred.getValue().getId());
+                if(useDefaultTime) {
+                            sqlString += String.format("'%s %s' AND NOW()", startDate.formatString(), startDate.getStartOfDay());
+                        }
+                        else {
+                            sqlString += String.format("'%s %s' AND NOW()", startDate.formatString(), startDate.getTimeOfDay());
+                        }
                 ResultSet additionsResults = dbConnection.dbQuery(sqlString);
                 additionsResults.next();
                 int numTimes = additionsResults.getInt(1);
                 totalAmountUsed += numTimes;
 
                 //amount of times in subtractions
-                sqlString = String.format("SELECT COUNT(*) FROM orderitemsubtractions WHERE ingredientid = %d", temp_ingred.getId());
+                sqlString = String.format("SELECT COUNT(*) FROM orderitemsubtractions INNER JOIN ordertickets ON orderitemsubtractions.orderid = ordertickets.id WHERE ingredientid = %d AND timestamp BETWEEN ", ingred.getValue().getId());
+                if(useDefaultTime) {
+                            sqlString += String.format("'%s %s' AND NOW()", startDate.formatString(), startDate.getStartOfDay());
+                        }
+                        else {
+                            sqlString += String.format("'%s %s' AND NOW()", startDate.formatString(), startDate.getTimeOfDay());
+                        }
                 ResultSet subtractionsResults = dbConnection.dbQuery(sqlString);
                 subtractionsResults.next();
                 numTimes = subtractionsResults.getInt(1);
@@ -159,26 +168,26 @@ public class orderViewFunctions {
 
 
                 //Calculating if it's < 10%
-                double percentUsed = totalAmountUsed / (totalAmountUsed + temp_ingred.getQuantityRemaining());
-                if(percentUsed < 0.1) {targetIngredient.add(temp_ingred);}
+                double percentUsed = totalAmountUsed / (totalAmountUsed + ingred.getValue().getQuantityRemaining());
+                if(percentUsed < 0.1) {
+                    excessReportItem temp_Item = new excessReportItem(ingred.getValue().getId(), ingred.getValue().getName(), ingred.getValue().getQuantityRemaining(), totalAmountUsed, totalAmountUsed + ingred.getValue().getQuantityRemaining());
+                    excessItems.add(temp_Item);
+                }
+
             }
 
-            //Get ingredients that have < 10%
+            /*//Get ingredients that have < 10%
             String idList = "(";
             int i = 0;
             for(ingredient temp : targetIngredient) {
-                if(i == targetIngredient.size()-1) {
-                    idList += String.format("%d", temp.getId());
-                }
-                idList += String.format("%d, ", temp.getId());
+                if(i == targetIngredient.size()-1) {idList += String.format("%d", temp.getId());}
+                else {idList += String.format("%d, ", temp.getId());}
                 i++;
             }
             idList += ")";
 
             sqlString = String.format("SELECT id AS \"Id\", name AS \"Name\", quantityremaining AS \"Quantity Remaining\" FROM ingredients WHERE id IN %s", idList);
-            finalResults = dbConnection.dbQuery(sqlString);
-
-
+            finalResults = dbConnection.dbQuery(sqlString);*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,7 +195,7 @@ public class orderViewFunctions {
             System.exit(0);
         } 
 
-        return finalResults;
+        return excessItems;
     }//End generateExcessReport
 
 }

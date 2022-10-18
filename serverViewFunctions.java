@@ -19,7 +19,6 @@ public class serverViewFunctions {
         try{
              dbFunctions dbConnection = new dbFunctions();
              dbConnection.createDbConnection();
-             // TODO see if sql has get first ten, then next ten, and page it
              String sqlStatement = "SELECT * FROM orderTickets LIMIT 10";
              ResultSet result = dbConnection.dbQuery(sqlStatement);
              

@@ -55,10 +55,12 @@ public class ManagerOrder extends ManagerViewScreen {
 
 
         back.addActionListener(e -> {
-           // new ManagerView();
-           // managerView.myFrame.dispose();
-           managerView.setHomeView();
+           new ManagerView(managerView.serverFunctions);
+           managerView.myFrame.dispose();
         });
+
+        // **********
+        // action listeners to generate data for if a certain preset time range button is pressed
         week.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {
                 this.currentlySelectedButton.setBackground(Color.white);
@@ -93,7 +95,6 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
-
         month.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {
                 this.currentlySelectedButton.setBackground(Color.white);
@@ -111,7 +112,6 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
-
         year.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {
                 this.currentlySelectedButton.setBackground(Color.white);
@@ -129,7 +129,6 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
-
         quarter.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {
                 this.currentlySelectedButton.setBackground(Color.white);
@@ -147,6 +146,8 @@ public class ManagerOrder extends ManagerViewScreen {
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
         });
+        // end of time generation action listeners
+        // *********
 
         generate.addActionListener(e -> {
             ordersTable.setModel(managerView.resultSetToTableModel(null,

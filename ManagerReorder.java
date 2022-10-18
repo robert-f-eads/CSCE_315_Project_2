@@ -15,10 +15,8 @@ public class ManagerReorder extends ManagerViewScreen {
         JButton back = managerView.createButton("Back", buttonWidth, buttonHeight);
         JButton export = managerView.createButton("Refresh", buttonWidth, buttonHeight);
 
-        JLabel reorder = managerView.createLabel("Inventory", buttonWidth, buttonHeight);
-
         back.addActionListener(e -> {
-            new ManagerView();
+            new ManagerView(managerView.serverFunctions);
             managerView.myFrame.dispose();
         });
         export.addActionListener(e -> {

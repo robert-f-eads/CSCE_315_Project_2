@@ -64,7 +64,7 @@ public class ManagerHome extends ManagerViewScreen {
         generateTrends.setMaximumSize(new Dimension(975,75));
 
 
-        JButton addProduct = new JButton("Generate Trends");
+        JButton addProduct = new JButton("Add Product");
         addProduct.setForeground(Color.black);
         addProduct.setFont(defaultButtons);
 		addProduct.setBackground(Color.white);
@@ -73,6 +73,7 @@ public class ManagerHome extends ManagerViewScreen {
         addProduct.setPreferredSize(new Dimension(975,75));
         addProduct.setMinimumSize(new Dimension(975,75));
         addProduct.setMaximumSize(new Dimension(975,75));
+
 
 
         managerView.mainPanel.setLayout(null);
@@ -90,6 +91,10 @@ public class ManagerHome extends ManagerViewScreen {
         generateTrends.addActionListener(e -> {
             managerView.setTrendView();
         });
+        addProduct.addActionListener(e -> {
+            managerView.setAddView();
+            System.out.println("add product");
+        });
 
 
         JPanel mainPanel = new JPanel();
@@ -102,6 +107,7 @@ public class ManagerHome extends ManagerViewScreen {
         mainPanel.add(inventoryStatus);
         mainPanel.add(reorderStatement);
         mainPanel.add(generateTrends);
+        mainPanel.add(addProduct);
 
 
 		//Logo panel will house Smoothie King logo in top left 

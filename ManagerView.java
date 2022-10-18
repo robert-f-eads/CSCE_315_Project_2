@@ -15,7 +15,8 @@ public class ManagerView {
     dbFunctions myDbConnection;
     int maxWidth = 1500;
     int maxHeight = 1080; 
-    public ManagerView() {
+    serverViewFunctions serverFunctions;
+    public ManagerView(serverViewFunctions serverFunctions) {
         myFrame = new JFrame();//creating instance of JFrame  
         myFrame.setSize(maxWidth, maxHeight);
         myFrame.setPreferredSize(new Dimension(maxWidth, maxHeight));
@@ -25,17 +26,11 @@ public class ManagerView {
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setBackground(Color.black);
 
+        this.serverFunctions = serverFunctions;
 
 
-       /*myRows = 5;
-        myCols = 5;
 
-        myPanels = new JPanel[myRows][myCols];
-        for(int i = 0; i < myRows; i++) {
-            for(int j = 0; j < myCols; j++) {
-                myPanels[i][j] = new JPanel();
-            }
-        }*/
+
 
         myDbConnection = new dbFunctions();
 
@@ -109,6 +104,14 @@ public class ManagerView {
     }
 
 
+    public void setAddView() {
+        this.clearView();
+        // setBorderLayout();
+        (new ManagerAdd(this)).setAddView();
+        myFrame.revalidate();
+        myFrame.repaint();
+    }
+
     public void setTrendView() {
         this.clearView();
         setBorderLayout();
@@ -146,15 +149,6 @@ public class ManagerView {
         //this.setGridBoxLayout();
         // this.setGridLayout();
         (new ManagerHome(this)).setHomeView();
-        myFrame.revalidate();
-        myFrame.repaint();
-    }
-
-    public void setAddProductView() {
-        this.clearView();
-        //this.setGridBoxLayout();
-        // this.setGridLayout();
-        //(new ManagerHome(this)).setAddProductView();
         myFrame.revalidate();
         myFrame.repaint();
     }

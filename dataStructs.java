@@ -1,6 +1,10 @@
 import java.util.*;
 import java.text.SimpleDateFormat;
 
+
+/**
+ * @author Robert Eads
+ */
 class orderTicketInfo {  
     private
         int id;
@@ -13,6 +17,9 @@ class orderTicketInfo {
 
 
     //Constructors
+    /**
+     * Default constructor gives example values to all private fields
+     */
     public orderTicketInfo() {
         id = -1;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
@@ -25,6 +32,15 @@ class orderTicketInfo {
         items = new Vector<orderItem>();
     }
 
+    /**
+     * 
+     * @param id the orderId
+     * @param timestamp the time the order was made
+     * @param customerFirstName customer's first name
+     * @param rewardsMemberId the associated reward id for the customer
+     * @param employeeId the id of the employee who took the order
+     * @param orderPriceTotal the total price of the order
+     */
     public orderTicketInfo(int id, String timestamp, String customerFirstName, int rewardsMemberId, int employeeId, double orderPriceTotal) {
         this.id = id;
         this.timestamp = timestamp;
@@ -38,34 +54,105 @@ class orderTicketInfo {
 
     public
         //Getters
+        /**
+         * Gets the id of the order ticket
+         * @return the id of the order ticket
+         */
         int getId() {return id;}
+        /**
+         * Gets the time the order was made
+         * @return the time the order was made
+         */
         String getTimestamp() {return timestamp;}
+        /**
+         * Gets the first name of the customer who made the order
+         * @return the first name of the customer who made the order
+         */
         String getCustomerFirstName() {return customerFirstName;}
+        /**
+         * Gets the rewards member id associated with the customer
+         * @return the rewards member id associated with the customer
+         */
         int getRewardsMemberId() {return rewardsMemberId;}
+        /**
+         * Gets the id of the employee who took the order
+         * @return the id of the employee who took the order
+         */
         int getEmployeeId() {return employeeId;}
+        /**
+         * Gets the total price of the order
+         * @return the total price of the order
+         */
         double getOrderPriceTotal() {return orderPriceTotal;}
+        /**
+         * Gets the date extracted from the timestamp field
+         * @return the date extracted from the timestamp field
+         */
         String getDate() {return timestamp.substring(0,10);}
+        /**
+         * Gets the time extracted from the timestamp field
+         * @return the time extracted from the timestamp field
+         */
         String getTime() {return timestamp.substring(11);}
+        /**
+         * Gets a vector of orderItem objects which are in the current order ticket
+         * @return a vector of orderItem objects which are in the current order ticket
+         */
         Vector<orderItem> getOrderItems() {return items;}
 
         //Setters
+        /**
+         * Sets orderId for the ticket
+         * @param id orderId for the ticket
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the time which the ticket order was placed
+         * @param timestamp the time which the ticket order was placed
+         */
         void settimestamp(String timestamp) {this.timestamp = timestamp;}
+        /**
+         * Sets the first name of the customer who made the order
+         * @param customerFirstName the first name of the customer who made the order
+         */
         void setCustomerFirstName(String customerFirstName) {this.customerFirstName = customerFirstName;}
+        /**
+         * Sets the rewards member id associated with the customer
+         * @param rewardsMemberId the rewards member id associated with the customer
+         */
         void setRewardsMemberId(int rewardsMemberId) {this.rewardsMemberId = rewardsMemberId;}
+        /**
+         * Sets the employee id of the employee who took the order
+         * @param employeeId the employee id of the employee who took the order
+         */
         void setEmployeeId(int employeeId) {this.employeeId = employeeId;}
+        /**
+         * Sets the total price of the order ticket
+         * @param orderPriceTotal the total price of the order ticket
+         */
         void setOrderPriceTotal(double orderPriceTotal) {this.orderPriceTotal = orderPriceTotal;}
+        /**
+         * Adds an item to the order ticket vector
+         * @param item item to add to the order ticket
+         */
         void addItemToOrder(orderItem item) {items.add(item);}
+        /**
+         * Removes an item from the order ticket vector
+         * @param item item to remove from the order ticket
+         */
         void removeItemFromOrder(orderItem item) {items.remove(item);}
 
 
+    /**
+     * Prints out an order ticket in a human readable format
+     */
     @Override
     public String toString() {
         String print = String.format("Id: %d\ntimestamp: %s\nCustomer First Name: %s\nRewards Member Id: %d\nEmployee Id: %d\nOrder Price Total: %.2f",
             id, timestamp, customerFirstName, rewardsMemberId, employeeId, orderPriceTotal);
         return print;
     }
-}//End orderTicketInfo   
+}//End orderTicketInfo 
 
 class orderItem {
     private
@@ -417,6 +504,9 @@ class product {
     }
 }//End product
 
+/**
+ * @author Robert Eads
+ */
 class dateStruct {
     String month;
     String day;
@@ -424,7 +514,11 @@ class dateStruct {
     String hours;
     String minutes;
     String seconds;
-
+    
+    /**
+     * Constructor for dateStruct that stores the date input from users
+     * @param date a string of the data in the format of yyyy-mm-dd
+     */
     public dateStruct(String date) {
         String[] parts = date.split("-");
         this.year = parts[0];
@@ -432,12 +526,34 @@ class dateStruct {
         this.day = parts[2];
     }
 
+    /**
+     * A function to format the stored date into database formatting
+     * @return The stored date in proper format for the database
+     */
     public String formatString() {return String.format("%s-%s-%s", year, month, day);}
+
+    /**
+     * A function to format the end time of the day in database format
+     * @return The end time of the day in database format
+     */
     public String getEndOfDay() {return "23:59:59";}
+
+    /**
+     * A function to format the start time of the day in database format
+     * @return The start time of the day in database format
+     */
     public String getStartOfDay() {return "00:00:00";}
+
+    /**
+     * A function to format the stored time into database formatting
+     * @return The stored time in proper format for the database
+     */
     public String getTimeOfDay() {return String.format("%s:%s:%s", hours, minutes, seconds);}
 }
 
+/**
+ * @author Robert Eads
+ */
 class salesReportItem {
     public
         int productId;
@@ -445,11 +561,45 @@ class salesReportItem {
         int quantitySold;
         double totalSales;
 
+    /**
+     * Constructor for salesReportItem that contains product information
+     * @param id id of the product
+     * @param name name of the product
+     * @param quantity amount of the product sold
+     * @param sales monetary total of sales for this product 
+     */
     public salesReportItem(int id, String name, int quantity, double sales) {
         productId = id;
         productName = name;
         quantitySold = quantity;
         totalSales = sales;
 
+    }
+}
+
+/**
+ * @author Robert Eads
+ */
+class excessReportItem {
+    int ingredientId;
+    String ingredientName;
+    double quantityRemaining;
+    double quantityUsed;
+    double quantityAtStart;
+
+    /**
+     * Constructor for excessReportItem that contains ingredient information
+     * @param id id of the ingredient
+     * @param name name of the ingredient
+     * @param remaining remaining amount of inventory for the ingredient
+     * @param used used amount of inventory for the ingredient
+     * @param atStart inital amount of inventory for the ingredient
+     */
+    public excessReportItem(int id, String name, double remaining, double used, double atStart) {
+        ingredientId = id;
+        ingredientName = name;
+        quantityRemaining = remaining;
+        quantityUsed = used;
+        quantityAtStart = atStart;
     }
 }

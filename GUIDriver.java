@@ -725,7 +725,7 @@ public class GUIDriver {
 			managerViewButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed),  BorderFactory.createEmptyBorder(15, 8, 15, 10)));
 			managerViewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 			managerViewButton.addActionListener(e -> {
-				new ManagerView();
+				new ManagerView(serverFunctions);
 				frame.dispose();
 			});
 			rightPanel.add(managerViewButton);

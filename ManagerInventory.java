@@ -2,6 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
+/**
+ * @author Emma Ong
+ * @author Shreyes Kaliyur
+ * @author Alexia Hassan
+ */
+
 public class ManagerInventory extends ManagerViewScreen {
     boolean toggleInventory = true;
 
@@ -40,7 +46,7 @@ public class ManagerInventory extends ManagerViewScreen {
 
 
         HintTextField searchText = (HintTextField) formatTextArea(new HintTextField("Search", buttonWidth, buttonHeight));
-        HintTextField id = (HintTextField) formatTextArea(new HintTextField("ID", 60, buttonHeight));
+        HintTextField id = (HintTextField) formatTextArea(new HintTextField("Id", 60, buttonHeight));
 
 
         HintTextField[] attributeFields = new HintTextField[8];
@@ -53,6 +59,9 @@ public class ManagerInventory extends ManagerViewScreen {
         HintTextField last = (HintTextField) formatTextArea(new HintTextField("Last", 150, generalHeight));
         HintTextField units = (HintTextField) formatTextArea(new HintTextField("Units", 90, generalHeight));
 
+        // we store attribute fields like this so it is easy to fill them using the table 
+        // this lets the user not have to manually enter unimportant fields when updating items
+        // in the table
         attributeFields[0] = name;
         attributeFields[1] = expiration;
         attributeFields[2] = quantity;
@@ -68,11 +77,11 @@ public class ManagerInventory extends ManagerViewScreen {
 
         JTable inventoryTable = new JTable();
         JTable productTable = new JTable();
-        managerView.updateTable(inventoryTable, "ingredients", -1);
-        managerView.updateTable(productTable, "products", -1);
+        updateIngredientsTable(inventoryTable);
+        updateProductsTable(productTable);
 
         back.addActionListener(e -> {
-            new ManagerView();
+            new ManagerView(managerView.serverFunctions);
             managerView.myFrame.dispose();
         });
 
@@ -110,8 +119,8 @@ public class ManagerInventory extends ManagerViewScreen {
                 attributeField.resetText();
             }
             managerView.myDbConnection.dbUpsert(sql);
-            managerView.updateTable(productTable, "products", -1);
-            managerView.updateTable(inventoryTable, "ingredients", -1);
+            updateProductsTable(productTable);
+            updateIngredientsTable(inventoryTable);
         });
 
 
@@ -126,8 +135,8 @@ public class ManagerInventory extends ManagerViewScreen {
                     price.getText() + ", '" + last.getText() + "', " + units.getText() + ")";
             }
             managerView.myDbConnection.dbUpsert(sql);
-            managerView.updateTable(productTable, "products", -1);
-            managerView.updateTable(inventoryTable, "ingredients", -1);
+            updateProductsTable(productTable);
+            updateIngredientsTable(inventoryTable);
         });
 
 
@@ -140,8 +149,8 @@ public class ManagerInventory extends ManagerViewScreen {
                 sql = "DELETE FROM ingredients WHERE id=" + id.getText();
             }
             managerView.myDbConnection.dbUpsert(sql);
-            managerView.updateTable(productTable, "products", -1);
-            managerView.updateTable(inventoryTable, "ingredients", -1);
+            updateProductsTable(productTable);
+            updateIngredientsTable(inventoryTable);
         });
 
         JPanel title = new JPanel();
@@ -273,16 +282,24 @@ public class ManagerInventory extends ManagerViewScreen {
         return b;
     }
 
-    // void updateInventoryTable(JTable table, String tableName, int limit) {
-    //     ResultSet row;
-    //     if(limit == -1) {
-    //         row = managerView.myDbConnection.dbQuery("SELECT * FROM " + tableName);
-    //     } else {
-    //         row = managerView.myDbConnection.dbQuery("SELECT * FROM " + tableName + " LIMIT " + limit);
-    //     }
-    //     table.setModel(managerView.resultSetToTableModel(null, row));
-    // }
 
+    /**
+     * A function to update the ingredients table
+     * @param table the JTable to update
+     */
+    void updateIngredientsTable(JTable table) {
+        ResultSet row;
+        row = managerView.myDbConnection.dbQuery("SELECT id AS \"Ingredient Id\", name AS \"Name\", expirationdate AS \"Expiration Date\", quantitytarget AS \"Target Quantity\", quantityremaining AS \"Quantity Remaining\", measurementunits AS \"Measurement Units\", priceperunitlastorder AS \"Last Order's Price Per Unit\", lastorderdate AS \"Last Order Date\", unitsinlastorder AS \"Units In Last Order\" FROM ingredients");
+        table.setModel(managerView.resultSetToTableModel(null, row));
+    }
 
-    
+    /**
+     * A function to update the products table
+     * @param table the JTable to update
+     */
+    void updateProductsTable(JTable table) {
+        ResultSet row;
+        row = managerView.myDbConnection.dbQuery("SELECT id AS \"Product Id\", name AS \"Name\", price AS \"Price\" FROM products");
+        table.setModel(managerView.resultSetToTableModel(null, row));
+    }
 }

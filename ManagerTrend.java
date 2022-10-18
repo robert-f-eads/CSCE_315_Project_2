@@ -1,9 +1,12 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Vector;
 
 public class ManagerTrend extends ManagerViewScreen {
     private orderViewFunctions ovf;
@@ -65,7 +68,7 @@ public class ManagerTrend extends ManagerViewScreen {
 
 
         back.addActionListener(e -> {
-            new ManagerView();
+            new ManagerView(managerView.serverFunctions);
             managerView.myFrame.dispose();
         });
         week.addActionListener(e -> {
@@ -198,24 +201,52 @@ public class ManagerTrend extends ManagerViewScreen {
 
         
         generateSales.addActionListener(e -> {
-            // sales.setModel(managerView.resultSetToTableModel(null, 
-            //     ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), 
-            //         new dateStruct(endDate.getText()), true)));
-
-
-            // managerView.borderPanel.removeAll();
-            // managerView.borderPanel.add(flow);
-            // managerView.borderPanel.add(new JScrollPane(sales));
-            // managerView.myFrame.revalidate();
-            // managerView.myFrame.repaint();
+            Vector<salesReportItem> salesReportItems = ovf.generateSalesReportBetweenDates(new dateStruct(startDate.getText()), new dateStruct(endDate.getText()), true);
+            DefaultTableModel model = new DefaultTableModel();
+            int numCols = 4;
+            String cols[] = new String[numCols];
+            cols[0] = "Id";
+            cols[1] = "Name";
+            cols[2] = "Quantity Sold";
+            cols[3] = "Total Sales ($)";
+            model.setColumnIdentifiers(cols);
+            for(salesReportItem sri : salesReportItems) {
+                Object[] data = new Object[numCols];
+                data[0] = sri.productId;
+                data[1] = sri.productName;
+                data[2] = sri.quantitySold;
+                data[3] = sri.totalSales;
+                model.addRow(data);
+            }
+            sales.setModel(model);
+            managerView.borderPanel.removeAll();
+            managerView.borderPanel.add(flow);
+            managerView.borderPanel.add(new JScrollPane(sales));
+            managerView.myFrame.revalidate();
+            managerView.myFrame.repaint();
         });
 
         generateExcess.addActionListener(e -> {
-            excess.setModel(managerView.resultSetToTableModel(null, 
-                ovf.generateExcessReport(// new dateStruct(startDate.getText()), 
-                    new dateStruct(endDate.getText()), true)));
-
-                    
+            Vector<excessReportItem> excessReportItems = ovf.generateExcessReport(new dateStruct(startDate.getText()), true);
+            DefaultTableModel model = new DefaultTableModel();
+            int numCols = 5;
+            String cols[] = new String[numCols];
+            cols[0] = "Id";
+            cols[1] = "Name";
+            cols[2] = "Quantity Remaining";
+            cols[3] = "Quantity Used";
+            cols[4] = "Quantity at Start";
+            model.setColumnIdentifiers(cols);
+            for(excessReportItem eri : excessReportItems) {
+                Object[] data = new Object[numCols];
+                data[0] = eri.ingredientId;
+                data[1] = eri.ingredientName;
+                data[2] = eri.quantityRemaining;
+                data[3] = eri.quantityUsed;
+                data[4] = eri.quantityAtStart;
+                model.addRow(data);
+            }
+            excess.setModel(model);
 
             managerView.borderPanel.removeAll();
             managerView.borderPanel.add(flow);
