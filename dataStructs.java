@@ -662,6 +662,9 @@ class ingredient {
     }
 }//End ingredient
 
+/**
+ * @author Emma Ong
+ */
 class material {
     private
         int id;
@@ -676,6 +679,9 @@ class material {
 
 
     //Constructors
+    /**
+     * Default constructor for the material class
+     */
     public material() {
         id = -1;
         name = "";
@@ -688,6 +694,18 @@ class material {
         unitsInLastOrder = -1;
     }
 
+    /**
+     * Parametrized constructor for a material
+     * @param id the id of the material
+     * @param name the name of the material
+     * @param size the size of the material
+     * @param quantityRemaining the amount of the material remaining
+     * @param measurementUnits the units we measure the material in
+     * @param itemsPerUnit the number of items per unit for our material
+     * @param pricePerUnitLastOrder the price per unit we paid in our last order
+     * @param lastOrderDate the last time we ordered this material
+     * @param unitsInLastOrder the amount of units in our last order
+     */
     public material(int id, String name, String size, int quantityRemaining, String measurementUnits, int itemsPerUnit, 
         double pricePerUnitLastOrder, String lastOrderDate, double unitsInLastOrder) {
         this.id = id;
@@ -704,28 +722,104 @@ class material {
 
     public
         //Getters
+        /**
+         * Gets the id of the material
+         * @return the id of the material
+         */
         int getId() {return id;}
+        /**
+         * Gets the name of the material
+         * @return the name of the material
+         */
         String getName() {return name;}
+        /**
+         * Gets the size of the material
+         * @return the size of the material
+         */
         String getSize() {return size;}
+        /**
+         * Gets the amount of the material we have remaining
+         * @return the amount of the material we have remaining
+         */
         int getQuantityRemaining() {return quantityRemaining;}
+        /**
+         * Gets the units we use to measure the material
+         * @return the units we use to measure the material
+         */
         String getMeasurementUnits() {return measurementUnits;}
+        /**
+         * Gets the items per unit for our material
+         * @return the items per unit for our material
+         */
         int getItemsPerUnit() {return itemsPerUnit;}
+        /**
+         * Gets the price we paid per unit in out last order
+         * @return the price we paid per unit in out last order
+         */
         double getPricePerUnitLastOrder() {return pricePerUnitLastOrder;}
+        /**
+         * Gets the last time we ordered this material
+         * @return the last time we ordered this material
+         */
         String getLastOrderDate() {return lastOrderDate;}
+        /**
+         * Gets the number of units in our last order
+         * @return the number of units in our last order
+         */
         double getUnitsInLastOrder() {return unitsInLastOrder;}
 
         //Setters
+        /**
+         * Sets the id of the material
+         * @param id the id of the material
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the name of the material
+         * @param name the name of the material
+         */
         void setName(String name) {this.name = name;}
+        /**
+         * Sets the size of the material
+         * @param size the size of the material
+         */
         void setSize(String size) {this.size = size;}
+        /**
+         * Sets the amount of the material we have remaining
+         * @param quantityRemaining the amount of the material we have remaining
+         */
         void setQuantityRemaining(int quantityRemaining) {this.quantityRemaining = quantityRemaining;}
+        /**
+         * Sets the units we will measure our material in
+         * @param measurementUnits the units we will measure our material in
+         */
         void setMeasurementUnits(String measurementUnits) {this.measurementUnits = measurementUnits;}
+        /**
+         * Sets the items per unit for our material
+         * @param itemsPerUnit the items per unit for our material
+         */
         void setItemsPerUnit(int itemsPerUnit) {this.itemsPerUnit = itemsPerUnit;}
+        /**
+         * Sets the price per unit we paid in our last order
+         * @param pricePerUnitLastOrder the price per unit we paid in our last order
+         */
         void setPricePerUnitLastOrder(double pricePerUnitLastOrder) {this.pricePerUnitLastOrder = pricePerUnitLastOrder;}
+        /**
+         * Sets the last date we ordered this material
+         * @param lastOrderDate the last date we ordered this material
+         */
         void setLastOrderDate(String lastOrderDate) {this.lastOrderDate = lastOrderDate;}
+        /**
+         * Sets the number of units in our last order
+         * @param unitsInLastOrder the number of units in our last order
+         */
         void setUnitsInLastOrder(double unitsInLastOrder) {this.unitsInLastOrder = unitsInLastOrder;}
 
 
+    /**
+     * Convert material to a string representation
+     * @return a string representation of the material
+     */
     @Override
     public String toString() {
         String print = String.format("Id: %d\nMaterial Name: %s\nMaterial Size: %s\nQuantity Remaining: %d\nMeasurement Units: %s\nItems Per Unit: %d\nPrice Per Unit Last Order: %.2f\nLast Order Date: %s\nUnits in Last Order: %.2f",
@@ -734,6 +828,9 @@ class material {
     }
 }//End material
 
+/**
+ * @author Alexia Hassan
+ */
 class product {
     private
         int id;
@@ -742,6 +839,9 @@ class product {
         Vector<ingredient> ingredients;
 
     // Constructors
+    /**
+     * Default constructor for product, field values indicate they should be altered
+     */
     public product() {
         id = -1;
         name = "";
@@ -749,6 +849,12 @@ class product {
         ingredients = new Vector<ingredient>();
     }
 
+    /**
+     * Parametrized constructor for product
+     * @param id the id of the product
+     * @param name the name of the product
+     * @param price the price of the product
+     */
     public product(int id, String name, double price) {
         this.id = id;
         this.name = name;
@@ -759,20 +865,64 @@ class product {
 
     public
         //Getters
+        /**
+         * Gets the id of the prodcut
+         * @return the id of the prodcut
+         */
         int getId() {return id;}
+        /**
+         * Gets the name of the product
+         * @return the name of the product
+         */
         String getName() {return name;}
+        /**
+         * Gets the price of the product
+         * @return the price of the product
+         */
         double getPrice() {return price;}
+        /**
+         * Gets the ingredients that make up this product
+         * @return the ingredients that make up this product
+         */
         Vector<ingredient> ingredients() {return ingredients;}
 
         //Setters
+        /**
+         * Sets the id of the product
+         * @param id the id of the product
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the name of the product
+         * @param name the name of the product
+         */
         void setName(String name) {this.name = name;}
+        /**
+         * Sets the price of the product
+         * @param price the price of the product
+         */
         void setPrice(double price) {this.price = price;}
+        /**
+         * Adds an ingredient to this productSets the ingredient to be added to the product
+         * @param ingredientAdded the ingredient to be added to the product
+         */
         void addIngredient(ingredient ingredientAdded) {ingredients.add(ingredientAdded);}
+        /**
+         * Removes an ingredient from this product
+         * @param ingredientRemoved the ingredient to be removed from the product
+         */
         void removeIngredient(ingredient ingredientRemoved) {ingredients.remove(ingredientRemoved);}
+        /**
+         * Sets the ingredients of this product to a passed in vector
+         * @param ingredients a vector of ingredients to use to set the ingredients for this prodcut
+         */
         void setIngredients(Vector<ingredient> ingredients) {this.ingredients = ingredients;}
 
 
+    /**
+     * Convert product to a string representation
+     * @return a human readable string representation of the product
+     */
     @Override
     public String toString() {
         String print = String.format("Id: %d\nName: %s\nPrice: %.2f",

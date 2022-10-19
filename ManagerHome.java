@@ -10,15 +10,25 @@ import java.sql.*;
 import  java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ * @author Shreyes Kaliyur, Alexia Hassan, Emma Ong
+ */
 public class ManagerHome extends ManagerViewScreen {
+    /**
+     * ManagerHome constructor, calls superclass ManagerView
+     * @param managerView the managerView parent object associated with this child object
+     */
     public ManagerHome(ManagerView managerView) {super(managerView);}
+
 
 	static Border line = new LineBorder(Color.black);
     static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 28); //font used in text box
     static Color darkRed = new Color(165,58,59);
     int maxHeight = 1000;
 
-
+    /**
+     * Creates and displays all components neccessary for manager home view, including buttons to logout, and to go to every other manager view
+     */
     public void setHomeView() {
         JButton orderHistory = new JButton("Order History");
         orderHistory.setForeground(Color.black);

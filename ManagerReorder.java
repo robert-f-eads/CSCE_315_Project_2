@@ -1,14 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Shreyes Kaliyur
+ */
 public class ManagerReorder extends ManagerViewScreen {
     private orderViewFunctions ovf;
 
+    /**
+     * ManagerReorder constructor, calls super for ManagerView
+     * @param managerView the ManagerView parent object associated with this ManagerReorder child object
+     */
     public ManagerReorder(ManagerView managerView) {
         super(managerView);
         ovf = new orderViewFunctions(managerView.serverFunctions);
     }
     
+    /**
+     * Creates and displays all components required of creating a reorder report, including back and refresh buttons, a table, and an export button
+     */
     public void setReorderView() {
         int buttonWidth = 150;
         int buttonHeight = 150;
