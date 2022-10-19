@@ -83,7 +83,7 @@ public class ManagerOrder extends ManagerViewScreen {
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime weekAgo = now.minus(1, ChronoUnit.WEEKS);
             startDate.setText(dtf.format(weekAgo));
-            endDate.setText(dtf.format(now));
+            endDate.setText(dtf.format(now.plus(1, ChronoUnit.DAYS)));
 
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
@@ -100,7 +100,7 @@ public class ManagerOrder extends ManagerViewScreen {
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime week2Ago = now.minus(2, ChronoUnit.WEEKS);
             startDate.setText(dtf.format(week2Ago));
-            endDate.setText(dtf.format(now));
+            endDate.setText(dtf.format(now.plus(1, ChronoUnit.DAYS)));
 
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
@@ -117,7 +117,7 @@ public class ManagerOrder extends ManagerViewScreen {
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime monthAgo = now.minus(1, ChronoUnit.MONTHS);
             startDate.setText(dtf.format(monthAgo));
-            endDate.setText(dtf.format(now));
+            endDate.setText(dtf.format(now.plus(1, ChronoUnit.DAYS)));
 
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
@@ -134,7 +134,7 @@ public class ManagerOrder extends ManagerViewScreen {
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime yearAgo = now.minus(1, ChronoUnit.YEARS);
             startDate.setText(dtf.format(yearAgo));
-            endDate.setText(dtf.format(now));
+            endDate.setText(dtf.format(now.plus(1, ChronoUnit.DAYS)));
 
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
@@ -151,7 +151,7 @@ public class ManagerOrder extends ManagerViewScreen {
             LocalDateTime now = LocalDateTime.now();  
             LocalDateTime quarterAgo = now.minus(3, ChronoUnit.MONTHS);
             startDate.setText(dtf.format(quarterAgo));
-            endDate.setText(dtf.format(now));
+            endDate.setText(dtf.format(now.plus(1, ChronoUnit.DAYS)));
 
             startDate.setForeground(Color.black);
             endDate.setForeground(Color.black);
