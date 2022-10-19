@@ -11,7 +11,7 @@ public class orderViewFunctions {
     dbFunctions dbConnection;
 
     /**
-     * 
+     * Get the order tickets from the database
      * @return order tickets as received from dbFunctions
      */
     public Vector<orderTicketInfo> getOrders() {
@@ -21,7 +21,7 @@ public class orderViewFunctions {
 			String sqlStatement = "SELECT * FROM orderTickets";
 			ResultSet results = dbConnection.dbQuery(sqlStatement);
 			while(results.next()) {
-				orderTicketInfo oti = serverFunctions.getOrderTicket(results.getInt("id")); // serverFunctions.getIngredient(results.getInt("id")); 
+				orderTicketInfo oti = serverFunctions.getOrderTicket(results.getInt("id"));
                 orderTickets.add(oti);
 			}
 		} catch (Exception e) {
@@ -32,12 +32,23 @@ public class orderViewFunctions {
         return orderTickets;
     }
 
+    /**
+     * Parametrized constructor
+     * @param serverFunctions the server functions passed from the creater
+     */
     public orderViewFunctions(serverViewFunctions serverFunctions) {
         this.serverFunctions = serverFunctions;
         dbConnection = new dbFunctions();
         dbConnection.createDbConnection();
     }
 
+    /**
+     * Generate the sales report information between two dates
+     * @param startDate the start date for the sales report
+     * @param endDate the end date for the sales report
+     * @param useDefaultTime whether the time should include up to minutes accuracy or not
+     * @return a vector of the sales report items which are between the two dates
+     */
     public Vector<salesReportItem> generateSalesReportBetweenDates(dateStruct startDate, dateStruct endDate, boolean useDefaultTime) {
         Vector<salesReportItem> salesItems = new Vector<salesReportItem>();
         try{ 
@@ -69,6 +80,10 @@ public class orderViewFunctions {
         return salesItems;
     }//End generateSalesReportBetweenDate
 
+    /**
+     * Generates a report for what items need to be bought
+     * @return a result set of the items, their desired quantity, current quantity, and helper information
+     */
     public ResultSet generateRestockReport() {
         ResultSet results = null;
         try{ 
@@ -84,6 +99,10 @@ public class orderViewFunctions {
         return results;
     }//End generateRestockReport
 
+    /**
+     * Adds a seasonal item to our menu
+     * @param newProduct the product to be added to the menu
+     */
     public void addSeasonalItem(product newProduct) {
         try{ 
             dbConnection.createDbConnection();
@@ -111,6 +130,12 @@ public class orderViewFunctions {
         } 
     }//End addSeasonalItem
 
+    /**
+     * Generates a report on the excess inventory we are storing (Ingredients which aren't selling a lot)
+     * @param startDate the start date for the excess report
+     * @param useDefaultTime whether the time should be specific down to the minute
+     * @return a vector of the items in our excess report
+     */
     public Vector<excessReportItem> generateExcessReport(dateStruct startDate, boolean useDefaultTime) {
         Vector<excessReportItem> excessItems = new Vector<excessReportItem>(); 
         try{ 
