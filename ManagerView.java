@@ -239,7 +239,7 @@ public class ManagerView {
 
     public void increaseFont(JTable table) {
         Font oldFont = table.getFont();
-        float size = oldFont.getSize() + 5;
+        float size = oldFont.getSize() + 3;
         table.setFont(oldFont.deriveFont(size));
     }
 }
