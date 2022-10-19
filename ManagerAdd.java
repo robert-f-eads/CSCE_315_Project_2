@@ -3,7 +3,9 @@ import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
 
-
+/**
+ * @author Alexia Hassan
+ */
 public class ManagerAdd extends ManagerViewScreen {
 	dbFunctions dbConnection = new dbFunctions();
 	orderViewFunctions orderFunctions;
@@ -23,12 +25,19 @@ public class ManagerAdd extends ManagerViewScreen {
 
 	Vector<AdditionButtonManager> additionButtons = new Vector<AdditionButtonManager>();
 
-
+	/**
+	 * Default construct for the add products screen in the manager view
+	 * @param managerView the manager view container
+	 */
     public ManagerAdd(ManagerView managerView) {
 		super(managerView);
 		orderFunctions = new orderViewFunctions(managerView.serverFunctions);
 	}
 
+	/**
+	 * Sets the view of the manager to be the add product view. This includes text fields to set the product
+	 * name and price, as well as a search bar to add ingredients our store provides to the product by default
+	 */
     public void setAddView() {
         int generalHeight = 42;
         
@@ -60,7 +69,6 @@ public class ManagerAdd extends ManagerViewScreen {
             managerView.myFrame.dispose();
         });
 
-    /////////////////////////////////////////// STAND BY SHITS FUCKED//////////////////////////////////
 		JPanel title = new JPanel();
 		title.setLayout(new BoxLayout(title, BoxLayout.LINE_AXIS));
 
@@ -155,6 +163,11 @@ public class ManagerAdd extends ManagerViewScreen {
         managerView.mainPanel.repaint();
     }
 
+	/**
+	 * Formats a text field for consistent styling
+	 * @param b a text field which needs to be styled
+	 * @return the styled JTextField
+	 */
     JTextField formatTextArea(JTextField b) {
         b.setFont(new Font("SansSerif", Font.PLAIN, 15));
         b.setBackground(Color.white);
@@ -163,6 +176,11 @@ public class ManagerAdd extends ManagerViewScreen {
         return b;
     }
 
+	/**
+	 * Formats a button for consistent styling
+	 * @param button a button which needs to be styled
+	 * @return the styled JButton
+	 */
     public JButton formatButtons(JButton button) {
 		button.setForeground(darkRed);
 		button.setBackground(Color.white);
@@ -175,6 +193,11 @@ public class ManagerAdd extends ManagerViewScreen {
     }
 
 
+	/**
+	 * Finds and displays ingredients which are close to what was searched
+	 * @param searchBarText the text which was searched
+	 * @param searchPanel the panel which displays the found ingredients
+	 */
 	public void updateAdditions(String searchBarText, JPanel searchPanel) {
 		searchResultPanel.removeAll();
 		searchResultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -226,6 +249,9 @@ public class ManagerAdd extends ManagerViewScreen {
 		managerView.mainPanel.repaint();
 	}
 
+	/**
+	 * Updates the additions which are displayed to match whenver a button is selected
+	 */
 	public void redrawButtonAdditions() {
 		additionButtonPanel.removeAll();
 		for (int k = 0; k < ingredients.size();  k++) {
@@ -251,6 +277,9 @@ public class ManagerAdd extends ManagerViewScreen {
 
 }
 	
+/**
+ * @author Alexia Hassan
+ */
 class AdditionButtonManager {
 	public JButton mainButton;
 	public boolean selected;
@@ -262,6 +291,11 @@ class AdditionButtonManager {
 	static Color blueHighlight = new Color(184, 204, 220);
 
 
+	/**
+	 * Parametrized constructor for a button manager
+	 * @param name the text of the button 
+	 * @param ingredientTemp the ingredient which the button represents
+	 */
 	public AdditionButtonManager(String name, ingredient ingredientTemp) {
 		selected = false;
 		this.name = name;
