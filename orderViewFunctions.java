@@ -190,7 +190,7 @@ public class orderViewFunctions {
                 //Calculating if it's < 10%
                 double percentUsed = totalAmountUsed / (totalAmountUsed + ingred.getValue().getQuantityRemaining());
                 if(percentUsed < 0.1) {
-                    excessReportItem temp_Item = new excessReportItem(ingred.getValue().getId(), ingred.getValue().getName(), ingred.getValue().getQuantityRemaining(), totalAmountUsed, totalAmountUsed + ingred.getValue().getQuantityRemaining());
+                    excessReportItem temp_Item = new excessReportItem(ingred.getValue().getId(), ingred.getValue().getName(), ingred.getValue().getQuantityRemaining(), totalAmountUsed, totalAmountUsed + ingred.getValue().getQuantityRemaining(), String.format("%.0f", percentUsed*100));
                     excessItems.add(temp_Item);
                 }
             }

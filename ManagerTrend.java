@@ -238,13 +238,14 @@ public class ManagerTrend extends ManagerViewScreen {
         generateExcess.addActionListener(e -> {
             Vector<excessReportItem> excessReportItems = ovf.generateExcessReport(new dateStruct(startDate.getText()), true);
             DefaultTableModel model = new DefaultTableModel();
-            int numCols = 5;
+            int numCols = 6;
             String cols[] = new String[numCols];
             cols[0] = "Id";
             cols[1] = "Name";
             cols[2] = "Quantity Remaining";
             cols[3] = "Quantity Used";
             cols[4] = "Quantity at Start";
+            cols[5] = "Percentage Used";
             model.setColumnIdentifiers(cols);
             for(excessReportItem eri : excessReportItems) {
                 Object[] data = new Object[numCols];
@@ -253,6 +254,7 @@ public class ManagerTrend extends ManagerViewScreen {
                 data[2] = eri.quantityRemaining;
                 data[3] = eri.quantityUsed;
                 data[4] = eri.quantityAtStart;
+                data[5] = eri.percentage;
                 model.addRow(data);
             }
             excess.setModel(model);

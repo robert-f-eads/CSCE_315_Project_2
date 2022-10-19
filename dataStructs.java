@@ -1013,6 +1013,7 @@ class excessReportItem {
     double quantityRemaining;
     double quantityUsed;
     double quantityAtStart;
+    String percentage;
 
     /**
      * Constructor for excessReportItem that contains ingredient information
@@ -1021,12 +1022,14 @@ class excessReportItem {
      * @param remaining remaining amount of inventory for the ingredient
      * @param used used amount of inventory for the ingredient
      * @param atStart inital amount of inventory for the ingredient
+     * @param percent the percentage used
      */
-    public excessReportItem(int id, String name, double remaining, double used, double atStart) {
+    public excessReportItem(int id, String name, double remaining, double used, double atStart, String percent) {
         ingredientId = id;
         ingredientName = name;
         quantityRemaining = remaining;
         quantityUsed = used;
         quantityAtStart = atStart;
+        percentage = percent;
     }
 }
