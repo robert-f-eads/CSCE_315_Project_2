@@ -67,7 +67,7 @@ public class orderViewFunctions {
         try{ 
             dbConnection.createDbConnection();
             String sqlString = "SELECT id AS \"Id\", name AS \"Name\", quantityremaining AS \"Quantity Remaining\", quantitytarget AS \"Target Quantity\",";
-            sqlString += "(quantitytarget - quantityremaining) AS \"Amount Under Target\", measurementunits AS \"Units\" FROM ingredients WHERE quantityremaining < quantitytarget"; 
+            sqlString += "(quantitytarget - quantityremaining) AS \"Amount Under Target\", measurementunits AS \"Units\" FROM ingredients WHERE quantityremaining < quantitytarget AND quantityremaining > 0"; 
             results = dbConnection.dbQuery(sqlString);
         } catch (Exception e) {
             e.printStackTrace();

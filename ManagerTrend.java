@@ -57,9 +57,11 @@ public class ManagerTrend extends ManagerViewScreen {
         endDate.setFont((defaultButtons));
 
         JTable sales = new JTable();
+        managerView.increaseFont(sales);
         sales.setBackground(Color.white);
         sales.setSize(900, 700);
         JTable excess = new JTable();
+        managerView.increaseFont(excess);
         excess.setBackground(Color.white);
         excess.setSize(900, 700);
 

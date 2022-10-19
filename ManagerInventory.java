@@ -77,7 +77,9 @@ public class ManagerInventory extends ManagerViewScreen {
         tableText.setVisible(false);
 
         JTable inventoryTable = new JTable();
+        managerView.increaseFont(inventoryTable);
         JTable productTable = new JTable();
+        managerView.increaseFont(productTable);
         updateIngredientsTable(inventoryTable);
         updateProductsTable(productTable);
 

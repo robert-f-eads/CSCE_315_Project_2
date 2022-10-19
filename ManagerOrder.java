@@ -49,6 +49,7 @@ public class ManagerOrder extends ManagerViewScreen {
         endDate.setFont((defaultButtons));
 
         JTable ordersTable = new JTable();
+        managerView.increaseFont(ordersTable);
         ordersTable.setBackground(Color.white);
         ResultSet row = managerView.myDbConnection.dbQuery("SELECT id AS \"Order Id\", timestamp AS \"Timestamp\", customerfirstname AS \"Customer Name\", rewardsmemberid AS \"Rewards Id\", employeeid AS \"Employee Id\", orderpricetotal AS \"Order Total\" FROM ordertickets");
         ordersTable.setModel(managerView.resultSetToTableModel(null, row));

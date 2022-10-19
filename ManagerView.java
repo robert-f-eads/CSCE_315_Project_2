@@ -236,4 +236,10 @@ public class ManagerView {
         borderPanel.removeAll();
         mainPanel.removeAll();
     }
+
+    public void increaseFont(JTable table) {
+        Font oldFont = table.getFont();
+        float size = oldFont.getSize() + 10;
+        table.setFont(oldFont.deriveFont(size));
+    }
 }

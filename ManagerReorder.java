@@ -49,6 +49,7 @@ public class ManagerReorder extends ManagerViewScreen {
         flowBot.add(export);
 
         JTable restock = new JTable(managerView.resultSetToTableModel(null, ovf.generateRestockReport()));
+        managerView.increaseFont(restock);
 
         managerView.borderPanel.add(flowTop, BorderLayout.NORTH);
         managerView.borderPanel.add(new JScrollPane(restock), BorderLayout.CENTER);
