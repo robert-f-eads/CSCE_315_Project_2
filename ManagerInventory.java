@@ -114,7 +114,6 @@ public class ManagerInventory extends ManagerViewScreen {
                     "', measurementunits='" + measurement.getText() + "', lastorderdate= date'" + last.getText() + "', priceperunitlastorder=" + 
                     price.getText() + ", quantityRemaining=" + quantity.getText() + ", quantityTarget=" + target.getText() + ", unitsinlastorder=" + units.getText() +
                     " WHERE id=" + id.getText();
-                System.out.println(sql);
             }
             for(HintTextField attributeField : attributeFields) {
                 attributeField.resetText();
@@ -258,7 +257,6 @@ public class ManagerInventory extends ManagerViewScreen {
         toggleTable.addActionListener(e -> {
             managerView.mainPanel.removeAll();
             if (toggleInventory) {
-                System.out.println("Toggling to product table");
                 toggleTable.setText("Switch to Inventory Table");
                 tableText.setText("products");
                 managerView.mainPanel.add(header, BorderLayout.PAGE_START);
@@ -267,7 +265,6 @@ public class ManagerInventory extends ManagerViewScreen {
                 toggleInventory = false;
             }
             else {
-                System.out.println("Toggling to inventory table");
                 toggleTable.setText("Switch to Product Table");
                 tableText.setText("ingredients");
                 managerView.mainPanel.add(header);

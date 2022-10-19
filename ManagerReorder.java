@@ -30,7 +30,6 @@ public class ManagerReorder extends ManagerViewScreen {
             managerView.myFrame.dispose();
         });
         export.addActionListener(e -> {
-            System.out.println("Export to csv");
         });
 
         JPanel flowTop = new JPanel();

@@ -165,7 +165,6 @@ public class ManagerOrder extends ManagerViewScreen {
                 managerView.myDbConnection.dbQuery("SELECT * FROM ordertickets WHERE timestamp > date '" + startDate.getText() + "' AND timestamp < date '" + endDate.getText() + "' LIMIT 30000")));
             managerView.myFrame.repaint();
             managerView.myFrame.revalidate();
-            System.out.println("Generate order history");
         });
 
         JPanel flow = new JPanel();

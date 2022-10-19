@@ -103,7 +103,6 @@ public class ManagerHome extends ManagerViewScreen {
         });
         addProduct.addActionListener(e -> {
             managerView.setAddView();
-            System.out.println("add product");
         });
 
 
