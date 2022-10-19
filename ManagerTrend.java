@@ -58,13 +58,9 @@ public class ManagerTrend extends ManagerViewScreen {
 
         JTable sales = new JTable();
         sales.setBackground(Color.white);
-        // ResultSet row = managerView.myDbConnection.dbQuery("SELECT id AS \"Order Id\", timestamp AS \"Timestamp\", customerfirstname AS \"Customer Name\", rewardsmemberid AS \"Rewards Id\", employeeid AS \"Employee Id\", orderpricetotal AS \"Order Total\" FROM ordertickets");
-        // sales.setModel(managerView.resultSetToTableModel(null, row));
         sales.setSize(900, 700);
         JTable excess = new JTable();
         excess.setBackground(Color.white);
-        // ResultSet row = managerView.myDbConnection.dbQuery("SELECT id AS \"Order Id\", timestamp AS \"Timestamp\", customerfirstname AS \"Customer Name\", rewardsmemberid AS \"Rewards Id\", employeeid AS \"Employee Id\", orderpricetotal AS \"Order Total\" FROM ordertickets");
-        // sales.setModel(managerView.resultSetToTableModel(null, row));
         excess.setSize(900, 700);
 
         JPanel title = new JPanel();

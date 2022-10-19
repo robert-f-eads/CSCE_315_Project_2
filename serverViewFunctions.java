@@ -46,7 +46,7 @@ public class serverViewFunctions {
     /**
      * Imports ingredients data from the database
      */
-    private void importIngredients() {
+    void importIngredients() {
         try{
             dbFunctions dbConnection = new dbFunctions();
             dbConnection.createDbConnection();
@@ -69,7 +69,7 @@ public class serverViewFunctions {
     /**
      * Imports products data from the database
      */
-    private void importProducts() {
+    void importProducts() {
         try{
             dbFunctions dbConnection = new dbFunctions();
             dbConnection.createDbConnection();

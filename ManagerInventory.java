@@ -3,7 +3,10 @@ import java.awt.*;
 import java.sql.*;
 
 /**
- * @author Emma Ong, Shreyes Kaliyur, Alexia Hassan
+ * @author Emma Ong
+ * @author Shreyes Kaliyur
+ * @author Alexia Hassan
+ * @author Robert Eads
  */
 
 public class ManagerInventory extends ManagerViewScreen {
@@ -134,6 +137,11 @@ public class ManagerInventory extends ManagerViewScreen {
             managerView.myDbConnection.dbUpsert(sql);
             updateProductsTable(productTable);
             updateIngredientsTable(inventoryTable);
+            if(table.equals("products")) {
+                managerView.serverFunctions.importProducts();
+            } else {
+                managerView.serverFunctions.importIngredients();
+            }
         });
 
 
@@ -165,6 +173,7 @@ public class ManagerInventory extends ManagerViewScreen {
         JPanel topButtons = new JPanel();
         topButtons.setBackground(Color.white);
         topButtons.setLayout(new BoxLayout(topButtons, BoxLayout.LINE_AXIS));
+        //topButtons.add(Box.createRigidArea(new Dimension(15, 0)));
         topButtons.add(back);
         topButtons.add(Box.createRigidArea(new Dimension(465, 0)));
         topButtons.add(searchText);
