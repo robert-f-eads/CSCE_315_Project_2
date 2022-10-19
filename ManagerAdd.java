@@ -148,6 +148,8 @@ public class ManagerAdd extends ManagerViewScreen {
 			product newProduct = new product(-1, productName.getText(), Double.parseDouble(productCost.getText()));
 			newProduct.setIngredients(ingredients);
 			orderFunctions.addSeasonalItem(newProduct);
+			new ManagerView(managerView.serverFunctions);
+            managerView.myFrame.dispose();	
 		});
 			
 		managerView.mainPanel.add(title);
