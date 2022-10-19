@@ -1,3 +1,6 @@
+/**
+ * @author Robert Eads
+ */
 public class DbSetup {
     /*
         Main function used in conjunction with DbTools to manage database for project 2
