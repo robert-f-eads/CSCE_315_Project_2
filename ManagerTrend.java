@@ -8,6 +8,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Vector;
 
+/**
+ * @author Emma Ong
+ */
 public class ManagerTrend extends ManagerViewScreen {
     private orderViewFunctions ovf;
     JButton currentlySelectedButton;
@@ -17,11 +20,20 @@ public class ManagerTrend extends ManagerViewScreen {
     boolean toggleGenerate;
 
 
+    /**
+     * Parametrized constructor for the manager view of generate trends page
+     * @param managerView the container of the manager view
+     */
     public ManagerTrend(ManagerView managerView) {
         super(managerView);
         ovf = new orderViewFunctions(managerView.serverFunctions);
     }
 
+    /**
+     * Sets the manager view to the generate trends page, a table representing the trend is most prominent.
+     * Also feautred are two buttons for selecting the type of trend to calculate, buttons to autofill date ranges 
+     * to calculate the trend over, text fields to manually enter those dates, and clear markings of where the user is
+     */
     public void setTrendView() {
         int buttonWidth = 150;
         int buttonHeight = 150;
@@ -260,7 +272,11 @@ public class ManagerTrend extends ManagerViewScreen {
         managerView.borderPanel.repaint();
     }
 
-
+    /**
+     * Formats a button for consistent styling throughout the trend page
+     * @param button the button to be styled
+     * @return a styled JButton
+     */
     public JButton formatButtons(JButton button) {
         button.setForeground(darkRed);
         button.setBackground(Color.white);
