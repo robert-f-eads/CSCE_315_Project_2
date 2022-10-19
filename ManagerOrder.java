@@ -6,16 +6,27 @@ import java.time.temporal.ChronoUnit;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Emma Ong
+ */
 public class ManagerOrder extends ManagerViewScreen {
     static Color darkRed = new Color(165,58,59);
 	static Color blueHighlight = new Color(184, 204, 220);
-	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 20); //font used in text box
+	static Font defaultButtons = new Font("SansSerif", Font.PLAIN, 20); // font used in text box
     JButton currentlySelectedButton;
 
-
+    /**
+     * Parametrized construct for the manager order screen
+     * @param managerView the manager view container
+     */
     public ManagerOrder(ManagerView managerView) {super(managerView);}
 
     
+    /**
+     * Sets the current manager view screen to the order history view. This content includes a large
+     * table which displays order history in a time range selected by one of the time range buttons or manually
+     * typed into the start and end date text fields
+     */
     public void setOrderView() {
         int buttonWidth = 150;
         int buttonHeight = 150;
@@ -194,6 +205,11 @@ public class ManagerOrder extends ManagerViewScreen {
 
     }
 
+    /**
+     * Create a styled JButton for consistent display
+     * @param button the starting button which needs to be styled
+     * @return the styled JButton
+     */
     public JButton formatButtons(JButton button) {
         button.setForeground(darkRed);
         button.setBackground(Color.white);
