@@ -6,6 +6,7 @@ import java.sql.*;
  * @author Emma Ong
  * @author Shreyes Kaliyur
  * @author Alexia Hassan
+ * @author Robert Eads
  */
 
 public class ManagerInventory extends ManagerViewScreen {
@@ -128,9 +129,9 @@ public class ManagerInventory extends ManagerViewScreen {
             String table = tableText.getText();
             String sql = "";
             if(table.equals("products")) {
-                sql = "INSERT INTO products VALUES (" + id.getText() + ", '" + name.getText() + "', " + price.getText() + ")";
+                sql = "INSERT INTO products (name, price) VALUES ('" + name.getText() + "', " + price.getText() + ")";
             } else {
-                sql = "INSERT INTO ingredients VALUES (" + id.getText() + ", '" + name.getText() + "', '" + 
+                sql = "INSERT INTO ingredients (name, expirationdate, quantityremaining, quantitytarget, measurementunits, priceperunitlastorder, lastorderdate, unitsinlastorder) VALUES ('" + name.getText() + "', '" + 
                     expiration.getText() + "', " + quantity.getText() + ", " + target.getText() + ", '" + measurement.getText() + "', " + 
                     price.getText() + ", '" + last.getText() + "', " + units.getText() + ")";
             }
@@ -142,13 +143,18 @@ public class ManagerInventory extends ManagerViewScreen {
 
         delete.addActionListener(e -> {
             String table = tableText.getText();
-            String sql = "";
+            String sqlFirst = "";
+            String sqlSecond = "";
+
             if(table.equals("products")) {
-                sql = "DELETE FROM products WHERE id=" + id.getText();
+                sqlFirst = "DELETE FROM productstoingredients WHERE productid =" + id.getText();
+                sqlSecond = "DELETE FROM products WHERE id=" + id.getText();
             } else {
-                sql = "DELETE FROM ingredients WHERE id=" + id.getText();
+                sqlFirst = "DELETE FROM productstoingredients WHERE ingredientid =" + id.getText();
+                sqlSecond = "DELETE FROM ingredients WHERE id=" + id.getText();
             }
-            managerView.myDbConnection.dbUpsert(sql);
+            managerView.myDbConnection.dbUpsert(sqlFirst);
+            managerView.myDbConnection.dbUpsert(sqlSecond);
             updateProductsTable(productTable);
             updateIngredientsTable(inventoryTable);
         });
