@@ -1267,9 +1267,9 @@ class SubtractionButton {
 
 	/**
 	 * Constructor for SubtractionButton class creates buttons with associated products
-	 * @param serverFunctions
-	 * @param product
-	 * @param myIndex
+	 * @param serverFunctions the server functions to interact with the database
+	 * @param product the product the subtraction button should represent
+	 * @param myIndex the index of the subtractions button
 	 */
 	public SubtractionButton(serverViewFunctions serverFunctions, product product, int myIndex) {
 		this.product = product;
@@ -1302,7 +1302,8 @@ class AdditionButton {
 	 * Constructor for additionButton class creates buttons with associated products
 	 * @param serverFunctions serverViewFunction item that is responsible for communicating with the database
 	 * @param name The name of the ingredient that the button will display
-	 * @param myIndex
+	 * @param id the id of the addition button
+	 * @param product the product represented by the addition button
 	 */
 	public AdditionButton(serverViewFunctions serverFunctions,  String name, int id, product product) {
 		selected = false;
