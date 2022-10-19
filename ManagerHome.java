@@ -113,7 +113,7 @@ public class ManagerHome extends ManagerViewScreen {
         mainPanel.add(addProduct);
 
 
-		//Logo panel will house Smoothie King logo in top left 
+		//Logo panel houses Smoothie King logo in top left 
 		JPanel logoPanel = new JPanel();
 		logoPanel.setBackground(Color.white);
 		logoPanel.setBounds(0, 0, 975, 75);
@@ -125,7 +125,7 @@ public class ManagerHome extends ManagerViewScreen {
 		logoPanel.add(picLabel);
 
 		
-		//Search panel will house static search bar in top left
+		//Search panel houses static search bar in top left
 		JPanel searchPanel = new JPanel();
 		searchPanel.setBackground(Color.white);
 		searchPanel.setBounds(13, 87, 975, 50);

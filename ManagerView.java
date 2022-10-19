@@ -232,7 +232,6 @@ public class ManagerView {
         myFrame.setVisible(true);
     }
     
-    // clears both borderPanel and mainPanel
     private void clearView() {
         borderPanel.removeAll();
         mainPanel.removeAll();

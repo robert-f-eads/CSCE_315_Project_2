@@ -144,7 +144,6 @@ public class ManagerAdd extends ManagerViewScreen {
 		
 		JButton createItem = formatButtons(new JButton("Finalize Item"));
 		createItem.addActionListener(e -> {
-			//ROBERT HELP
 			product newProduct = new product(-1, productName.getText(), Double.parseDouble(productCost.getText()));
 			newProduct.setIngredients(ingredients);
 			orderFunctions.addSeasonalItem(newProduct);
@@ -160,7 +159,6 @@ public class ManagerAdd extends ManagerViewScreen {
 		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
 		managerView.mainPanel.add(createItem);
 		managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 75)));
-		//managerView.mainPanel.add(Box.createRigidArea(new Dimension(0, 75)));
         managerView.mainPanel.revalidate();
         managerView.mainPanel.repaint();
     }

@@ -3,10 +3,7 @@ import java.awt.*;
 import java.sql.*;
 
 /**
- * @author Emma Ong
- * @author Shreyes Kaliyur
- * @author Alexia Hassan
- * @author Robert Eads
+ * @author Emma Ong, Shreyes Kaliyur, Alexia Hassan
  */
 
 public class ManagerInventory extends ManagerViewScreen {
@@ -168,7 +165,6 @@ public class ManagerInventory extends ManagerViewScreen {
         JPanel topButtons = new JPanel();
         topButtons.setBackground(Color.white);
         topButtons.setLayout(new BoxLayout(topButtons, BoxLayout.LINE_AXIS));
-        //topButtons.add(Box.createRigidArea(new Dimension(15, 0)));
         topButtons.add(back);
         topButtons.add(Box.createRigidArea(new Dimension(465, 0)));
         topButtons.add(searchText);

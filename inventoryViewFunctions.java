@@ -48,7 +48,6 @@ public class inventoryViewFunctions {
         return ingredients;
     }
 
-    // filter by a search term
     /**
      * Filter the materials in the database by the search term
      * @param filter what to limit the database search for materials by

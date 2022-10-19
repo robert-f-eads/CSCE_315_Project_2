@@ -70,7 +70,6 @@ public class ManagerOrder extends ManagerViewScreen {
            managerView.myFrame.dispose();
         });
 
-        // **********
         // action listeners to generate data for if a certain preset time range button is pressed
         week.addActionListener(e -> {
             if (this.currentlySelectedButton != null) {
@@ -158,7 +157,6 @@ public class ManagerOrder extends ManagerViewScreen {
             endDate.setForeground(Color.black);
         });
         // end of time generation action listeners
-        // *********
 
         generate.addActionListener(e -> {
             ordersTable.setModel(managerView.resultSetToTableModel(null,
@@ -173,7 +171,6 @@ public class ManagerOrder extends ManagerViewScreen {
         flow.setMinimumSize(new Dimension(1500, 50));
         flow.setMaximumSize(new Dimension(1500,50));
         flow.add(back);
-        //flow.add(orders);
         flow.add(Box.createRigidArea(new Dimension(50,0)));
         flow.add(startDateLabel);
         flow.add(Box.createRigidArea(new Dimension(5,0)));

@@ -996,7 +996,7 @@ public class GUIDriver {
 				public void actionPerformed(ActionEvent e) {
 					clearMainPanel();
 					updateLoginButtons();
-					// remove order ticket
+					//remove order ticket
 					newTicket = new orderTicketInfo();
 				}
 			}
@@ -1039,7 +1039,6 @@ public class GUIDriver {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateOrderCreatedButton();
-					//UPDATE STUFF HERE
 					newTicket = new orderTicketInfo();
 					newTicket.setEmployeeId(currentEmployeeId);
 					searchTextField.setEditable(true);
