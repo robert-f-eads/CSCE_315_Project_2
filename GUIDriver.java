@@ -16,12 +16,12 @@ public class GUIDriver {
 	public static void main(String args[]) {
 		
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		GUIWindow newGUIWindow = new GUIWindow();
+		new GUIWindow();
 	}
 }
 
 /**
- * @author Alexia Hassan, Shreyes Kaliyur, Emma Ong,  Robert Eads
+ * @author Alexia Hassan, Shreyes Kaliyur, Emma Ong, Robert Eads
  */ 
  class GUIWindow {
 	static int maxHeight = 1080;
@@ -996,7 +996,7 @@ public class GUIDriver {
 				public void actionPerformed(ActionEvent e) {
 					clearMainPanel();
 					updateLoginButtons();
-					//REMOVE ORDER TICKET
+					// remove order ticket
 					newTicket = new orderTicketInfo();
 				}
 			}

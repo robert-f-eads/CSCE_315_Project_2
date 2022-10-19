@@ -107,7 +107,7 @@ public class DbTools {
                 }
                 sqlStatement += ")";
 
-                int result = stmt.executeUpdate(sqlStatement);
+                stmt.executeUpdate(sqlStatement);
                 System.out.println(String.format("Added %s to database", currentTable.tableName));
 
                 for(String user : users) {
@@ -165,7 +165,7 @@ public class DbTools {
                     ////ALTER SEQUENCE <table>_id_seq RESTART WITH <number>
                     int temp =  result.getInt("id");
                     sqlStatement = String.format("ALTER SEQUENCE %s_id_seq RESTART WITH %d", currentTable.tableName, temp + 1);
-                    int results = stmt.executeUpdate(sqlStatement); 
+                    stmt.executeUpdate(sqlStatement); 
                     
                 }
 
@@ -191,7 +191,7 @@ public class DbTools {
 
             for(int i = infoForTables.size()-1; i >= 0; i--){
                 String sqlStatement = String.format("DROP TABLE IF EXISTS %s", infoForTables.get(i).tableName);
-                int result = stmt.executeUpdate(sqlStatement);
+                stmt.executeUpdate(sqlStatement);
                 System.out.println(String.format("Dropped %s from the database", infoForTables.get(i).tableName));
             }
 

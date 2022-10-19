@@ -1,14 +1,8 @@
 import java.awt.Component;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.*;
 import javax.swing.border.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.sql.*;
-import  java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * @author Shreyes Kaliyur, Alexia Hassan, Emma Ong
