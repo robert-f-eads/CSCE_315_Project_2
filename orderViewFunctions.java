@@ -1,7 +1,6 @@
 import java.util.*;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.text.Format;
+
 
 /**
  * @author Shreyes, Robert, Alexia, Emma
@@ -9,28 +8,6 @@ import java.text.Format;
 public class orderViewFunctions {
     serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
-
-    /**
-     * Get the order tickets from the database
-     * @return order tickets as received from dbFunctions
-     */
-    public Vector<orderTicketInfo> getOrders() {
-        Vector<orderTicketInfo> orderTickets = new Vector<>();
-        try {
-			dbConnection.createDbConnection();
-			String sqlStatement = "SELECT * FROM orderTickets";
-			ResultSet results = dbConnection.dbQuery(sqlStatement);
-			while(results.next()) {
-				orderTicketInfo oti = serverFunctions.getOrderTicket(results.getInt("id"));
-                orderTickets.add(oti);
-			}
-		} catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        } 
-        return orderTickets;
-    }
 
     /**
      * Parametrized constructor
@@ -67,7 +44,8 @@ public class orderViewFunctions {
                 ResultSet temp_results = dbConnection.dbQuery(sqlStatement);
                 temp_results.next();
                 int total = temp_results.getInt(1);
-                //SELECT SUM(itemamount) FROM orderitems INNER JOIN ordertickets ON ordertickets.id = orderitems.orderid WHERE itemname = 'keto-champ-coffee' AND timestamp BETWEEN '2022-09-08 00:00:00' AND '2022-09-13 00:00:00'
+
+                //Create salesReportItem for later use
                 salesReportItem temp_item = new salesReportItem(prodId.getValue().getId(), prodId.getValue().getName(), total, Double.parseDouble(String.format("%.2f", total * prodId.getValue().getPrice())));
                 salesItems.add(temp_item);
             }
@@ -81,7 +59,7 @@ public class orderViewFunctions {
     }//End generateSalesReportBetweenDate
 
     /**
-     * Generates a report for what items need to be bought
+     * Generates a report for what items need to be bought(restocked)
      * @return a result set of the items, their desired quantity, current quantity, and helper information
      */
     public ResultSet generateRestockReport() {
