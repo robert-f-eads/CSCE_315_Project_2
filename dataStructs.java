@@ -828,6 +828,9 @@ class material {
     }
 }//End material
 
+/**
+ * @author Alexia Hassan
+ */
 class product {
     private
         int id;
@@ -836,6 +839,9 @@ class product {
         Vector<ingredient> ingredients;
 
     // Constructors
+    /**
+     * Default constructor for product, field values indicate they should be altered
+     */
     public product() {
         id = -1;
         name = "";
@@ -843,6 +849,12 @@ class product {
         ingredients = new Vector<ingredient>();
     }
 
+    /**
+     * Parametrized constructor for product
+     * @param id the id of the product
+     * @param name the name of the product
+     * @param price the price of the product
+     */
     public product(int id, String name, double price) {
         this.id = id;
         this.name = name;
@@ -853,20 +865,64 @@ class product {
 
     public
         //Getters
+        /**
+         * Gets the id of the prodcut
+         * @return the id of the prodcut
+         */
         int getId() {return id;}
+        /**
+         * Gets the name of the product
+         * @return the name of the product
+         */
         String getName() {return name;}
+        /**
+         * Gets the price of the product
+         * @return the price of the product
+         */
         double getPrice() {return price;}
+        /**
+         * Gets the ingredients that make up this product
+         * @return the ingredients that make up this product
+         */
         Vector<ingredient> ingredients() {return ingredients;}
 
         //Setters
+        /**
+         * Sets the id of the product
+         * @param id the id of the product
+         */
         void setId(int id) {this.id = id;}
+        /**
+         * Sets the name of the product
+         * @param name the name of the product
+         */
         void setName(String name) {this.name = name;}
+        /**
+         * Sets the price of the product
+         * @param price the price of the product
+         */
         void setPrice(double price) {this.price = price;}
+        /**
+         * Adds an ingredient to this productSets the ingredient to be added to the product
+         * @param ingredientAdded the ingredient to be added to the product
+         */
         void addIngredient(ingredient ingredientAdded) {ingredients.add(ingredientAdded);}
+        /**
+         * Removes an ingredient from this product
+         * @param ingredientRemoved the ingredient to be removed from the product
+         */
         void removeIngredient(ingredient ingredientRemoved) {ingredients.remove(ingredientRemoved);}
+        /**
+         * Sets the ingredients of this product to a passed in vector
+         * @param ingredients a vector of ingredients to use to set the ingredients for this prodcut
+         */
         void setIngredients(Vector<ingredient> ingredients) {this.ingredients = ingredients;}
 
 
+    /**
+     * Convert product to a string representation
+     * @return a human readable string representation of the product
+     */
     @Override
     public String toString() {
         String print = String.format("Id: %d\nName: %s\nPrice: %.2f",
