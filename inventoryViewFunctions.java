@@ -1,12 +1,15 @@
 import java.util.Vector;
 import java.sql.ResultSet;
 
+/**
+ * @author Shreyes Kaliyur
+ */
 public class inventoryViewFunctions {
     serverViewFunctions serverFunctions;
     dbFunctions dbConnection;
 
     /**
-     * 
+     * Get the ingredients in the database
      * @return all the ingredients in the database
      */
     public Vector<ingredient> getIngredients() {
@@ -14,7 +17,7 @@ public class inventoryViewFunctions {
     }
 
     /**
-     * 
+     * Get the materials in the database
      * @return all the materials in the database
      */
     public Vector<material> getMaterials() {
@@ -23,7 +26,7 @@ public class inventoryViewFunctions {
 
     // filter by a search term
     /**
-     * 
+     * Filter the ingredients in the database by a search term
      * @param filter what to limit the database search for ingredients by
      * @return all ingredients which have filter as part of their name
      */
@@ -45,9 +48,8 @@ public class inventoryViewFunctions {
         return ingredients;
     }
 
-    // filter by a search term
     /**
-     * 
+     * Filter the materials in the database by the search term
      * @param filter what to limit the database search for materials by
      * @return all materials which have the filter as part of their name
      */

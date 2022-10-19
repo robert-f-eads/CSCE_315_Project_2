@@ -9,14 +9,20 @@ import  java.text.DecimalFormat;
 import java.util.List;
 
 
+/**
+ * @author Alexia Hassan
+ */
 public class GUIDriver {
 	public static void main(String args[]) {
 		
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		GUIWindow newGUIWindow = new GUIWindow();
+		new GUIWindow();
 	}
 }
 
+/**
+ * @author Alexia Hassan, Shreyes Kaliyur, Emma Ong, Robert Eads
+ */ 
  class GUIWindow {
 	static int maxHeight = 1080;
 	static int maxWidth = 1500;
@@ -60,12 +66,15 @@ public class GUIDriver {
 	boolean currentPageIsTile;
 	boolean currentPageIsModifications;
 
+	/**
+	 * Makes visible components required for logging in
+	 */
 	public void showLoginScreen() {
 		rightPanel.removeAll();
 		rightPanel.revalidate();
 		rightPanel.repaint();
 
-		resetMainPanel();
+		clearMainPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
 
@@ -110,6 +119,12 @@ public class GUIDriver {
 		mainPanel.repaint();
 	}
 
+
+/**
+ * Updates search results when adding additions to an OrderItem object
+ * @param searchBarText the string to search the database for 
+ * @param searchPanel the panel that will house the search results as buttons
+ */
 	public void updateAdditions(String searchBarText, JPanel searchPanel) {
 		searchPanel.removeAll();
 		searchPanel.setLayout(new FlowLayout());
@@ -151,6 +166,10 @@ public class GUIDriver {
 		searchPanel.repaint();
 	}
 	
+/**
+ * Creates and makes visible the components required to modify a product including size, additions, and subtractions
+ * @param product the product that will be used to determine which subtraction options are available
+ */
 	public void updateModifications(product product) { // needs product object parameter product product
 		mainPanel.removeAll();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
@@ -462,12 +481,19 @@ public class GUIDriver {
 	}
 
 
+/**
+ * Clears the center or main panel completely and repaints
+ */
 	public void clearMainPanel() {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
 
+/**
+ * Creates and displays search results for products as a tile object of pictures and product names
+ * @param searchBarText The string to search the database for 
+ */
 	public void updateTileView(String searchBarText) {
 
 		mainPanel.removeAll();
@@ -525,6 +551,10 @@ public class GUIDriver {
 		mainPanel.repaint();
 	}
 
+/**
+ * Creates and displays the current order as a series of items with size, quantity, and price
+ * Calculates and displays order total
+ */
 	public void updateMainView() {
 		mainPanel.removeAll();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
@@ -661,12 +691,9 @@ public class GUIDriver {
 		mainPanel.repaint();
 	}
 
-	public void resetMainPanel() {
-		mainPanel.removeAll();
-		mainPanel.revalidate();
-		mainPanel.repaint();
-	}
-
+/**
+ * Creates and displays components required to complete an order, including the sever name, logout button, cancel button, and finish and pay button.
+ */
 	public void updateOrderCreatedButton() {
 		rightPanel.removeAll();
 		
@@ -700,6 +727,10 @@ public class GUIDriver {
 		rightPanel.repaint();
 	}
 
+
+/**
+ * Creates and displays for making an order such as the "Create Order" Button
+ */
 	public void updateLoginButtons() {
 		rightPanel.removeAll();
 		mainPanel.removeAll();
@@ -725,7 +756,7 @@ public class GUIDriver {
 			managerViewButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, darkRed),  BorderFactory.createEmptyBorder(15, 8, 15, 10)));
 			managerViewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 			managerViewButton.addActionListener(e -> {
-				new ManagerView();
+				new ManagerView(serverFunctions);
 				frame.dispose();
 			});
 			rightPanel.add(managerViewButton);
@@ -747,18 +778,30 @@ public class GUIDriver {
 		rightPanel.repaint();
 	}
 
+/**
+ * Gets current input of customer name text entry box and assigns it as needed
+ * @param customerName the name of the customer for the current order
+ */
 	public void updateCustomerName(String customerName) {
 		String[] splittedString = customerName.trim().split(" ");
 		newTicket.setCustomerFirstName(splittedString[0]);
 	}
 
+/**
+ * 
+ * @param rewardsMemberId the rewards member Id of the customer for the current order
+ */
 	public void updateRewardsMemberId(String rewardsMemberId) {
 		String strippedString = rewardsMemberId.trim();
 		newTicket.setRewardsMemberId(Integer.parseInt(strippedString));
 	}
 
+/**
+ * The GUIWindow constructor. Creates all visual and functional objects required for the server view application to run
+ */
 	public GUIWindow() {
 		//Establishing database connection
+
 		serverFunctions = new serverViewFunctions();
 		dbConnection = new dbFunctions();
 		
@@ -951,9 +994,9 @@ public class GUIDriver {
 		cancel.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					resetMainPanel();
+					clearMainPanel();
 					updateLoginButtons();
-					//REMOVE ORDER TICKET
+					//remove order ticket
 					newTicket = new orderTicketInfo();
 				}
 			}
@@ -996,7 +1039,6 @@ public class GUIDriver {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateOrderCreatedButton();
-					//UPDATE STUFF HERE
 					newTicket = new orderTicketInfo();
 					newTicket.setEmployeeId(currentEmployeeId);
 					searchTextField.setEditable(true);
@@ -1016,7 +1058,7 @@ public class GUIDriver {
 		//Create left panel to house logo, search, and all other functionalities
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.white);
-		leftPanel.setBounds(0, 0, 1150, maxHeight);
+		leftPanel.setBounds(0, 0, 1050, maxHeight);
 		leftPanel.setLayout(null);
 
 
@@ -1037,7 +1079,9 @@ public class GUIDriver {
 
 }
 
-
+/**
+ * @author Alexia Hassan
+ */
 class TilePanel {
     public JButton mainPanel;
 	public product productInformation;
@@ -1045,6 +1089,11 @@ class TilePanel {
 	private static Border line = new LineBorder(Color.black);
 	private static Font itemNameFont =  new Font("SansSerif", Font.PLAIN, 20); 
 
+	/**
+	 * TilePanel constructor creates a stacked panel of an image and a text box
+	 * @param itemNameString the name of the product to be displayed under the image
+	 * @param product the product to be displayed above the text
+	 */
     public TilePanel(String itemNameString, product product) {
 
 		productInformation = product;
@@ -1079,6 +1128,9 @@ class TilePanel {
 }
 
 
+/**
+ * @author Alexia Hassan
+ */
 class ItemInOrder {
 	public JButton mainPanel;
 	public JButton quantityIncrease;
@@ -1094,7 +1146,11 @@ class ItemInOrder {
 	serverViewFunctions serverFunctions;
 
 
-	//get itemAdditons and itemSubtractions from database and display them
+/**
+ * Get itemAdditons and itemSubtractions from database and display them as buttons 
+ * @param item The order item to create a display from
+ * @param serverFunctions the serverViewFunctions object responsible for communicating with the database 
+ */
 	public ItemInOrder(orderItem item, serverViewFunctions serverFunctions) {
 
 		if (serverFunctions == null) {
@@ -1199,7 +1255,9 @@ class ItemInOrder {
 	}
 }
 
-
+/**
+ * @author Alexia Hassan
+ */
 class SubtractionButton {
 	public JButton mainButton;
 	public boolean selected;
@@ -1207,7 +1265,12 @@ class SubtractionButton {
 	private static Font defaultButtons =  new Font("SansSerif", Font.PLAIN, 25); 
 	static Color darkRed = new Color(165,58,59);
 
-
+	/**
+	 * Constructor for SubtractionButton class creates buttons with associated products
+	 * @param serverFunctions the server functions to interact with the database
+	 * @param product the product the subtraction button should represent
+	 * @param myIndex the index of the subtractions button
+	 */
 	public SubtractionButton(serverViewFunctions serverFunctions, product product, int myIndex) {
 		this.product = product;
 		selected = false;
@@ -1222,7 +1285,9 @@ class SubtractionButton {
 	}
 }
 
-
+/**
+ * @author Alexia Hassan
+ */
 class AdditionButton {
 	public JButton mainButton;
 	public boolean selected;
@@ -1233,7 +1298,13 @@ class AdditionButton {
 	static Color darkRed = new Color(165,58,59);
 	static Color blueHighlight = new Color(184, 204, 220);
 
-
+	/**
+	 * Constructor for additionButton class creates buttons with associated products
+	 * @param serverFunctions serverViewFunction item that is responsible for communicating with the database
+	 * @param name The name of the ingredient that the button will display
+	 * @param id the id of the addition button
+	 * @param product the product represented by the addition button
+	 */
 	public AdditionButton(serverViewFunctions serverFunctions,  String name, int id, product product) {
 		selected = false;
 		this.name = name;

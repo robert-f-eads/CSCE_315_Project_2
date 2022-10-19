@@ -4,37 +4,53 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 
+/**
+ * @author Emma Ong, Alexia Hassan, Shreyes Kaliyur
+ */
 public class ManagerView {
     JFrame myFrame;
-    JPanel[][] myPanels;
     JPanel mainPanel;
     JPanel borderPanel;
     int myRows;
     int myCols;
     dbFunctions myDbConnection;
+    int maxWidth = 1500;
+    int maxHeight = 1080; 
+    serverViewFunctions serverFunctions;
 
-    public ManagerView() {
-        myFrame = new JFrame();//creating instance of JFrame  
-        myFrame.setSize(1500, 1000);
+    /**
+     * Constructor for a manager view, borrows server functions for faster load time
+     * @param serverFunctions the server functions needed to interact with the database
+     */
+    public ManagerView(serverViewFunctions serverFunctions) {
+        myFrame = new JFrame(); // creating instance of JFrame  
+        myFrame.setSize(maxWidth, maxHeight);
+        myFrame.setPreferredSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setMinimumSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setMaximumSize(new Dimension(maxWidth, maxHeight));
+		myFrame.setResizable(false);
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setBackground(Color.black);
 
-        myRows = 5;
-        myCols = 5;
+        this.serverFunctions = serverFunctions;
+
         myDbConnection = new dbFunctions();
         myDbConnection.createDbConnection();
 
-        myPanels = new JPanel[myRows][myCols];
-        for(int i = 0; i < myRows; i++) {
-            for(int j = 0; j < myCols; j++) {
-                myPanels[i][j] = new JPanel();
-            }
-        }
         borderPanel = new JPanel();
-
         mainPanel = new JPanel();
+
+        myFrame.setVisible(true);
 
         this.setHomeView();
     }
 
+    /**
+     * Convert a result set to a table model for display via swing
+     * @param model the start of the table model, null if starting from blank
+     * @param row the result set to be adding to the table from
+     * @return a talbe model which contains a table view of the result set
+     */
     DefaultTableModel resultSetToTableModel(DefaultTableModel model, ResultSet row) {
 
         ResultSetMetaData meta;
@@ -64,6 +80,12 @@ public class ManagerView {
         return null;
     }
 
+    /**
+     * Grab information from the database to update a table, typ products or ingredients
+     * @param table the table to be updated
+     * @param tableName the name of the table in the database to pull information from
+     * @param limit the amount of rows to pull from the database
+     */
     void updateTable(JTable table, String tableName, int limit) {
         ResultSet row;
         if(limit == -1) {
@@ -74,6 +96,13 @@ public class ManagerView {
         table.setModel(resultSetToTableModel(null, row));
     }
 
+    /**
+     * Fill in a text field with the corresponding value in the database before sending an update SQL statement
+     * @param table the table name in our database to pull information from
+     * @param id the id of the element we want to update
+     * @param attributeIndex the index of the attribute in our table headers
+     * @param attribute the JTextField to be updated
+     */
     void setUneditedAttribute(String table, String id, int attributeIndex, HintTextField attribute) {
         String sql = "SELECT * FROM " + table + " WHERE id=" + id;
         ResultSet row = myDbConnection.dbQuery(sql);
@@ -93,29 +122,51 @@ public class ManagerView {
         }
     }
 
+    /**
+     * Sets the manager view to the add product screen
+     */
+    public void setAddView() {
+        this.clearView();
+        (new ManagerAdd(this)).setAddView();
+        myFrame.revalidate();
+        myFrame.repaint();
+    }
 
+    /**
+     * Sets the manager view to the generate trends screen
+     */
     public void setTrendView() {
         this.clearView();
-        setGridLayout();
+        setBorderLayout();
         (new ManagerTrend(this)).setTrendView();
+        myFrame.revalidate();
         myFrame.repaint();
     }
 
+    /**
+     * Sets the manager view to the get restock report screen
+     */
     public void setReorderView() {
         this.clearView();
-        setGridLayout();
+        setBorderLayout();
         (new ManagerReorder(this)).setReorderView();
+        myFrame.revalidate();
         myFrame.repaint();
     }
 
+    /**
+     * Sets the manager view to the inventory screen
+     */
     public void setInventoryView() {
         this.clearView();
-        setBorderLayout();
         (new ManagerInventory(this)).setInventoryView();
         myFrame.repaint();
         myFrame.revalidate();
     }
 
+    /**
+     * Sets the manager view to the view order history screen
+     */
     public void setOrderView() {
         this.clearView();
         setBorderLayout();
@@ -124,58 +175,51 @@ public class ManagerView {
         myFrame.repaint();
     }
 
+    /**
+     * Sets the manager view to the home screen
+     */
     public void setHomeView() {
         this.clearView();
-        this.setGridBoxLayout();
-        // this.setGridLayout();
         (new ManagerHome(this)).setHomeView();
         myFrame.revalidate();
         myFrame.repaint();
     }
 
 
+    /**
+     * Creates a button with default syling for consistent display
+     * @param text the text the button should have
+     * @param width the width of the button
+     * @param height the height of the btton
+     * @return a JButton element that is styled
+     */
     JButton createButton(String text, int width, int height) {
         JButton b = new JButton(text);
-        b.setSize(width, height);
+        b.setForeground(new Color(165,58,59));
+        b.setFont(new Font("SansSerif", Font.PLAIN, 23));
+		b.setBackground(Color.white);
+		b.setRolloverEnabled(false);
+		b.setFocusPainted(false);
+
         return b;
     }
 
+    /**
+     * Creates a label with default styling for consistent display
+     * @param text the text the label should have 
+     * @param width the width of the label
+     * @param height the height of the label
+     * @return a JLabel element that is styled
+     */
     JLabel createLabel(String text, int width, int height) {
         JLabel l = new JLabel(text);
         l.setSize(width, height);
         return l;
     }
 
-    private void setGridLayout() {
-        myFrame.getContentPane().removeAll();;
-        myFrame.setLayout(new GridLayout(myRows, myCols));
-        myPanels = new JPanel[myRows][myCols];
-        for(int i = 0; i < myRows; i++) {
-            for(int j = 0; j < myCols; j++) {
-                myPanels[i][j] = new JPanel();
-                myPanels[i][j].setBackground(new Color((int) (Math.random() * 100)));
-                myFrame.add(myPanels[i][j]);
-            }
-        }
-        myFrame.revalidate();
-        myFrame.repaint();
-        myFrame.setVisible(true);
-    }
-
-    private void setGridBoxLayout() {
-        myFrame.getContentPane().removeAll();
-        // myFrame.setLayout(new GridBagLayout());
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.setSize(1000,1000);
-        mainPanel.invalidate();
-        mainPanel.revalidate();
-        myFrame.add(mainPanel);
-        
-        myFrame.revalidate();
-        myFrame.repaint();
-        myFrame.setVisible(true);
-    }
-
+    /**
+     * Sets the frame to have a border layout, removing all current content
+     */
     private void setBorderLayout() {
         myFrame.getContentPane().removeAll();;
         borderPanel = new JPanel(new BorderLayout(10, 10));
@@ -188,14 +232,14 @@ public class ManagerView {
         myFrame.setVisible(true);
     }
     
-    // clears both gridlayout and borderlayout
     private void clearView() {
-        for(int i = 0; i < myCols; i++) {
-            for(int j = 0; j < myCols; j++) {
-                myPanels[i][j].removeAll();
-            }
-        }
         borderPanel.removeAll();
         mainPanel.removeAll();
+    }
+
+    public void increaseFont(JTable table) {
+        Font oldFont = table.getFont();
+        float size = oldFont.getSize() + 3;
+        table.setFont(oldFont.deriveFont(size));
     }
 }

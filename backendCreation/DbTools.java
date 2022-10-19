@@ -2,6 +2,9 @@ import java.sql.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * @author Robert Eads
+ */
 public class DbTools {
 
     //Variables    
@@ -12,6 +15,9 @@ public class DbTools {
     private Vector<String> users = new Vector<String>();
 
     //Constructor
+    /**
+     * Default constructor for db tools adds different users to have access
+     */
     public DbTools() {
         dbName = "csce315_901_2";
         dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
@@ -22,6 +28,11 @@ public class DbTools {
     } 
 
     //Member functions
+    /**
+     * Opens a connection to the database
+     * @param username the username of the person using the database
+     * @param password the password of the person using the database
+     */
     public void openDbConnection(String username, String password) {
         try {
             dbConnection = DriverManager.getConnection(dbConnectionString, username, password);
@@ -33,6 +44,10 @@ public class DbTools {
         }
     }
 
+    /**
+     * Checks if the db connection is valid
+     * @return whether the database connection is valid
+     */
     public boolean hasDbConnection() {
         if(dbConnection != null) {
             return true;
@@ -40,6 +55,9 @@ public class DbTools {
         return false;
     }
 
+    /**
+     * Closes the connection to the database
+     */
     public void closeDbConnection() {
         try {
             dbConnection.close();
@@ -49,6 +67,10 @@ public class DbTools {
         }
     }
 
+    /**
+     * Imports the meta data for the tables
+     * @param filePath the file path which stores meta data information on the tables
+     */
     public void importMetaData(String filePath) {
         try {
             Scanner sc = new Scanner(new File(filePath));
@@ -79,6 +101,9 @@ public class DbTools {
         }
     }
 
+    /**
+     * Creates the database with all the desired settings
+     */
     public void dbCreate() {
         try {
             Statement stmt = dbConnection.createStatement();
@@ -107,7 +132,7 @@ public class DbTools {
                 }
                 sqlStatement += ")";
 
-                int result = stmt.executeUpdate(sqlStatement);
+                stmt.executeUpdate(sqlStatement);
                 System.out.println(String.format("Added %s to database", currentTable.tableName));
 
                 for(String user : users) {
@@ -127,6 +152,11 @@ public class DbTools {
         }
     }
 
+    /**
+     * Fills the database using our specified settings
+     * @param directoryPath the path to the directory with the csvs to load our database from
+     * @param username the username of the person running this operation
+     */
     public void dbFill(String directoryPath, String username) {
         try{
             String executable = "powershell.exe";
@@ -165,7 +195,7 @@ public class DbTools {
                     ////ALTER SEQUENCE <table>_id_seq RESTART WITH <number>
                     int temp =  result.getInt("id");
                     sqlStatement = String.format("ALTER SEQUENCE %s_id_seq RESTART WITH %d", currentTable.tableName, temp + 1);
-                    int results = stmt.executeUpdate(sqlStatement); 
+                    stmt.executeUpdate(sqlStatement); 
                     
                 }
 
@@ -177,6 +207,9 @@ public class DbTools {
         }
     }
 
+    /**
+     * Drops the tables in the database so that they are reset to a default state
+     */
     public void dbDrop() {
         /*
             --------------------------------- WARNING ---------------------------------
@@ -191,7 +224,7 @@ public class DbTools {
 
             for(int i = infoForTables.size()-1; i >= 0; i--){
                 String sqlStatement = String.format("DROP TABLE IF EXISTS %s", infoForTables.get(i).tableName);
-                int result = stmt.executeUpdate(sqlStatement);
+                stmt.executeUpdate(sqlStatement);
                 System.out.println(String.format("Dropped %s from the database", infoForTables.get(i).tableName));
             }
 
@@ -203,6 +236,10 @@ public class DbTools {
         }
     }
 
+    /**
+     * Runs the queries that are specified in a file
+     * @param filePath the path to the file which contains a list of queries
+     */
     public void dbRunQueries(String filePath) {
         try {
             Statement stmt = dbConnection.createStatement();
