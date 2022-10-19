@@ -1,12 +1,18 @@
 import java.sql.*;
 import src.dbLogin.dbLogin;
 
+/**
+ * @author Robert Eads
+ */
 public class dbFunctions {
     
     Connection dbConnection = null;
 
     dbLogin user = new dbLogin();
 
+    /**
+     * Create a db connection using the class url and the user and pswd of the compiled class
+     */
     void createDbConnection() {
         try {
             dbConnection = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_901_2", user.user, user.pswd);
@@ -30,7 +36,7 @@ public class dbFunctions {
     }
 
     /**
-     * 
+     * Check if the db connection to the database exists and is valid
      * @return if there exists a connection to the database that is valid
      */
     private boolean checkDbConnection() {
@@ -41,7 +47,7 @@ public class dbFunctions {
     }
 
     /**
-     * 
+     * Perform an update or insert statement into the database
      * @param sqlStatement a statement that will either update or insert into the database
      * @return an int representing success or failure
      */
@@ -61,7 +67,7 @@ public class dbFunctions {
     }
 
     /**
-     * 
+     * Query the database using a statement
      * @param sqlStatement a statement that we will use to query on the database
      * @return a ResultSet of all the items retrieved to dbQuery
      */
